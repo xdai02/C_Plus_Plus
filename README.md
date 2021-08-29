@@ -1,2 +1,0 @@
-# C-Plus-Plus
-C++

@@ -15,8 +15,7 @@ private:
 };
 
 User::User(int id = 0, string name = "")
-    : id(id), name(name) {
-}
+    : id(id), name(name) {}
 
 ostream& operator<<(ostream& out, const User& user) {
     out << "ID: " << to_string(user.id) << ", "

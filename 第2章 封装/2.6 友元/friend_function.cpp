@@ -5,8 +5,7 @@ using namespace std;
 
 class Coordinate {
 public:
-    Coordinate(double x, double y) : x(x), y(y) {
-    };
+    Coordinate(double x, double y) : x(x), y(y) {};
 
     friend double distance(Coordinate &c1, Coordinate &c2);
 

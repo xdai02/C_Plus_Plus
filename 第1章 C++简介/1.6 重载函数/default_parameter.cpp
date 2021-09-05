@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void setDate(int year=1970, int month=1, int day=1) {
+void setDate(int year = 1970, int month = 1, int day = 1) {
     cout << year << "/" << month << "/" << day << endl;
 }
 

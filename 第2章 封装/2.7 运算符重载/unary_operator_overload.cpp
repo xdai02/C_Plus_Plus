@@ -18,8 +18,7 @@ private:
 };
 
 Time::Time(int hour, int minute, int second) 
-    : hour(hour), minute(minute), second(second) {
-}
+    : hour(hour), minute(minute), second(second) {}
 
 void Time::display() {
     cout << setfill('0')

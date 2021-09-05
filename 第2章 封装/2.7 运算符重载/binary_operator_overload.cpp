@@ -15,8 +15,7 @@ private:
 };
 
 Complex::Complex(int real = 0, int imaginary = 0)
-    : real(real), imaginary(imaginary) {
-}
+    : real(real), imaginary(imaginary) {}
 
 string Complex::getNumber() {
     return to_string(real) + "+" + to_string(imaginary) + "i";

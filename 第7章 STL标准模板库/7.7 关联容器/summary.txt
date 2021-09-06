@@ -1,0 +1,15 @@
+Internet of Things allows billions of physical objects to 
+be connected to collect and exchange data for offering various 
+applications, such as environmental monitoring, infrastructure 
+management, and home automation. On the other hand, IoT has 
+unsupported features that are critical for some IoT applications, 
+including smart traffic lights, home energy management and 
+augmented reality. To support these features, fog computing is 
+integrated into IoT to extend computing, storage and networking 
+resources to the network edge. Unfortunately, it is confronted 
+with various security and privacy risks, which raise serious 
+concerns towards users. In this survey, we review the architecture 
+and features of fog computing and study critical roles of fog 
+nodes, including real-time services, transient storage, data 
+dissemination and decentralized computation. We also examine 
+fog-assisted IoT applications based on different roles of fog nodes.

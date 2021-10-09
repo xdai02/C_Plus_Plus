@@ -13,6 +13,8 @@ int main() {
     date.year = 2021;
     date.month = 8;
     date.day = 11;
-    cout << date.year << "/" << date.month << "/" << date.day << endl;
+    cout << date.year << "/"
+		 << date.month << "/"
+		 << date.day << endl;
 	return 0;
 }

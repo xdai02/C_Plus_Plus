@@ -20,6 +20,8 @@ C++应用非常广泛，常用于系统开发、引擎开发等领域，支持�
 
 **Hello World!**
 
+---
+
 【代码】Hello World!
 
 ```c++
@@ -92,6 +94,8 @@ C++中的关键字不能作为常量名、变量名、或其它标识符名称�
 | unsigned long long |  8字节   |          $ 0 \sim 18446744073709551615 $          |
 |       float        |  4字节   |              $ -3.4e38 \sim 3.4e38 $              |
 |       double       |  8字节   |            $ -1..7e308 \sim 1.7e308 $             |
+
+---
 
 【代码】数据类型
 
@@ -189,6 +193,8 @@ min: 0
 max: 1
 ---------------------------------
 ```
+
+---
 
 
 
@@ -338,6 +344,8 @@ foo::f()
 bar::f()
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 1.3 结构体与共同体
@@ -463,6 +471,8 @@ int main() {
 little endian
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 1.4 常量指针与指针常量
@@ -496,6 +506,8 @@ int main() {
 error: assignment of read-only location '* p'
 ```
 
+---
+
 
 
 **指针常量**
@@ -528,6 +540,8 @@ int main() {
 error: assignment of read-only variable 'p'
 ```
 
+---
+
 
 
 **常指针常量**
@@ -559,6 +573,8 @@ int main() {
 error: assignment of read-only location '*(const int*)p'
 error: assignment of read-only variable 'p'
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -640,6 +656,8 @@ int main() {
 1970/1/1
 ```
 
+---
+
 
 
 **重载函数**
@@ -682,6 +700,8 @@ int main() {
 3.14
 H
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -730,6 +750,8 @@ int main() {
 Before: 92 28
 After: 28 92
 ```
+
+---
 
 
 
@@ -787,6 +809,8 @@ int main() {
 4
 ```
 
+---
+
 
 
 **回调函数（Callback Function）**
@@ -809,7 +833,9 @@ int main() {
 
 因此`make_youtiao()`需要增加一个参数，除了指定制作油条的数量外，还可以指定制作好后该干什么，这个被`make_youtiao()`调用的函数就叫回调。
 
-<img src="./img/C1/1-8/2.png" style="zoom: 55%;" />
+<img src="./img/C1/1-8/2.png" style="zoom: 50%;" />
+
+---
 
 【代码】回调函数
 
@@ -840,6 +866,8 @@ int main() {
 making youtiao ...
 selling youtiao ...
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -896,6 +924,8 @@ int main() {
 ```
 0 1 2 3 4 5 6 7 8 9
 ```
+
+---
 
 
 
@@ -956,6 +986,8 @@ int main() {
 *p1 = 928
 p2: 0 1 2 3 4 5 6 7 8 9
 ```
+
+---
 
 
 
@@ -1019,6 +1051,8 @@ Java、C++、Python等都是面向对象的编程语言，面向对象的优势�
 
 <img src="./img/C2/2-2/1.png" style="zoom:67%;" />
 
+---
+
 【代码】类和对象
 
 ```c++
@@ -1063,6 +1097,8 @@ int main() {
 吃饭
 睡觉
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -1151,6 +1187,8 @@ int main() {
 年龄：17
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 2.4 构造函数与析构函数
@@ -1218,6 +1256,8 @@ Person::Person()
 Person::Person(string, int)
 姓名：小灰，年龄：17
 ```
+
+---
 
 
 
@@ -1327,6 +1367,8 @@ Person::Person(string, int)
 Person::~Person()
 Person::~Person()
 ```
+
+---
 
 
 
@@ -1504,6 +1546,8 @@ int main() {
 0x6b17d0
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 2.5 静态成员
@@ -1561,6 +1605,8 @@ int main() {
 10
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 2.6 友元
@@ -1617,6 +1663,8 @@ int main() {
 ```
 1.41421
 ```
+
+---
 
 
 
@@ -1711,6 +1759,8 @@ int main() {
 ```
 9+3i
 ```
+
+---
 
 
 
@@ -1809,6 +1859,8 @@ int main() {
 09:22:00
 ```
 
+---
+
 
 
 **输入输出运算符重载**
@@ -1822,7 +1874,6 @@ C++使用流提取运算符`>>`和流插入运算符`<<`进行输入输出，通
 ```c++
 #include <iostream>
 #include <string>
-
 using namespace std;
 
 class User {
@@ -1870,6 +1921,8 @@ Enter user ID: 1
 Enter user name: Terry
 ID: 1, name: Terry
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -2036,6 +2089,8 @@ eating
 biting
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 3.2 多继承
@@ -2201,6 +2256,8 @@ int main() {
 2021/08/31 13:50:23
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 3.3 向上转型与向下转型
@@ -2311,6 +2368,8 @@ int main() {
 dog: 狗子, 哈士奇
 animal: 狗子
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -2446,6 +2505,8 @@ Android Development
 programming
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 4.3 纯虚函数
@@ -2568,6 +2629,8 @@ int main() {
 rectangle: 35
 circle: 113.097
 ```
+
+---
 
 
 
@@ -2706,6 +2769,8 @@ Hello!
 你好
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 # 第5章 异常
@@ -2723,6 +2788,8 @@ C++异常处理涉及到三个关键字：
 3. `catch`：捕获并处理异常。
 
 ![](./img/C5/5-1/1.png)
+
+---
 
 【代码】除以0
 
@@ -2816,6 +2883,8 @@ int main() {
 std::bad_alloc
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 5.3 自定义异常
@@ -2832,14 +2901,17 @@ std::bad_alloc
 #include <iostream>
 #include <string>
 #include <exception>
+
 using namespace std;
 
 class AgeException : public exception {
 public:
     AgeException(string msg) : msg(msg) {}
+    
     virtual const char* what() const noexcept override {
         return msg.c_str();
     }
+    
 private:
     string msg;
 };
@@ -2855,6 +2927,7 @@ int main() {
     } catch(AgeException& e) {
         cout << e.what() << endl;
     }
+    
     return 0;
 }
 ```
@@ -2865,6 +2938,8 @@ int main() {
 Enter age: -1
 invalid age
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -2924,6 +2999,8 @@ C++不直接处理输入输出，而是通过标准库中的一组类来处理I/
 | setprecision(n) | 将浮点精度设置为n                           |
 | setw(n)         | 读或写值的宽度为n个字符                     |
 | setbase(n)      | 将整数输出为n进制                           |
+
+---
 
 【代码】格式化输出
 
@@ -2995,6 +3072,8 @@ int main() {
 宽度填充：2021/09/02
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 6.2 文件I/O
@@ -3028,6 +3107,8 @@ int main() {
 | ios::app   | 以追加方式打开                                  |
 | ios::ate   | 打开文件定位到文件末尾                          |
 | ios::trunc | 如果文件存在，其内容将被截断，即把文件长度设为0 |
+
+---
 
 【代码】文件I/O
 
@@ -3065,6 +3146,8 @@ Enter name: Terry
 Enter id: 979489
 name = Terry, id = 979489
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -3114,6 +3197,8 @@ cout << out.str() << endl;
 convert a string to Python list format: This is a test
 [This, is, a, test]
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -3312,6 +3397,8 @@ int main() {
 [1, 3, 3, 7, 7, 12, 28]
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 7.2 容器
@@ -3408,6 +3495,8 @@ int main() {
 [h, e, l, l, o,  , w, o, r, l, d]
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 7.3 STL数组
@@ -3429,6 +3518,8 @@ int main() {
 | data()          | 返回一个指向容器首个元素的指针                               |
 | fill(val)       | 将val赋值给容器中的每个元素                                  |
 | arr1.swap(arr2) | 交换arr1和arr2容器中的所有元素，前提是它们具有相同的长度和类型 |
+
+---
 
 【代码】array
 
@@ -3459,6 +3550,8 @@ size = 10
 0 1 2 3 4 5 6 7 8 9
 ```
 
+---
+
 
 
 **vector**
@@ -3477,6 +3570,8 @@ size = 10
 | vector<T> v{a, b, c, ...}    | 用列表元素初始化v                              |
 | vector<T> v = {a, b, c, ...} | 等价于v{a, b, c, ...}                          |
 | vector<T> v (begin, end)     | 根据迭代器范围[begin, end)复制到另一个vector中 |
+
+---
 
 【代码】vector构造函数
 
@@ -3524,6 +3619,8 @@ v3 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 v4 = [10, 1]
 v5 = [hello]
 ```
+
+---
 
 
 
@@ -3576,6 +3673,8 @@ int main() {
 ```
 0 1 4 9 16 25 36 49 64 81
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -3630,6 +3729,8 @@ s5 = hello
 s6 = hello
 ```
 
+---
+
 
 
 **string操作**
@@ -3653,6 +3754,8 @@ s6 = hello
 | s.substr(pos, n)       | 返回一个string，包含s中从pos开始的n个字符的拷贝。pos的默认值为0，n的默认值为s.size() - pos。 |
 | s1.find(s2)            | 查找s1中s2第一次出现的位置                                   |
 | s1.rfind(s2)           | 查找s1中s2最后一次出现的位置                                 |
+
+---
 
 【代码】string
 
@@ -3691,6 +3794,8 @@ C++!
 3
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 7.5 STL链表
@@ -3726,6 +3831,8 @@ C++!
 | lst.swap()              | 交换两个list                                                 |
 | lst.splice()            | 合并两个list                                                 |
 | lst.merge()             | 合并两个有序list                                             |
+
+---
 
 【代码】list
 
@@ -3788,6 +3895,8 @@ int main() {
 0 1 2 2 2 3 8 8 9 11
 ```
 
+---
+
 
 
 **forward_list**
@@ -3836,6 +3945,8 @@ int main() {
 | pop()     | 出栈                                  |
 | top()     | 返回栈顶元素的引用                    |
 
+---
+
 【代码】stack
 
 ```c++
@@ -3868,6 +3979,8 @@ int main() {
 1
 ```
 
+---
+
 
 
 **deque**
@@ -3887,6 +4000,8 @@ int main() {
 | pop_front()  | 在头部删除一个元素  |
 | pop_back()   | 在尾部删除一个元素  |
 | clear()      | 清空deque           |
+
+---
 
 【代码】deque
 
@@ -3924,6 +4039,8 @@ int main() {
 3
 ```
 
+---
+
 
 
 **priority_queue**
@@ -3939,6 +4056,8 @@ int main() {
 | top()              | 访问队头           |
 | push()             | 插入元素           |
 | pop()              | 弹出队头           |
+
+---
 
 【代码】priority_queue
 
@@ -3969,6 +4088,8 @@ int main() {
 8
 2
 ```
+
+---
 
 <div style="page-break-after: always;"></div>
 
@@ -4191,6 +4312,8 @@ users: 1
 various: 2
 ```
 
+---
+
 <div style="page-break-after: always;"></div>
 
 ## 7.8 泛型算法
@@ -4283,6 +4406,8 @@ sum = 238
 v1 == v2? true
 ```
 
+---
+
 
 
 **写容器元素算法**
@@ -4362,6 +4487,8 @@ int main() {
 9 2 8 8 2 1 0 1 2 0
 9 2 8 8 2 7 0 7 2 0
 ```
+
+---
 
 
 
@@ -4458,3 +4585,5 @@ C C++ C++ C++ Golang Java JavaScript Python
 JavaScript Golang Python Java C++ C++ C++ C
 JavaScript Golang Python Java C++ C
 ```
+
+---

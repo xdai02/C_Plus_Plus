@@ -1,27 +1,5 @@
-the
-a
-an
-is
-this
-that
-of
-at
-in
-on
-for
-and
-it
-with
-to
-we
-I
-into
-which
-these
-those
-are
-be
-as
-has
-have
-or
+the a an is this
+that of at in on for
+and it with to we I
+into which these those are
+be as has have or

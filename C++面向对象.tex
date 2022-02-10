@@ -13,8 +13,18 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[a4paper]{geometry}
 \usepackage{url}
+\usepackage{amssymb}
+\usepackage{fontawesome5}
 \usepackage[most]{tcolorbox}
+\usepackage{stackengine}
+\usepackage{multirow}
+\usepackage[T1]{fontenc}
+\usepackage{diagbox}
+\usepackage{longtable}
+\usepackage{newtxtt}
 \usepackage{pgf-umlcd}
+\usepackage{bbding}
+\usepackage[edges]{forest}
 % \usepackage{minted}
 
 \makeatletter
@@ -24,6 +34,9 @@
 \usetikzlibrary{calc,trees,positioning,arrows,fit,shapes}
 \usetikzlibrary{shapes.multipart,chains}
 \usetikzlibrary{automata}
+\usetikzlibrary{shadows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{matrix,backgrounds}
 
 \def\rlwd{.5pt} \def\rlht{2.2ex} \def\rldp{.5ex}
 \def\mydiv#1{~%
@@ -45,6 +58,64 @@
     top=5pt, 
     bottom=5pt
 }
+
+\tikzset{block/.style={
+        font=\sffamily,
+        draw=black,
+        thin,
+        fill=pink!50,
+        rectangle split,
+        rectangle split horizontal,
+        rectangle split parts=#1,
+        outer sep=0pt},
+        %
+        gblock/.style={
+            block,
+            rectangle split parts=#1,
+            fill=green!30}
+        }
+
+\tikzstyle{ptr}  = [draw, -{Stealth[scale=1.0]}, blue]
+\tikzstyle{head} = [rectangle, draw, text height=3mm, text width=3mm,
+                    text centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{data} = [rectangle split, rectangle split parts=2, draw,
+                    text centered, minimum height=3em]
+\newcommand{\data}{
+  data \nodepart{second}
+  \phantom{\texttt{NULL}}
+}
+
+\tikzset{
+    queue element/.style={
+        draw,very thin,rounded corners,
+        fill=yellow!30,
+        minimum width=1cm,minimum height=.5cm,
+        font=\sffamily\footnotesize
+    },
+    >={[scale=0.8]Triangle},
+    queue/.style={matrix of nodes,
+        nodes in empty cells,
+        nodes={queue element, anchor=center},
+        fill=green!20,
+        column sep=5mm,
+        row sep=2mm,
+    },
+}
+
+% \def\x{0}
+% \def\y{0}
+% \def\k{0}
+% \def\radius{5}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\tikzstyle{startend} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=red!30]
+\tikzstyle{io}        = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, inner xsep = -15pt, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process}   = [rectangle, minimum width=3cm, minimum height=1cm, inner ysep=0, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision}  = [diamond,shape aspect=2.5, minimum width=3cm, minimum height=1cm, inner xsep=0,text centered, draw=black, fill=green!30]
+\tikzstyle{arrow}     = [thick,->,>=stealth]
 
 \setstretch{1.5}
 \setlength{\parindent}{0cm}
@@ -202,12 +273,12 @@
 
 \setcounter{page}{1}
 
-% \input{chapters/chapter1}
-% \input{chapters/chapter2}
-% \input{chapters/chapter3}
-% \input{chapters/chapter4}
-% \input{chapters/chapter5}
-% \input{chapters/chapter6}
+\input{chapters/chapter1}
+\input{chapters/chapter2}
+\input{chapters/chapter3}
+\input{chapters/chapter4}
+\input{chapters/chapter5}
+\input{chapters/chapter6}
 \input{chapters/chapter7}
 
 \end{document}

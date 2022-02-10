@@ -1,0 +1,595 @@
+\chapter{STL标准模板库}
+
+\section{模板}
+
+\subsection{泛型编程（Generic Programming）}
+
+面向对象编程（OOP）和泛型编程（GP）都能处理在编写程序时类型未知的情况，OOP能处理运行时获取类型的情况，GP能处理编译期可获取类型的情况。 \\
+
+模板是泛型编程的基础，泛型编程就是以一种独立于任何特定类型的方式编写代码。C++标准库的容器、迭代器、算法都是泛型编程的例子。
+
+\subsection{函数模板}
+
+通过定义一个通用的函数模板可以处理参数为多种类型的情形，而不是为每个类型都定义一个重载。模板定义使用template关键字，后跟模板参数列表。模板参数表示函数或类定义中用到的类型，使用模板时需要隐式或显式提供模板实参，将其绑定到模板参数。 \\
+
+\mybox{函数模板}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+template <typename T>
+inline T getMax(const T& val1, const T& val2) {
+    return val1 > val2 ? val1 : val2;
+}
+
+int main() {
+    int iVal1 = 28;
+    int iVal2 = 92;
+    cout << getMax(iVal1, iVal2) << endl;
+
+    double dVal1 = 3.14;
+    double dVal2 = 3.71;
+    cout << getMax(dVal1, dVal2) << endl;
+
+    string sVal1 = "hello";
+    string sVal2 = "world";
+    cout << getMax(sVal1, sVal2) << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+92
+3.71
+world
+	\end{verbatim}
+\end{tcolorbox}
+
+函数模板仅仅是函数的规范，本身并不会占用内存。当编译器遇到对模板函数的调用时，才会在内存中创建该函数的实例。
+
+\subsection{类模板}
+
+类模板用来生成类的蓝图，与函数模板不同的是，类模板在实例化时编译器无法为类模板推导模板参数类型，而是必须在模板名后用【<>】提供实参。根据显式提供的模板实参列表，编译器使用这些模板参数来实例化特定的类。 \\
+
+编译器从类模板实例化一个类时，会重写模板，将模板参数的每个实例替换为给定的模板实参。因此类模板的每个实例都是独立的类，使用不同模板实参实例化出的类之间没有关联，也没有特殊的访问权限。 \\
+
+\mybox{类模板}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+
+using namespace std;
+
+template<class T>
+class SortedArray {
+public:
+    SortedArray(int capacity = 1);
+    SortedArray(T *arr, int capacity);
+    ~SortedArray();
+
+    string data();
+    void add(T val);
+    void remove(T val);
+
+private:
+    T *arr;
+    int len;
+    int capacity;
+    void resize(int size);
+};
+
+template<class T>
+SortedArray<T>::SortedArray(int capacity) {
+    this->len = 0;
+    this->capacity = capacity;
+    this->arr = new T[capacity];
+}
+
+template<class T>
+SortedArray<T>::SortedArray(T *arr, int len) {
+    this->len = len;
+    this->capacity = len;
+    this->arr = new T[len];
+    for(int i = 0; i < len; i++) {
+        this->arr[i] = arr[i];
+    }
+}
+
+template<class T>
+SortedArray<T>::~SortedArray() {
+    delete arr;
+}
+
+template<class T>
+string SortedArray<T>::data() {
+    if(len == 0) {
+        return "[]";
+    }
+
+    sort(this->arr, this->arr + len);
+    ostringstream out;
+    out << "[";
+    for(int i = 0; i < len; i++) {
+        out << arr[i] << ", ";
+    }
+    out << "\b\b]";
+    return out.str();
+}
+
+template<class T>
+void SortedArray<T>::resize(int size) {
+    T *temp = new T[size];
+    for(int i = 0; i < len; i++) {
+        temp[i] = arr[i];
+    }
+    delete arr;
+    arr = temp;
+}
+
+template<class T>
+void SortedArray<T>::add(T val) {
+    if(len == capacity) {
+        capacity *= 2;
+        resize(capacity);
+    }
+    arr[len++] = val;
+}
+
+template<class T>
+void SortedArray<T>::remove(T val) {
+    for(int i = 0; i < len; i++) {
+        if(arr[i] == val) {
+            arr[i] = arr[len-1];
+            len--;
+            if(len <= capacity / 2) {
+                capacity /= 2;
+                resize(capacity);
+            }
+            break;
+        }
+    }
+}
+
+int main() {
+    int arr[] = {7, 7, 3, 9, 7, 1, 3};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    SortedArray<int> sortedArray(arr, n);
+    cout << sortedArray.data() << endl;
+
+    sortedArray.add(28);
+    sortedArray.add(12);
+    cout << sortedArray.data() << endl;
+
+    sortedArray.remove(7);
+    sortedArray.remove(9);
+    cout << sortedArray.data() << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+[1, 3, 3, 7, 7, 7, 9] 
+[1, 3, 3, 7, 7, 7, 9, 12, 28]
+[1, 3, 3, 7, 7, 12, 28]
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{容器}
+
+\subsection{容器（Container）}
+
+容器是特定类型对象的集合，容器分为顺序容器和关联容器：
+
+\begin{itemize}
+	\item 顺序容器：元素的顺序与其加入容器的位置对应。
+	\item 关联容器：元素的顺序由其关联的关键字决定，关联容器分为有序关联容器和无序关联容器。
+\end{itemize}
+
+所有容器类共享公有接口，不同容器按不同方式扩展。 \\
+
+C++新标准容器的性能比旧版本快很多，其性能与最精心优化过的同类数据结构一样好。现代C++程序应该使用标准库容器，而不是更原始的数据结构。
+
+\subsection{顺序容器}
+
+每个容器都定义于一个头文件中，文件名与容器名相同。容器都定义为模板类，顺序容器几乎可以保存任意类型的元素，还可以在容器中保存容器。 \\
+
+顺序容器包括array、vector、string、deque、list和forward\_list。
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|l|}
+			\hline
+			\textbf{容器} & \textbf{描述}                                      \\
+			\hline
+			array         & 固定大小数组，支持快速随机访问，不能增删元素       \\
+			\hline
+			vector        & 可变大小数组，支持快速随机访问，非尾部位置增删较慢 \\
+			\hline
+			string        & 专门用于保存字符，随机访问快，在尾部增删速度快     \\
+			\hline
+			deque         & 双端队列，支持快速随机访问，在头尾位置增删速度很快 \\
+			\hline
+			list          & 双向链表，支持双向顺序访问，在任何位置增删都很快   \\
+			\hline
+			forward\_list & 单向链表，只支持单向顺序访问，在任何位置增删都很快 \\
+			\hline
+		\end{tabular}
+	}
+	\caption{顺序容器}
+\end{table}
+
+array和内置数组一样大小固定，但操作更安全。除固定大小的array外，其它容器都提供高效灵活的内存管理，可以添加、删除、扩展和收缩容器的大小。 \\
+
+vector和string将元素存储在连续空间中，故通过下标的随机访问很快。在尾部添加元素很快，但中间和头部插入或删除很慢。添加元素可能造成空间的重新分配和元素拷贝。 \\
+
+deque支持快速随机访问，在两端插入或删除很快，但在中间插入或删除元素很慢。 \\
+
+list和forward\_list的设计目的是让任何位置的插入或删除都快速高效且不需重新分配内存，但是不支持随机访问，为访问一个元素需要遍历整个链表。
+
+\subsection{迭代器（Iterator）}
+
+迭代器比下标访问更通用，所有标准库容器都支持迭代器，但只有几种支持下标。迭代器提供了对容器对象的间接访问，类似于指针。begin()返回指向首元素的迭代器，end()返回指向尾元素下一位置（尾后）的迭代器。如果容器为空，则begin()和end()返回的都是尾后迭代器。 \\
+
+任何可能改变容器容量的操作都会使容器的迭代器失效。
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{容器}            & \textbf{描述}                  \\
+			\hline
+			iterator                 & 容器的迭代器                   \\
+			\hline
+			begin()                  & 返回指向首元素的迭代器         \\
+			\hline
+			end()                    & 返回尾后迭代器                 \\
+			\hline
+			const\_iterator          & 只读迭代器                     \\
+			\hline
+			cbegin()                 & 返回指向首元素的只读迭代器     \\
+			\hline
+			cend()                   & 返回尾后只读迭代器             \\
+			\hline
+			reverse\_iterator        & 按逆序寻址元素的迭代器         \\
+			\hline
+			rbegin()                 & 返回指向尾元素的逆序迭代器     \\
+			\hline
+			rend()                   & 返回首前逆序迭代器             \\
+			\hline
+			const\_reverse\_iterator & 只读逆序迭代器                 \\
+			\hline
+			crbegin()                & 返回指向尾元素的只读逆序迭代器 \\
+			\hline
+			crend()                  & 返回首前只读逆序迭代器         \\
+			\hline
+		\end{tabular}
+	}
+	\caption{迭代器}
+\end{table}
+
+迭代器可以进行算术运算，将迭代器与整数相加减可以得到向前或向后若干位置的迭代器。使用关系运算符【<】、【<=】、【>】、【>=】和【==】可以对迭代器所指位置比较大小。将两个迭代器相减，结果是两个迭代器的距离。 \\
+
+\mybox{迭代器}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string s = "hello world";
+
+    string::iterator iter = s.begin();
+    cout << "[";
+    while(iter != s.end()) {
+        cout << *iter << ", ";
+        iter++;
+    }
+    cout << "\b\b]" << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+[h, e, l, l, o,  , w, o, r, l, d]
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{STL数组}
+
+\subsection{array}
+
+array容器是C++11标准中新增的序列容器，它在普通数组的基础上，添加了一些成员函数和全局函数。在使用上，它比普通数组更安全，且效率并没有因此变差。和其它容器不同，array的大小是固定的，无法动态的扩展或收缩。与内置数组不同的是，array允许做整个容器的拷贝和赋值，要求两个array大小和元素类型都一样。 \\
+
+array以类模板的形式定义在<array>头文件，array具有固定大小，其大小也是类型的一部分，定义时模板参数包含元素类型和大小。
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|l|}
+			\hline
+			\textbf{成员函数} & \textbf{功能}                            \\
+			\hline
+			size()            & 返回容器中当前元素的数量                 \\
+			\hline
+			max\_size()       & 返回容器可容纳元素的最大数量             \\
+			\hline
+			empty()           & 判断容器是否为空                         \\
+			\hline
+			at(n)             & 返回容器中第n个元素的引用                \\
+			\hline
+			front()           & 返回容器中第一个元素的直接引用           \\
+			\hline
+			back()            & 返回容器中最后一个元素的直接应用         \\
+			\hline
+			data()            & 返回一个指向容器首个元素的指针           \\
+			\hline
+			fill(val)         & 将val赋值给容器中的每个元素              \\
+			\hline
+			arr1.swap(arr2)   & 交换相同长度和类型的arr1和arr2中所有元素 \\
+			\hline
+		\end{tabular}
+	}
+	\caption{array成员函数}
+\end{table}
+
+\mybox{array}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <array>
+
+using namespace std;
+
+int main() {
+    array<int, 10> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    cout << "size = " << arr.size() << endl;
+    array<int, 10>::iterator begin = arr.begin();
+    array<int, 10>::iterator end = arr.end();
+    while(begin != end) {
+        cout << *begin << " ";
+        begin++;
+    }
+    cout << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+size = 10
+0 1 2 3 4 5 6 7 8 9
+	\end{verbatim}
+\end{tcolorbox}
+
+\subsection{vector}
+
+vector表示对象的集合，由于vector容纳其它的对象，所以是一种容器。使用vector需要包含头文件<vector>。vector是一个类模板，模板可以看作编译器生成类或函数的一份说明。 \\
+
+vector的初始化包括直接初始化、拷贝初始化和列表初始化。
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{初始化}              & \textbf{功能}                            \\
+			\hline
+			vector<T> v                  & 创建一个空的vector                       \\
+			\hline
+			vector<T> v2(v1)             & 用v1中所有元素的副本创建v2               \\
+			\hline
+			vector<T> v2 = v1            & 等价于v2(v1)                             \\
+			\hline
+			vector<T> v(n, val)          & v中包含了n个值为val的元素                \\
+			\hline
+			vector<T> v(n)               & v中包含了n个值为默认初始化的元素         \\
+			\hline
+			vector<T> v{a, b, c, ...}    & 用列表元素初始化v                        \\
+			\hline
+			vector<T> v = {a, b, c, ...} & 等价于v{a, b, c, ...}                    \\
+			\hline
+			vector<T> v (begin, end)     & 根据迭代器范围[begin, end)复制到vector中 \\
+			\hline
+		\end{tabular}
+	}
+	\caption{vecor初始化}
+\end{table}
+
+\mybox{vector初始化}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+template <typename T>
+ostream& operator<<(ostream& out, const vector<T>& v) {
+    if(!v.empty()) {
+        out << "[";
+        copy(v.begin(), v.end(), ostream_iterator<T>(out, ", "));
+        out << "\b\b]";
+    }
+    return out;
+}
+
+int main() {
+    vector<int> v1(10);         // 有10个元素，都是0
+    vector<int> v2{10};         // 有1个元素，值是10
+    vector<int> v3(10, 1);      // 有10个元素，都是1
+    vector<int> v4{10, 1};      // 有2个元素，10和1
+    vector<string> v5{"hello"}; // 有1个元素，是字符串"hello"
+    
+    cout << "v1 = " << v1 << endl;
+    cout << "v2 = " << v2 << endl;
+    cout << "v3 = " << v3 << endl;
+    cout << "v4 = " << v4 << endl;
+    cout << "v5 = " << v5 << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+v1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
+v2 = [10] 
+v3 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1] 
+v4 = [10, 1]
+v5 = [hello]
+	\end{verbatim}
+\end{tcolorbox}
+
+\subsection{vector操作}
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{操作}       & \textbf{功能}                              \\
+			\hline
+			v.empty()           & 判断vector是否为空                         \\
+			\hline
+			v.size()            & 返回vector元素个数                         \\
+			\hline
+			v[n]                & 返回vector中第n个元素的引用                \\
+			\hline
+			v1 = v2             & 用v2中的元素拷贝替换v1中的元素             \\
+			\hline
+			v1 == v2、v1 != v2  & v1和v2相等当且仅当元素个数和对应元素都相同 \\
+			\hline
+			v.push\_back(val)   & 向vector尾部添加一个元素                   \\
+			\hline
+			v.insert(iter, val) & 向迭代器指向元素前添加一个元素             \\
+			\hline
+			v.pop\_back()       & 删除vector最后一个元素                     \\
+			\hline
+			v.erase(iter)       & 删除迭代器指向元素                         \\
+			\hline
+			v.erase(begin, end) & 删除迭代器返回[begin, end)范围元素         \\
+			\hline
+			v.clear()           & 清空vector                                 \\
+			\hline
+			v.swap(vector)      & 交换两个同类型vector数据                   \\
+			\hline
+			v.assign(n, val)    & 设置vector中前n个元素值为val               \\
+			\hline
+		\end{tabular}
+	}
+	\caption{vecor操作}
+\end{table}
+
+vector不能使用下标添加元素，否则会造成缓冲区溢出，确保下标合法的一种有效手段就是尽可能使用for-each循环。如果循环体内部包含向vector添加元素的语句，则不能使用for-each循环。 \\
+
+\mybox{vector}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    vector<int> v;
+    for(int i = 0; i < 10; i++) {
+        v.push_back(i * i);
+    }
+
+    for(int& item : v) {
+        cout << item << " ";
+    }
+    cout << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+0 1 4 9 16 25 36 49 64 81
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{STL字符串}
+
+\subsection{string}
+
+string是标准库中的类型，表示可变长字符序列，使用需要包含头文件<string>。 \\
+
+string的初始化分为：
+
+\begin{enumerate}
+	\item 直接初始化：使用括号初始化，调用构造函数。
+	\item 拷贝初始化：使用赋值初始化，调用重载的赋值运算符。
+\end{enumerate}
+
+\mybox{string初始化}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string s1;              // 默认初始化，为空字符串
+    string s2(s1);          // 直接初始化，s2是s1的副本
+    string s3 = s1;         // 拷贝初始化，s3是s1的副本，等价s3(s1)
+    string s4("hello");     // 直接初始化，初始化为字面值常量
+    string s5 = "hello";    // 拷贝初始化，初始化为字面值常量
+    string s6(10, 'x');     // 直接初始化，初始化为10个字符'x'
+    
+    cout << "s1 = " << s1 << endl;
+    cout << "s2 = " << s2 << endl;
+    cout << "s3 = " << s3 << endl;
+    cout << "s4 = " << s4 << endl;
+    cout << "s5 = " << s4 << endl;
+    cout << "s6 = " << s4 << endl;
+    
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+s1 = 
+s2 =
+s3 =
+s4 = hello
+s5 = hello
+s6 = hello
+	\end{verbatim}
+\end{tcolorbox}
+
+\subsection{string操作}
+

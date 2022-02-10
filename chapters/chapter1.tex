@@ -20,8 +20,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 Hello World!
 	\end{verbatim}
 \end{tcolorbox}
@@ -35,39 +35,39 @@ using namespace std告诉编译器使用std命名空间，命名空间是C++中�
 C++中的关键字不能作为常量名、变量名、或其它标识符名称。
 
 \begin{table}[H]
-    \centering
-    \setlength{\tabcolsep}{5mm}{
-        \begin{tabular}{|c|c|c|c|c|}
-            \hline
-            asm           & else              & new      & this    & auto      \\
-            \hline
-            enum          & operator          & throw    & bool    & explicit  \\
-            \hline
-            private       & true              & break    & export  & protected \\
-            \hline
-            try           & case              & extern   & public  & typedef   \\
-            \hline
-            catch         & false             & register & typeid  & char      \\
-            \hline
-            float         & reinterpret\_cast & typename & class   & for       \\
-            \hline
-            return        & union             & const    & friend  & short     \\
-            \hline
-            unsigned      & const\_cast       & goto     & signed  & using     \\
-            \hline
-            continue      & if                & sizeof   & virtual & default   \\
-            \hline
-            inline        & static            & void     & delete  & int       \\
-            \hline
-            static\_cast  & volatile          & do       & long    & struct    \\
-            \hline
-            wchar\_t      & double            & mutable  & switch  & while     \\
-            \hline
-            dynamic\_cast & namespace         & template &         &           \\
-            \hline
-        \end{tabular}
-    }
-    \caption{关键字}
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			asm           & else              & new      & this    & auto      \\
+			\hline
+			enum          & operator          & throw    & bool    & explicit  \\
+			\hline
+			private       & true              & break    & export  & protected \\
+			\hline
+			try           & case              & extern   & public  & typedef   \\
+			\hline
+			catch         & false             & register & typeid  & char      \\
+			\hline
+			float         & reinterpret\_cast & typename & class   & for       \\
+			\hline
+			return        & union             & const    & friend  & short     \\
+			\hline
+			unsigned      & const\_cast       & goto     & signed  & using     \\
+			\hline
+			continue      & if                & sizeof   & virtual & default   \\
+			\hline
+			inline        & static            & void     & delete  & int       \\
+			\hline
+			static\_cast  & volatile          & do       & long    & struct    \\
+			\hline
+			wchar\_t      & double            & mutable  & switch  & while     \\
+			\hline
+			dynamic\_cast & namespace         & template &         &           \\
+			\hline
+		\end{tabular}
+	}
+	\caption{关键字}
 \end{table}
 
 \subsection{数据类型}
@@ -75,49 +75,49 @@ C++中的关键字不能作为常量名、变量名、或其它标识符名称�
 一些基本数据类型可以使用signed和unsigned修饰符进行修饰。
 
 \begin{table}[H]
-    \centering
-    \setlength{\tabcolsep}{2mm}{
-        \begin{tabular}{|c|c|c|}
-            \hline
-            \textbf{类型}      & \textbf{占用内存} & \textbf{范围}                                     \\
-            \hline
-            char               & 1字节             & $ -128 \sim 127 $                                 \\
-            \hline
-            unsigned char      & 1字节             & $ 0 \sim 255 $                                    \\
-            \hline
-            signed char        & 1字节             & $ -128 \sim 127 $                                 \\
-            \hline
-            int                & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
-            \hline
-            unsigned int       & 4字节             & $ 0 \sim 4294967295 $                             \\
-            \hline
-            signed int         & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
-            \hline
-            short              & 2字节             & $ -32768 \sim 32767 $                             \\
-            \hline
-            unsigned short     & 2字节             & $ 0 \sim 65535 $                                  \\
-            \hline
-            signed short       & 2字节             & $ -32768 \sim 32767 $                             \\
-            \hline
-            long               & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
-            \hline
-            signed long        & 4字节             & $ 0 \sim 4294967295 $                             \\
-            \hline
-            unsigned long      & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
-            \hline
-            long long          & 8字节             & $ -9223372036854775808 \sim 9223372036854775807 $ \\
-            \hline
-            signed long long   & 8字节             & $ -9223372036854775808 \sim 9223372036854775807 $ \\
-            \hline
-            unsigned long long & 8字节             & $ 0 \sim 18446744073709551615 $                   \\
-            \hline
-            float              & 4字节             & $ -3.4e38 \sim 3.4e38 $                           \\
-            \hline
-            double             & 8字节             & $ -1..7e308 \sim 1.7e308 $                        \\
-            \hline
-        \end{tabular}
-    }
-    \caption{数据类型}
+	\centering
+	\setlength{\tabcolsep}{2mm}{
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{类型}      & \textbf{占用内存} & \textbf{范围}                                     \\
+			\hline
+			char               & 1字节             & $ -128 \sim 127 $                                 \\
+			\hline
+			unsigned char      & 1字节             & $ 0 \sim 255 $                                    \\
+			\hline
+			signed char        & 1字节             & $ -128 \sim 127 $                                 \\
+			\hline
+			int                & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
+			\hline
+			unsigned int       & 4字节             & $ 0 \sim 4294967295 $                             \\
+			\hline
+			signed int         & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
+			\hline
+			short              & 2字节             & $ -32768 \sim 32767 $                             \\
+			\hline
+			unsigned short     & 2字节             & $ 0 \sim 65535 $                                  \\
+			\hline
+			signed short       & 2字节             & $ -32768 \sim 32767 $                             \\
+			\hline
+			long               & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
+			\hline
+			signed long        & 4字节             & $ 0 \sim 4294967295 $                             \\
+			\hline
+			unsigned long      & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
+			\hline
+			long long          & 8字节             & $ -9223372036854775808 \sim 9223372036854775807 $ \\
+			\hline
+			signed long long   & 8字节             & $ -9223372036854775808 \sim 9223372036854775807 $ \\
+			\hline
+			unsigned long long & 8字节             & $ 0 \sim 18446744073709551615 $                   \\
+			\hline
+			float              & 4字节             & $ -3.4e38 \sim 3.4e38 $                           \\
+			\hline
+			double             & 8字节             & $ -1..7e308 \sim 1.7e308 $                        \\
+			\hline
+		\end{tabular}
+	}
+	\caption{数据类型}
 \end{table}
 
 \mybox{数据类型}
@@ -212,8 +212,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 123
 foo::f()
 456
@@ -259,8 +259,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 2021/8/11
 	\end{verbatim}
 \end{tcolorbox}
@@ -301,8 +301,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 error: assignment of read-only location '* p'
 	\end{verbatim}
 \end{tcolorbox}
@@ -330,8 +330,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 error: assignment of read-only variable 'p'
 	\end{verbatim}
 \end{tcolorbox}
@@ -358,8 +358,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 error: assignment of read-only location '*(const int*)p'
 error: assignment of read-only variable 'p'
 	\end{verbatim}
@@ -391,8 +391,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 92
 	\end{verbatim}
 \end{tcolorbox}
@@ -432,8 +432,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 2021/8/15
 2021/7/1
 2021/1/1
@@ -472,8 +472,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 8
 3.14
 H
@@ -522,8 +522,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 Before: 92 28
 After: 28 92
 	\end{verbatim}
@@ -532,21 +532,21 @@ After: 28 92
 指针与引用的区别：
 
 \begin{itemize}
-    \item 指针有自己的一块空间，而引用只是一个别名，对引用的操作等效于对原变量的操作。
+	\item 指针有自己的一块空间，而引用只是一个别名，对引用的操作等效于对原变量的操作。
 
-    \item 指针的大小为4或8（根据OS），而引用则是被引用对象的大小。
+	\item 指针的大小为4或8（根据OS），而引用则是被引用对象的大小。
 
-    \item 指针可以被初始化为NULL，而引用必须被初始化且必须是一个已有对象的引用。
+	\item 指针可以被初始化为NULL，而引用必须被初始化且必须是一个已有对象的引用。
 
-    \item 作为参数传递时，指针需要被解引用才可以对对象进行操作，而直接对引用的修改都会改变引用所指向的对象。
+	\item 作为参数传递时，指针需要被解引用才可以对对象进行操作，而直接对引用的修改都会改变引用所指向的对象。
 
-    \item 引用在初始化后，便不能再更改引用的目标。
+	\item 引用在初始化后，便不能再更改引用的目标。
 
-    \item 指针可以有多级指针，而引用只有一级。
+	\item 指针可以有多级指针，而引用只有一级。
 
-    \item 指针和引用使用【++】运算符的意义不一样。
+	\item 指针和引用使用【++】运算符的意义不一样。
 
-    \item 返回动态内存分配的内存时必须使用指针，引用可能引起内存泄漏。
+	\item 返回动态内存分配的内存时必须使用指针，引用可能引起内存泄漏。
 \end{itemize}
 
 \newpage
@@ -584,8 +584,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 10
 4
 	\end{verbatim}
@@ -600,9 +600,9 @@ int main() {
 如果make\_youtiao()执行地很快并可以立即返回，那么B小组只需：
 
 \begin{enumerate}
-    \item 调用make\_youtiao()
-    \item 等待函数执行完成
-    \item 执行后续流程sell()出售
+	\item 调用make\_youtiao()
+	\item 等待函数执行完成
+	\item 执行后续流程sell()出售
 \end{enumerate}
 
 但是现实中make\_youtiao()函数需要处理的数据非常庞大，例如make\_youtiao(10000)不会立刻返回，而是需要等待10分钟才能执行完成。显然直接调用的话，需要等待10分钟后才能继续执行后续代码，这并不是一种高效的做法。 \\
@@ -635,8 +635,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 making youtiao ...
 selling youtiao ...
 	\end{verbatim}
@@ -663,8 +663,8 @@ malloc()的返回值为void *类型，表示一个指向申请到的空间的首
 通过malloc()申请来的空间是需要归还给操作系统的，否则程序长时间运行内存会逐渐下降。通过free()可以把申请来的空间释放，但是有两点需要注意：
 
 \begin{enumerate}
-    \item 只能释放通过malloc()申请得到的空间。
-    \item 只能通过空间的首地址进行释放。
+	\item 只能释放通过malloc()申请得到的空间。
+	\item 只能通过空间的首地址进行释放。
 \end{enumerate}
 
 \mybox{malloc() / free()}
@@ -693,8 +693,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 0 1 2 3 4 5 6 7 8 9
 	\end{verbatim}
 \end{tcolorbox}
@@ -751,8 +751,8 @@ int main() {
 \end{lstlisting}
 
 \begin{tcolorbox}
-    \mybox{运行结果}
-    \begin{verbatim}
+	\mybox{运行结果}
+	\begin{verbatim}
 *p1 = 928
 p2: 0 1 2 3 4 5 6 7 8 9
 	\end{verbatim}
@@ -761,15 +761,15 @@ p2: 0 1 2 3 4 5 6 7 8 9
 \subsection{malloc() / free()与new / delete区别}
 
 \begin{itemize}
-    \item new分配内存按照数据类型，而malloc()按照指定指定大小。
+	\item new分配内存按照数据类型，而malloc()按照指定指定大小。
 
-    \item new返回指定对象的指针，而malloc()返回void *，因此malloc()的返回值一般都需要类型转换。
+	\item new返回指定对象的指针，而malloc()返回void *，因此malloc()的返回值一般都需要类型转换。
 
-    \item new分配的空间要用delete销毁，而malloc()要用free()销毁。
+	\item new分配的空间要用delete销毁，而malloc()要用free()销毁。
 
-    \item new是一个操作符，malloc()是一个库函数。
+	\item new是一个操作符，malloc()是一个库函数。
 
-    \item new分配失败抛出bad\_alloc异常，而malloc()失败返回NULL。
+	\item new分配失败抛出bad\_alloc异常，而malloc()失败返回NULL。
 \end{itemize}
 
 \subsection{内存管理}
@@ -812,3 +812,5 @@ p2: 0 1 2 3 4 5 6 7 8 9
 	\end{tikzpicture}
 	\caption{内存管理}
 \end{figure}
+
+\newpage

@@ -503,7 +503,7 @@ v5 = [hello]
 			\hline
 		\end{tabular}
 	}
-	\caption{vecor操作}
+	\caption{vector操作}
 \end{table}
 
 vector不能使用下标添加元素，否则会造成缓冲区溢出，确保下标合法的一种有效手段就是尽可能使用for-each循环。如果循环体内部包含向vector添加元素的语句，则不能使用for-each循环。 \\
@@ -592,4 +592,260 @@ s6 = hello
 \end{tcolorbox}
 
 \subsection{string操作}
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{操作}          & \textbf{功能}                                 \\
+			\hline
+			out << s               & 将s写到输出流out中                            \\
+			\hline
+			in >> s                & 从输入流中读取字符串赋给s，字符串以空白符分割 \\
+			\hline
+			getline(in, s)         & 从输入流中读取一行赋给s                       \\
+			\hline
+			s.empty()              & 判断s是否为空                                 \\
+			\hline
+			s.size()               & 返回s中字符个数                               \\
+			\hline
+			s[n]                   & 返回s中第n个字符的引用                        \\
+			\hline
+			s1 + s2                & 返回s1和s2连接后的结果                        \\
+			\hline
+			s1 = s2                & 用s2的副本替换s1                              \\
+			\hline
+			s1 == s2、s1 != s2     & 判断s1和s2是否相等                            \\
+			\hline
+			<、<=、>、>=           & 字典序比较，对大小写敏感                      \\
+			\hline
+			s1.append(s2)          & 尾部插入                                      \\
+			\hline
+			s1.insert(pos, s2)     & 在第pos个位置插入s2                           \\
+			\hline
+			s.erase(pos, n)        & 从第pos个位置删除n个字符                      \\
+			\hline
+			s1.replace(pos, n, s2) & 从第pos个位置开始替换n个字符为s2              \\
+			\hline
+			s.substr(pos, n)       & 返回一个从pos开始的n个字符的拷贝              \\
+			\hline
+			s1.find(s2)            & 查找s1中s2第一次出现的位置                    \\
+			\hline
+			s1.rfind(s2)           & 查找s1中s2最后一次出现的位置                  \\
+			\hline
+		\end{tabular}
+	}
+	\caption{string操作}
+\end{table}
+
+\mybox{string}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string s("Hello");
+
+    s.append("world");          // Helloworld
+    s.insert(s.size(), "!");    // Helloworld!
+
+    s.replace(1, 4, "i");       // Hiworld!
+    s.erase(2, 5);              // Hi!
+    s.insert(2, " C++");        // Hi C++!
+
+    cout << s << endl;
+
+    cout << s.substr(3, 3) << endl;
+    cout << s.substr(3) << endl;
+    cout << s.find("C++") << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Hi C++!
+C++
+C++!
+3
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{STL链表}
+
+\subsection{list}
+
+list双向链表通过指针连成逻辑意义上的线性表，由于list中结点并不要求在一段连续内存中，因此list不支持快速随机存取，迭代器只能通过【++】或【--】移动。 \\
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=3,
+					draw, rectangle split horizontal}, >=stealth, start chain]
+		\node[on chain,draw,inner sep=6pt] (NULL1) {};
+		\node[list,on chain] (A) {prev \nodepart{second} data \nodepart{third} next};
+		\node[list,on chain] (B) {prev \nodepart{second} data \nodepart{third} next};
+		\node[list,on chain] (C) {prev \nodepart{second} data \nodepart{third} next};
+		\node[on chain,draw,inner sep=6pt] (NULL2) {};
+		\draw (NULL1.north east) -- (NULL1.south west);
+		\draw (NULL1.north west) -- (NULL1.south east);
+		\draw (NULL2.north east) -- (NULL2.south west);
+		\draw (NULL2.north west) -- (NULL2.south east);
+		\draw[<-] let \p1 = (A.west), \p2 = (A.center) in (NULL1) -- (\x1,\y2);
+		\draw[<->] let \p1 = (A.east), \p2 = (A.center) in (\x1,\y2) -- (B);
+		\draw[<->] let \p1 = (B.east), \p2 = (B.center) in (\x1,\y2) -- (C);
+		\draw[->] let \p1 = (C.east), \p2 = (C.center) in (\x1,\y2) -- (NULL2);
+	\end{tikzpicture}
+	\caption{双向链表}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{操作}      & \textbf{功能}         \\
+			\hline
+			list<T> lst        & 创建空的list          \\
+			\hline
+			list<T> lst(n)     & 创建含有n个元素的list \\
+			\hline
+			list<T> lst1(lst2) & 使用lst2初始化lst1    \\
+			\hline
+			lst.size()         & 返回list元素个数      \\
+			\hline
+			lst.clear()        & 删除所有元素          \\
+			\hline
+			lst.empty()        & 判断list是否为空      \\
+			\hline
+			lst.front()        & 返回第一个元素        \\
+			\hline
+			lst.back()         & 返回最后一个元素      \\
+			\hline
+			lst.insert()       & 插入一个元素          \\
+			\hline
+			lst.erase()        & 删除一个元素          \\
+			\hline
+			lst.push\_front()  & 在头部添加一个元素    \\
+			\hline
+			lst.push\_back()   & 在尾部添加一个元素    \\
+			\hline
+			lst.pop\_front()   & 删除第一个元素        \\
+			\hline
+			lst.pop\_back()    & 删除最后一个元素      \\
+			\hline
+			lst.remove()       & 删除元素              \\
+			\hline
+			lst.reverse()      & 反转list              \\
+			\hline
+			lst.sort()         & 排序                  \\
+			\hline
+			lst.unique()       & 去除相邻的重复元素    \\
+			\hline
+			lst.merge()        & 合并两个有序list      \\
+			\hline
+		\end{tabular}
+	}
+	\caption{list操作}
+\end{table}
+
+其中，lst.unique()并不是把重复的元素删除，而是全部放到数组尾部，返回去重后的尾地址。unique()中不自带sort()，因此需要先使用sort()进行排序。 \\
+
+\mybox{list}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+void printList(list<int> lst) {
+    for(list<int>::iterator iter = lst.begin();
+                            iter != lst.end();
+                            iter++) {
+        cout << *iter << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    list<int> lst;
+
+    lst.push_back(11);       // [11]
+    lst.push_front(22);      // [22, 11]
+    cout << lst.front() << endl;    // 22
+    cout << lst.back() << endl;     // 11
+
+    lst.insert(++lst.begin(), 3);   // [22, 3, 11]
+    lst.insert(--lst.end(), 2);     // [22, 3, 2, 11]
+    lst.push_back(2);               // [22, 3, 2, 11, 2]
+    printList(lst);
+
+    lst.pop_front();                // [3, 2, 11, 2]
+    lst.sort();                     // [2, 2, 3, 11]
+    lst.unique();                   // [2, 3, 11]
+    printList(lst);
+
+    lst.sort();                     // [2, 3, 11]
+    printList(lst);
+
+    list<int> lst2{1, 2, 8};
+    lst.merge(lst2);                // [1, 2, 2, 3, 8, 11]
+    printList(lst);
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+22
+11
+22 3 2 11 2
+2 3 11
+2 3 11
+1 2 2 3 8 11
+	\end{verbatim}
+\end{tcolorbox}
+
+\subsection{forward\_list}
+
+forward\_list和list的区别在于前者是单向链表，每个元素内部只有一个链接指向下一个元素，因此在存储方面list会消耗更多的空间。 \\
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+					draw, rectangle split horizontal}, >=stealth, start chain]
+		\node[list,on chain] (A) {data};
+		\node[list,on chain] (B) {data};
+		\node[list,on chain] (C) {data};
+		\node[on chain,draw,inner sep=6pt] (D) {};
+		\draw (D.north east) -- (D.south west);
+		\draw (D.north west) -- (D.south east);
+		\draw[*->] let \p1 = (A.two), \p2 = (A.center) in (\x1,\y2) -- (B);
+		\draw[*->] let \p1 = (B.two), \p2 = (B.center) in (\x1,\y2) -- (C);
+		\draw[*->] let \p1 = (C.two), \p2 = (C.center) in (\x1,\y2) -- (D);
+	\end{tikzpicture}
+	\caption{单向链表}
+\end{figure}
+
+forward\_list不支持反向迭代器，并且没有指向尾元素的迭代器，因此不提供back()、push\_back()、pop\_back()等操作。
+
+\newpage
+
+\section{容器适配器}
+
+\subsection{stack}
+
+栈，又名堆栈，是一种运算受限的线性数据结构，栈只能在表尾进行插入和删除操作。 \\
+
+栈中的元素只能先进后出（FILO, First In Last Out）。最早进入栈的元素所存放的位置叫作栈底（bottom），最后进入栈的元素存放的位置叫作栈顶（top）。 \\
 

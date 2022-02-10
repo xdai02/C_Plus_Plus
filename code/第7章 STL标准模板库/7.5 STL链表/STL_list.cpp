@@ -28,16 +28,11 @@ int main() {
     lst.unique();                   // [2, 3, 11]
     printList(lst);
 
-    list<int> lst2{0, 9, 2, 8};
-    // [2, 3, 11, 0, 9, 2, 8]
-    lst.splice(lst.end(), lst2, lst2.begin(), lst2.end());
+    lst.sort();                     // [2, 3, 11]
     printList(lst);
 
-    lst.sort();             // [0, 2, 2, 3, 8, 9, 11]
-    printList(lst);
-
-    list<int> lst3{1, 2, 8};
-    lst.merge(lst3);        // [0, 1, 2, 2, 2, 3, 8, 8, 9, 11]
+    list<int> lst2{1, 2, 8};
+    lst.merge(lst2);                // [1, 2, 2, 3, 8, 11]
     printList(lst);
 
     return 0;

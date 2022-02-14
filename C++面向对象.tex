@@ -25,11 +25,6 @@
 \usepackage{pgf-umlcd}
 \usepackage{bbding}
 \usepackage[edges]{forest}
-% \usepackage{minted}
-
-\makeatletter
-\newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
-\makeatother
 
 \usetikzlibrary{calc,trees,positioning,arrows,fit,shapes}
 \usetikzlibrary{shapes.multipart,chains}
@@ -38,10 +33,14 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{matrix,backgrounds}
 
+\makeatletter
+\newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
+\makeatother
+
 \def\rlwd{.5pt} \def\rlht{2.2ex} \def\rldp{.5ex}
-\def\mydiv#1{~%
-  \rule[-\rldp]{\rlwd}{\rlht}%
-  \setbox0=\hbox{~#1}%
+\def\mydiv#1{~
+  \rule[-\rldp]{\rlwd}{\rlht}
+  \setbox0=\hbox{~#1}
   \stackunder[\dimexpr\rldp-\rlwd]{~#1}{\rule{\wd0}{\rlwd}}%
 }
 
@@ -68,7 +67,6 @@
         rectangle split horizontal,
         rectangle split parts=#1,
         outer sep=0pt},
-        %
         gblock/.style={
             block,
             rectangle split parts=#1,
@@ -101,11 +99,6 @@
         row sep=2mm,
     },
 }
-
-% \def\x{0}
-% \def\y{0}
-% \def\k{0}
-% \def\radius{5}
 
 \makeatletter
 \def\BState{\State\hskip-\ALG@thistlm}
@@ -231,34 +224,11 @@
 		transform canvas ={rotate around ={45:($(current page.north west)+(20,-9)$)}}]
 	($(current page.north west)+(20,-9)$) rectangle ++(14,1.2);
 
-	% Year
-	% \draw[ultra thick,gray]
-	% ($(current page.center)+(5,2)$) -- ++(0,-3cm)
-	node[
-			midway,
-			left=0.25cm,
-			text width=5cm,
-			align=right,
-			black!75
-		]
-		{
-			% {\fontsize{25}{30} \selectfont \bf ANNUAL \\[10pt] REPORT}
-		}
-	node[
-			midway,
-			right=0.25cm,
-			text width=6cm,
-			align=left,
-			orange]
-		{
-			% {\fontsize{72}{86.4} \selectfont 2020}
-		};
-
 	% Title
 	\node[align=center] at ($(current page.center)+(0,-6)$)
 	{
-	{\fontsize{64}{64} \selectfont {{C++面向对象}}} \\[2cm]
-	{\fontsize{20}{19.2} \selectfont \textcolor{orange}{ \bf 极夜酱}} \\[4pt]
+	{\fontsize{64}{64} \selectfont {{C++面向对象}}}\\[2cm]
+	{\fontsize{20}{19.2} \selectfont \textcolor{orange}{ \bf 极夜酱}}\\[4pt]
 	};
 \end{tikzpicture}
 

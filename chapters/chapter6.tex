@@ -4,7 +4,7 @@
 
 \subsection{标准I/O}
 
-C++不直接处理输入输出，而是通过标准库中的一组类来处理I/O。输入流istream提供输入，输出流ostream提供输出。 \\
+C++不直接处理输入输出，而是通过标准库中的一组类来处理I/O。输入流istream提供输入，输出流ostream提供输出。\\
 
 标准输入输出有以下特点：
 
@@ -17,9 +17,11 @@ C++不直接处理输入输出，而是通过标准库中的一组类来处理I/
 	\item getline()从给定的`istream`读取一行数据，存入string对象。
 \end{enumerate}
 
+\vspace{0.5cm}
+
 \subsection{I/O格式化}
 
-每个iostream对象维护一个格式状态来控制I/O的细节，如进制、精度、宽度等。操纵符改变流的格式状态时，通常改变后的状态对所有后续I/O都生效。 \\
+每个iostream对象维护一个格式状态来控制I/O的细节，如进制、精度、宽度等。操纵符改变流的格式状态时，通常改变后的状态对所有后续I/O都生效。\\
 
 标准库定义了一组操纵符用来修改流的格式状态：
 
@@ -170,7 +172,7 @@ int main() {
 
 \subsection{文件I/O}
 
-程序不仅要从控制台进行I/O，还需要读写文件和字符串。 \\
+程序不仅要从控制台进行I/O，还需要读写文件和字符串。\\
 
 标准库的I/O类型在3个头文件中：
 
@@ -184,9 +186,11 @@ int main() {
 
 \begin{enumerate}
 	\item ifstream从给定文件读数据。
-	\item  ofstream向给定文件写数据。
+	\item ofstream向给定文件写数据。
 	\item fstream可读写文件。
 \end{enumerate}
+
+\vspace{0.5cm}
 
 \subsection{文件打开模式}
 
@@ -261,9 +265,9 @@ name = Terry, id = 979489
 <sstream>定义了3个类来支持内存IO：
 
 \begin{enumerate}
-    \item istringstream从string读数据。
-    \item ostringstream向string写数据。
-    \item stringstream可读写string。
+	\item istringstream从string读数据。
+	\item ostringstream向string写数据。
+	\item stringstream可读写string。
 \end{enumerate}
 
 \mybox{string流}

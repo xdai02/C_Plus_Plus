@@ -4,29 +4,9 @@
 
 \subsection{多态（Polymorphism）}
 
-多态是同一个行为具有多个不同表现形式或形态的能力。
+多态是同一个行为具有多个不同表现形式或形态的能力。例如可以把一只哈士奇，当成它的父类去看待，因此哈士奇是一只狗、一个动物或一个生物。\\
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.7]{img/C4/4-1/1.png}
-	\caption{多态}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[]
-		\draw (0,0) node {Animal animal = new Dog();};
-
-		\draw (-3,-2) rectangle (-1,-1);
-		\draw (1,-2) rectangle (3,-1);
-		\draw (-2,-1.5) node {父类引用};
-		\draw (2,-1.5) node {子类对象};
-
-		\draw[->] (-2,-1) -- (-1.5,-0.3);
-		\draw[->] (2,-1) -- (1.5,-0.3);
-	\end{tikzpicture}
-	\caption{父类引用指向子类对象}
-\end{figure}
+通过父类引用指向子类对象，例如Animal animal = new Dog()，从而产生多种形态。父类引用仅能访问父类所声明的属性和方法，不能访问子类独有的属性和方法。\\
 
 通过父类引用指向子类对象，从而产生多种形态。父类引用仅能访问父类所声明的属性和方法，不能访问子类独有的属性和方法。\\
 
@@ -255,13 +235,7 @@ circle: 113.097
 
 在面向对象中会使用抽象类为外部提供一个通用的、标准化的接口。\\
 
-宏观上来讲，接口是一种标准。例如常见的USB接口，电脑通过USB接口连接各种外设设备，每一个接口不用关心连接的外设设备是什么，只要这个外设设备实现了USB的标准，就可以连接到电脑上。
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{img/C4/4-3/1.png}
-	\caption{USB接口}
-\end{figure}
+宏观上来讲，接口是一种标准。例如常见的USB接口，电脑通过USB接口连接各种外设设备，每一个接口不用关心连接的外设设备是什么，只要这个外设设备实现了USB的标准，就可以连接到电脑上。\\
 
 从程序上来讲，接口代表了某种能力和约定。当父类的方法无法满足子类需求时，可实现接口扩充子类的能力，接口中方法的定义代表能力的具体要求。\\
 

@@ -1,10 +1,47 @@
-\chapter{C++基础}
+\chapter{Hello World!}
 
-\section{数据类型}
+\section{Hello World!}
 
-\subsection{C++简介}
+\subsection{编程语言（Programming Language）}
 
-C++由Bjarne Stroustrup于1979年在贝尔实验室发明，C++在C语言的基础上引起并扩充了面向对象的概念，最初命名为带类的C（C with classes），后更名为C++。C++应用非常广泛，常用于系统开发、引擎开发等领域，支持类、封装、继承、多态等特性。\\
+程序是为了让计算机去解决某些问题，它由一系列指令构成。但是计算机并不能理解人类的语言，即使是最简单的，例如“计算一下1+2是多少”。\\
+
+计算机采用的是二进制（binary），也就是只能够理解0和1，因此编程语言用于作为人类与计算机之间沟通的桥梁。
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.9]{img/Chapter1/1-1/1.png}
+\end{figure}
+
+通过使用编程语言来描述解决问题的步骤，从而让计算机一步一步去执行。流程图（flow chat）成为了一种程序的图形化表示方式。\\
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[node distance=2cm]
+		\node (start) [startend] {Start};
+		\node (init) [io, below of=start] {$ i = 0 $, $ sum = 0 $};
+		\node (decision)  [decision, below of=init] {$ i \le 100 $?};
+		\node (accumulation) [process, below of=decision] {$ sum = sum + i $};
+		\node (update) [process, below of=accumulation] {$ i = i + 1 $};
+		\node (output) [io, right of=decision, xshift=2.5cm] {print $ sum $};
+		\node (end) [startend, below of=update] {End};
+
+		\draw [arrow] (start) -- (init);
+		\draw [arrow] (init) -- (decision);
+		\draw [arrow] (decision) -- node[anchor=east] {yes } (accumulation);
+		\draw [arrow] (accumulation) -- (update);
+		\draw [arrow] (update) -- (-3,-8) -- (-3,-4) -- (decision);
+		\draw [arrow] (decision) -- node[anchor=south] {no} (output);
+		\draw [arrow] (output) |- (end);
+	\end{tikzpicture}
+	\caption{计算$ \sum_{i=1}^{100} i $的流程图}
+\end{figure}
+
+\vspace{0.5cm}
+
+\subsection{Hello World!}
+
+Hello World是学习编程的第一个程序，它的作用是向屏幕输出"Hello World!"。\\
 
 \mybox{Hello World!}
 
@@ -13,9 +50,10 @@ C++由Bjarne Stroustrup于1979年在贝尔实验室发明，C++在C语言的基�
 
 using namespace std;
 
-int main() {
-    cout << "Hello world!" << endl;
-    return 0;
+int main()
+{
+	cout << "Hello World!" << endl;
+	return 0;
 }
 \end{lstlisting}
 
@@ -26,44 +64,185 @@ Hello World!
 	\end{verbatim}
 \end{tcolorbox}
 
-头文件iostream库声明了用于在标准输入输出设备上操作的对象，头文件中包含cin（标准输入流）、cout（标准输出流）、cerr（标准错误流）、clog（标准日志流）对象。\\
+\#include <stdio.h>用于包含输入输出库的头文件（header file），这样才能够在程序中进行输入输出相关的操作。\\
 
-using namespace std告诉编译器使用std命名空间，命名空间是C++中新的概念。\\
+using namespace std表示使用std命名空间。\\
 
-\subsection{关键字}
+main()是程序的入口，程序运行后会首先执行main()中的代码。cout的功能是在屏幕上输出数据，endl表示输出一个换行符。最后的分号用于表示一条语句的结束，注意不要使用中文的分号。\\
 
-C++中的关键字不能作为常量名、变量名、或其它标识符名称。
+return 0表示main()运行结束，返回值为0，一般返回0用于表示程序正常结束。\\
+
+不同编程语言的Hello World写法大同小异，可以看出编程语言的基本结构是相似的。\\
+
+\mybox{C}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main() {
+	printf("Hello World!\n");
+	return 0;
+}
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\mybox{Java}
+
+\begin{lstlisting}[language=Java]
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+    }
+}
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\mybox{Python}
+
+\begin{lstlisting}[language=Python]
+print("Hello World!")
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\subsection{注释（Comment）}
+
+注释就是对代码的解释和说明，它并不会程序所执行。注释能提高程序的可读性，让人更加容易了解代码的功能。\\
+
+注释一般分为单行注释和多行注释：
+
+\begin{enumerate}
+	\item 单行注释：以//开头，该行之后的内容视为注释。
+	\item 多行注释：以/*开头，*/结束，中间的内容视为注释。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\mybox{注释}
+
+\begin{lstlisting}[language=C++]
+/*
+* Author: Terry
+* Date: 2022/11/16
+*/
+
+#include <iostream>      // header file
+
+using namespace std;
+
+int main()
+{
+	cout << "Hello World!" << endl;
+	return 0;
+}
+\end{lstlisting}
+
+\newpage
+
+\section{数据类型}
+
+\subsection{数据类型（Data Types）}
+
+在计算机中，每个数据一般都有一个对应的类型，基础数据类型包括：
+
+\begin{enumerate}
+	\item 整型
+	      \begin{itemize}
+		      \item 短整型short
+		      \item 整型int
+		      \item 长整型long
+		      \item 长长整型long long
+	      \end{itemize}
+
+	\item 浮点型
+	      \begin{itemize}
+		      \item 单精度浮点数float
+		      \item 双精度浮点数double
+	      \end{itemize}
+
+	\item 字符型char
+\end{enumerate}
+
+\vspace{0.5cm}
+
+不同的数据类型所占的内存空间大小不同，因此所能表示的数值范围也不同。\\
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{数据类型} & \textbf{大小} & \textbf{取值范围}           \\
+			\hline
+			short             & 2字节         & $ -2^{15} \sim 2^{15} - 1 $ \\
+			\hline
+			int               & 4字节         & $ -2^{31} \sim 2^{31} - 1 $ \\
+			\hline
+			long              & 4字节         & $ -2^{31} \sim 2^{31} - 1 $ \\
+			\hline
+			long long         & 8字节         & $ -2^{63} \sim 2^{63} - 1 $ \\
+			\hline
+			float             & 4字节         & 7位有效数字                 \\
+			\hline
+			double            & 8字节         & 15位有效数字                \\
+			\hline
+			char              & 1字节         & $ -128 \sim 127 $           \\
+			\hline
+		\end{tabular}
+	}
+\end{table}
+
+\vspace{0.5cm}
+
+\subsection{变量（Variable）}
+
+变量是用来存储数据的内存空间，每个变量都有一个类型，变量中只能存储对应类型的数据。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C++]
+int num = 10;
+double salary = 8232.56;
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+变量的命名需要符合规范：
+
+\begin{enumerate}
+	\item 由字母、数字和下划线组成，不能以数字开头
+	\item 不可以使用编程语言中预留的关键字
+	\item 使用英语单词，顾名思义
+\end{enumerate}
+
+关键字是编程语言内置的一些名称，具有特殊的用处和意义，因此不应该作为变量名，防止产生歧义。\\
 
 \begin{table}[H]
 	\centering
 	\setlength{\tabcolsep}{5mm}{
 		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			asm           & else              & new      & this    & auto      \\
+			asm      & auto     & break     & case     & catch    \\
 			\hline
-			enum          & operator          & throw    & bool    & explicit  \\
+			char     & class    & const     & continue & default  \\
 			\hline
-			private       & true              & break    & export  & protected \\
+			delete   & do       & double    & else     & enum     \\
 			\hline
-			try           & case              & extern   & public  & typedef   \\
+			extern   & float    & for       & friend   & goto     \\
 			\hline
-			catch         & false             & register & typeid  & char      \\
+			if       & inline   & int       & long     & new      \\
 			\hline
-			float         & reinterpret\_cast & typename & class   & for       \\
+			operator & private  & protected & public   & register \\
 			\hline
-			return        & union             & const    & friend  & short     \\
+			return   & short    & signed    & sizeof   & static   \\
 			\hline
-			unsigned      & const\_cast       & goto     & signed  & using     \\
+			struct   & switch   & template  & this     & throw    \\
 			\hline
-			continue      & if                & sizeof   & virtual & default   \\
+			try      & typedef  & union     & unsigned & virtual  \\
 			\hline
-			inline        & static            & void     & delete  & int       \\
-			\hline
-			static\_cast  & volatile          & do       & long    & struct    \\
-			\hline
-			wchar\_t      & double            & mutable  & switch  & while     \\
-			\hline
-			dynamic\_cast & namespace         & template &         &           \\
+			void     & volatile & while     &          &          \\
 			\hline
 		\end{tabular}
 	}
@@ -72,522 +251,279 @@ C++中的关键字不能作为常量名、变量名、或其它标识符名称�
 
 \vspace{0.5cm}
 
-\subsection{数据类型}
+\subsection{常量（Constant）}
 
-一些基本数据类型可以使用signed和unsigned修饰符进行修饰。
+变量的值在程序运行过程中可以修改，但有一些数据的值是固定的，为了防止这些数据被随意改动，可以将这些数据定义为常量。\\
+
+在数据类型前加上const关键字，即可定义常量，常量一般使用大写表示。如果在程序中尝试修改常量，将会报错。\\
+
+\mybox{常量}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	const double PI = 3.1415;
+	PI = 4;
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}\\
+	\textcolor{red}{error: assignment of read-only variable "PI"}
+\end{tcolorbox}
+
+\newpage
+
+\section{输入输出}
+
+\subsection{cout}
+
+cout是输出流对象，用来向屏幕输出数据。但是有些需要输出的字符在编程语言中具有特殊含义，因此这些特殊的字符，需要经过转义后输出。\\
 
 \begin{table}[H]
 	\centering
-	\setlength{\tabcolsep}{2mm}{
-		\begin{tabular}{|c|c|c|}
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|c|}
 			\hline
-			\textbf{类型}      & \textbf{占用内存} & \textbf{范围}                                     \\
+			\textbf{转义字符}      & \textbf{描述}                \\
 			\hline
-			char               & 1字节             & $ -128 \sim 127 $                                 \\
+			\lstinline|\\| & 反斜杠\lstinline|\| \\
 			\hline
-			unsigned char      & 1字节             & $ 0 \sim 255 $                                    \\
+			\lstinline|\'| & 单引号\lstinline|'| \\
 			\hline
-			signed char        & 1字节             & $ -128 \sim 127 $                                 \\
+			\lstinline|\"| & 双引号\lstinline|"| \\
 			\hline
-			int                & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
+			\lstinline|\n| & 换行                         \\
 			\hline
-			unsigned int       & 4字节             & $ 0 \sim 4294967295 $                             \\
-			\hline
-			signed int         & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
-			\hline
-			short              & 2字节             & $ -32768 \sim 32767 $                             \\
-			\hline
-			unsigned short     & 2字节             & $ 0 \sim 65535 $                                  \\
-			\hline
-			signed short       & 2字节             & $ -32768 \sim 32767 $                             \\
-			\hline
-			long               & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
-			\hline
-			signed long        & 4字节             & $ 0 \sim 4294967295 $                             \\
-			\hline
-			unsigned long      & 4字节             & $ -2147483648 \sim 2147483647 $                   \\
-			\hline
-			long long          & 8字节             & $ -9223372036854775808 \sim 9223372036854775807 $ \\
-			\hline
-			signed long long   & 8字节             & $ -9223372036854775808 \sim 9223372036854775807 $ \\
-			\hline
-			unsigned long long & 8字节             & $ 0 \sim 18446744073709551615 $                   \\
-			\hline
-			float              & 4字节             & $ -3.4e38 \sim 3.4e38 $                           \\
-			\hline
-			double             & 8字节             & $ -1..7e308 \sim 1.7e308 $                        \\
+			\lstinline|\t| & 制表符                       \\
 			\hline
 		\end{tabular}
 	}
-	\caption{数据类型}
+	\caption{转义字符}
 \end{table}
 
-\mybox{数据类型}
+\mybox{转义字符}
 
 \begin{lstlisting}[language=C++]
 #include <iostream>
-#include <limits>
+
 using namespace std;
 
-int main() {
-    cout << "int" << endl;
-    cout << "size: " << sizeof(int) << endl;
-    cout << "min: " << numeric_limits<int>::min() << endl;
-    cout << "max: " << numeric_limits<int>::max() << endl;
-    cout << "---------------------------------" << endl;
-    cout << "short" << endl;
-    cout << "size: " << sizeof(short) << endl;
-    cout << "min: " << numeric_limits<short>::min() << endl;
-    cout << "max: " << numeric_limits<short>::max() << endl;
-    cout << "---------------------------------" << endl;
-    cout << "long" << endl;
-    cout << "size: " << sizeof(long) << endl;
-    cout << "min: " << numeric_limits<long>::min() << endl;
-    cout << "max: " << numeric_limits<long>::max() << endl;
-    cout << "---------------------------------" << endl;
-    cout << "long long" << endl;
-    cout << "size: " << sizeof(long long) << endl;
-    cout << "min: " 
-        << numeric_limits<long long>::min() << endl;
-    cout << "max: "
-        << numeric_limits<long long>::max() << endl;
-    cout << "---------------------------------" << endl;
-    cout << "float" << endl;
-    cout << "size: " << sizeof(float) << endl;
-    cout << "min: " << numeric_limits<float>::min() << endl;
-    cout << "max: " << numeric_limits<float>::max() << endl;
-    cout << "---------------------------------" << endl;
-    cout << "double" << endl;
-    cout << "size: " << sizeof(double) << endl;
-    cout << "min: " << numeric_limits<double>::min() << endl;
-    cout << "max: " << numeric_limits<double>::max() << endl;
-    cout << "---------------------------------" << endl;
-    cout << "char" << endl;
-    cout << "size: " << sizeof(char) << endl;
-    cout << "---------------------------------" << endl;
-    cout << "bool" << endl;
-    cout << "size: " << sizeof(bool) << endl;
-    cout << "min: " << numeric_limits<bool>::min() << endl;
-    cout << "max: " << numeric_limits<bool>::max() << endl;
-    cout << "---------------------------------" << endl;
-
-    return 0;
-}
-\end{lstlisting}
-
-\newpage
-
-\section{命名空间}
-
-\subsection{命名空间（namespace）}
-
-多人共同开发时，经常会出现变量和函数定义冲突，例如编写了相同名称的函数。命名空间用于解决这个问题，它可以作为附加信息来区分不同库中的变量和函数。\\
-
-namespace表示了标识符的可见范围，C++标准库中的所有标识符都定义于一个名为std的namespace中。如果不使用using namespace std，就必须使用std::cout、std::endl等表示其中的标识符。\\
-
-\mybox{命名空间}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-namespace foo {
-    int n = 123;
-    void f() {
-        std::cout << "foo::f()" << std::endl;
-    }
-};
-
-namespace bar {
-    int n = 456;
-    void f() {
-        std::cout << "bar::f()" << std::endl;
-    }
-};
-
-int main() {
-    std::cout << foo::n << std::endl;
-    foo::f();
-    std::cout << bar::n << std::endl;
-    bar::f();
-    return 0;
+int main()
+{
+	cout << "\"Hello\nWorld\"" << endl;
+	return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-123
-foo::f()
-456
-bar::f()
+"Hello
+World"
 	\end{verbatim}
 \end{tcolorbox}
 
-\newpage
+在对变量的值进行输出时，可以使用格式控制符改变输出的格式。\\
 
-\section{结构体与共同体}
-
-\subsection{结构体}
-
-结构体是一种用户自定义的数据类型，它允许存储不同类型的数据项。结构体的声明使用关键字struct，声明通常定义为全局变量，这样就可以被多个函数所使用的了。\\
-
-通过成员运算符【.】可以访问一个结构体之中的成员变量。\\
-
-关键字typedef可以用来给数据类型定义别名，通过使用typedef可以简化结构体的声明，不用每次都加上struct关键字了。\\
-
-\mybox{结构体}
+\mybox{长方形面积}
 
 \begin{lstlisting}[language=C++]
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
-typedef struct {
-    int year;
-    int month;
-    int day;
-} Date;
+int main()
+{
+	int length = 10;
+	int width = 5;
+	double area = length * width;
 
-int main() {
-    Date date;
-    date.year = 2021;
-    date.month = 8;
-    date.day = 11;
-    cout << date.year << "/"
-        << date.month << "/"
-        << date.day << endl;
-    return 0;
+	cout << "Area = " << length << " * " << width << " = "
+			<< fixed << setprecision(2) << area << endl;
+	return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-2021/8/11
-	\end{verbatim}
-\end{tcolorbox}
-
-结构体也可以作为函数参数进行传递。如果是按值传递，那么在函数中会新创建一个结构体变量，并复制调用者的结构体的值。如果是按址传递，则需要传递结构体的指针。\\
-
-间接引用运算符【->】可以直接访问结构体指针所指的结构变量中的成员。\\
-
-\subsection{共同体}
-
-在存储多个成员信息时，编译器会自动给struct每个成员分配存储空间，struct可以存储多个成员信息。而union每个成员会用同一个存储空间，只能存储一个成员的信息。\\
-
-在任何同一时刻，union只存放了一个被先选中的成员，而结构体的所有成员都存在。对于union的不同成员赋值，将会对其它成员重写，原来成员的值就不存在了，而对于struct的不同成员赋值是互不影响的。\\
-
-\newpage
-
-\section{常量指针与指针常量}
-
-\subsection{常（量）指针}
-
-常（量）指针是指在定义指针变量时，在数据类型前用const修饰。\\
-
-定义一个常指针后，就不能通过指针去更改所指向的变量的值，但是指针的指向可以改变。\\
-
-\mybox{常指针}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-using namespace std;
-
-int main() {
-    int a = 123;
-    const int *p = &a;  // 等价于int const *p
-    *p = 456;
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-error: assignment of read-only location '* p'
+Area = 10 * 5 = 50.00
 	\end{verbatim}
 \end{tcolorbox}
 
 \vspace{0.5cm}
 
-\subsection{指针常量}
+\subsection{printf()}
 
-指针常量是指在定义指针时，在指针变量前用const修饰。\\
+printf()是C语言中的输出函数，包含在头文件stdio.h中，用于向屏幕输出指定格式的文本，使用对应类型的占位符可以更加方便地输出变量的值。\\
 
-指针常量不允许修改，必须要在定义时初始化，之后不能修改指针的指向。\\
-
-\mybox{指针常量}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-using namespace std;
-
-int main() {
-    int a = 123;
-    int b = 456;
-    int * const p = &a;
-    p = &b;
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-error: assignment of read-only variable 'p'
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{常指针常量}
-
-常指针常量表示指针的指向不能改变，同时指针指向的值也不能改变。\\
-
-\mybox{常指针常量}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-using namespace std;
-
-int main() {
-    int a = 123;
-    int b = 456;
-    const int * const p = &a;   // 等价于int const * const p
-    *p = 789;
-    p = &b;
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-error: assignment of read-only location '*(const int*)p'
-error: assignment of read-only variable 'p'
-	\end{verbatim}
-\end{tcolorbox}
-
-\newpage
-
-\section{内联函数}
-
-\subsection{内联函数（Inline Function）}
-
-内联函数是在编译时期展开，不用执行进入函数的步骤，直接执行函数体,相当于把内联函数里面的内容写在调用内联函数处。编译器一般不内联包含循环、递归、switch等复杂操作的函数。是否内联，程序员不可控，内联函数只是对编译器的建议，是否对函数内联，决定权在于编译器。\\
-
-\mybox{内联函数}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-using namespace std;
-
-inline int max(int num1, int num2) {
-    return num1 > num2 ? num1 : num2;
-}
-
-int main() {
-    cout << max(92, 28) << endl;
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-92
-	\end{verbatim}
-\end{tcolorbox}
-
-编译器对内联函数的处理首先是将内联函数复制到调用处，并为局部变量分配内存，将输入参数和返回值映射到局部变量空间中。如果内联函数有多个返回点，将会使用goto语句跳转到代码块的末尾。\\
-
-使用内联函数的优点在于同宏函数一样将在被调用处进行代码展开，省去了参数压栈、栈帧开辟与回收，结果返回等，从而提高程序运行速度。并且内联函数相比宏函数来说，在代码展开时，会做安全检查或自动类型转换，而宏定义则不会。在类中声明同时定义的成员函数，自动转化为内联函数，因此内联函数可以访问类的成员变量。\\
-
-但是内联是以代码膨胀（复制）为代价，消除函数调用带来的开销，每一处内联函数的调用都要复制代码，将使程序的总代码量增大，消耗更多的内存空间。并且内联函数无法随着函数库的升级而升级，内联函数的改变需要重新编译，不像普通函数可以直接链接。
-
-\newpage
-
-\section{重载函数}
-
-\subsection{函数默认参数}
-
-在进行函数参数定义的时候，也可以设置默认值。当参数没有传递的时候就利用默认值来进行参数内容的填充，如果在参数上定义了默认值，那么该参数一定要放在参数列表的最后。\\
-
-\mybox{函数默认参数}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-using namespace std;
-
-void setDate(int year = 1970, int month = 1, int day = 1) {
-    cout << year << "/" << month << "/" << day << endl;
-}
-
-int main() {
-    setDate(2021, 8, 15);
-    setDate(2021, 7);
-    setDate(2021);
-    setDate();
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-2021/8/15
-2021/7/1
-2021/1/1
-1970/1/1
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{重载函数}
-
-重载（overload）表示在同一个作用域中声明了一个与之前声明过的函数具有相同名称的函数，但是它们的参数列表不同。当调用一个重载函数时，编译器通过传递的参数类型，选用最合适的定义。\\
-
-\mybox{重载函数}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-using namespace std;
-
-int max(int num1, int num2) {
-    return num1 > num2 ? num1 : num2;
-}
-
-double max(double num1, double num2) {
-    return num1 > num2 ? num1 : num2;
-}
-
-char max(char num1, char num2) {
-    return num1 > num2 ? num1 : num2;
-}
-
-int main() {
-    cout << max(2, 8) << endl;
-    cout << max(3.14, 2.71) << endl;
-    cout << max('H', 'D') << endl;
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-8
-3.14
-H
-	\end{verbatim}
-\end{tcolorbox}
-
-\newpage
-
-\section{引用}
-
-\subsection{引用（Reference）}
-
-在C语言中【\&】表示取地址符，但是在C++中还有引用的特性。引用是指对某一变量的别名，因此引用本身并不占存储单元，对引用的操作与直接对变量的操作完全一样。
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{数据类型} & \textbf{占位符} \\
+			\hline
+			int               & \%d             \\
+			\hline
+			float             & \%f             \\
+			\hline
+			double            & \%f             \\
+			\hline
+			char              & \%c             \\
+			\hline
+		\end{tabular}
+	}
+	\caption{占位符}
+\end{table}
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C++]
-data_type &ref_var = var;
+\begin{lstlisting}[language=C]
+printf("Area = %d * %d = %.2f\n", length, width, area);
 \end{lstlisting}
 
-声明引用时必须对其初始化，并且之后不能再将该引用作为其它变量的别名。\\
+\vspace{0.5cm}
 
-引用的一个重要作用就是作为函数的参数。C语言中函数参数传递是按值传递，如果有大块数据作为参数传递的时候，往往采用指针的方式，因为这样可以避免将整块数据全部压栈，可以提高程序的效率。但是C++中传递引用给函数与传递指针的效果是一样的，使用引用传递函数的参数，在内存中并没有产生实参的副本，而是直接对实参操作。\\
+\subsection{cin}
 
-\mybox{引用}
+有时候一些数据需要从键盘输入，cin可以读取对应类型的数据，并赋值给相应的变量。\\
+
+在使用cin前，通常会使用cout先输出一句提示信息，告诉用户需要输入什么数据。\\
+
+\mybox{圆面积}
 
 \begin{lstlisting}[language=C++]
 #include <iostream>
+#include <cmath>
+#include <iomanip>
 
 using namespace std;
 
-void swap(int& num1, int& num2) {
-    int temp = num1;
-    num1 = num2;
-    num2 = temp;
-}
+int main()
+{
+	const double PI = 3.14159;
+	double r;
+	double area;
 
-int main() {
-    int a = 92;
-    int b = 28;
-    cout << "Before: " << a << " " << b << endl;
-    swap(a, b);
-    cout << "After: " << a << " " << b << endl;
-    return 0;
+	cout << "Radius: ";
+	cin >> r;
+
+	area = PI * pow(r, 2);
+	cout << "Area = " << fixed << setprecision(2) << area << endl;
+	
+	return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-Before: 92 28
-After: 28 92
+Radius: 5
+Area = 78.54
 	\end{verbatim}
 \end{tcolorbox}
 
-指针与引用的区别：
-
-\begin{itemize}
-	\item 指针有自己的一块空间，而引用只是一个别名，对引用的操作等效于对原变量的操作。
-
-	\item 指针的大小为4或8（根据OS），而引用则是被引用对象的大小。
-
-	\item 指针可以被初始化为NULL，而引用必须被初始化且必须是一个已有对象的引用。
-
-	\item 作为参数传递时，指针需要被解引用才可以对对象进行操作，而直接对引用的修改都会改变引用所指向的对象。
-
-	\item 引用在初始化后，便不能再更改引用的目标。
-
-	\item 指针可以有多级指针，而引用只有一级。
-
-	\item 指针和引用使用【++】运算符的意义不一样。
-
-	\item 返回动态内存分配的内存时必须使用指针，引用可能引起内存泄漏。
-\end{itemize}
+头文件cmath中定义了一些常用的数学函数，例如pow(x, y)可用于计算$ x $的$ y $次方。\\
 
 \newpage
 
-\section{函数指针}
+\section{表达式}
 
-\subsection{函数指针}
+\subsection{算术运算符}
 
-函数指针即指向函数的指针，它最大的作用是把一个函数作为参数传递给另外一个函数。在编译时，每一个函数都有一个入口地址，该入口地址就是函数指针所指向的地址。\\
+大部分编程语言中的除法与数学中的除法意义不同。\\
 
-\mybox{函数指针}
+当相除的两个数都为整数时，那么就会进行整除运算，因此结果仍为整数，例如21 / 4 = 5。\\
+
+如果相除的两个数中至少有一个为浮点数时，那么就会进行普通的除法运算，结果为浮点数，例如21.0 / 4 = 5.25。\\
+
+取模（modulo）运算符\%用于计算两个整数相除之后的余数，例如22 \% 3 = 1、4 \% 7 = 4。\\
+
+\mybox{逆序三位数}
 
 \begin{lstlisting}[language=C++]
 #include <iostream>
 
 using namespace std;
 
-int add(int num1, int num2) {
-    return num1 + num2;
-}
+int main()
+{
+	int num;
+	int a, b, c;
 
-int sub(int num1, int num2) {
-    return num1 - num2;
-}
+	cout << "Enter a 3-digit integer: ";
+	cin >> num;
 
-int get(int num1, int num2, int (*calculate)(int num1, int num2)) {
-    return calculate(num1, num2);
-}
+	a = num / 100;
+	b = num / 10 % 10;
+	c = num % 10;
 
-int main() {
-    cout << get(7, 3, add) << endl;
-    cout << get(7, 3, sub) << endl;
-    return 0;
+	cout << "Reversed: " << c*100 + b*10 + a << endl;
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Enter a 3-digit integer: 520
+Reversed: 25
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{复合运算符}
+
+使用复合运算符可以使表达式更加简洁。例如\lstinline|a = a + b|可以写成\lstinline|a += b|，-=、*=、/=、\%=等复合运算符的使用方式同理。\\
+
+当需要给一个变量的值加/减1时，除了可以使用\lstinline|a += 1|或\lstinline|a -= 1|之外，还可以使用++或--运算符，但是\lstinline|++|和\lstinline|--|可以出现在变量之前或之后：\\
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|l|}
+			\hline
+			\textbf{表达式}         & \textbf{含义}         \\
+			\hline
+			\lstinline|a++| & 执行完所在语句后自增1 \\
+			\hline
+			\lstinline|++a| & 在执行所在语句前自增1 \\
+			\hline
+			\lstinline|a--| & 执行完所在语句后自减1 \\
+			\hline
+			\lstinline|--a| & 在执行所在语句前自减1 \\
+			\hline
+		\end{tabular}
+	}
+	\caption{自增/自减运算符}
+\end{table}
+
+\mybox{自增/自减运算符}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int n = 10;
+
+	cout << n++ << endl;
+	cout << ++n << endl;
+	cout << n-- << endl;
+	cout << --n << endl;
+
+	return 0;
 }
 \end{lstlisting}
 
@@ -595,238 +531,51 @@ int main() {
 	\mybox{运行结果}
 	\begin{verbatim}
 10
-4
+12
+12
+10
 	\end{verbatim}
 \end{tcolorbox}
 
 \vspace{0.5cm}
 
-\subsection{回调函数（Callback Function）}
+\subsection{隐式类型转换}
 
-假设公司要开发一款主打解决国民早餐问题的APP明日油条，为了加快开发进度，这款应用由A小组和B小组协同开发。\\
+在计算机计算的过程中，只有类型相同的数据才可以进行运算。例如整数+整数、浮点数/浮点数等。\\
 
-其中有一个核心模块由A小组开发供B小组调用，这个核心模块被写成了一个函数make\_youtiao()。\\
+但是很多时候，我们仍然可以对不同类型的数据进行运算，而并不会产生错误，例如整数+浮点数。这是由于编译器会自动进行类型转换。在整数+浮点数的例子中，编译器会将整数转换为浮点数，这样就可以进行运算了。\\
 
-如果make\_youtiao()执行地很快并可以立即返回，那么B小组只需：
+编译器选择将整数转换为浮点数，而不是将浮点数转换为整数的原因在于，浮点数相比整数能够表示的范围更大。例如整数8可以使用8.0表示，而浮点数9.28变为整数9后就会丢失精度。\\
 
-\begin{enumerate}
-	\item 调用make\_youtiao()
-	\item 等待函数执行完成
-	\item 执行后续流程sell()出售
-\end{enumerate}
+隐式类型转换最常见的情形就是除法运算，这也是导致整数/整数=整数、整数/浮点数=浮点数的原因。\\
 
-但是现实中make\_youtiao()函数需要处理的数据非常庞大，例如make\_youtiao(10000)不会立刻返回，而是需要等待10分钟才能执行完成。显然直接调用的话，需要等待10分钟后才能继续执行后续代码，这并不是一种高效的做法。\\
+\subsection{显式类型转换}
 
-因此一种更好的做法是调用make\_youtiao()后不再等待这个函数执行完成，而是让这个函数知道制作完油条后该干什么，例如“制作10000个油条，然后卖出去”。\\
+有些时候编译器无法自动进行类型转换，这时就需要我们手动地强制类型转换。\\
 
-因此make\_youtiao()需要增加一个参数，除了指定制作油条的数量外，还可以指定制作好后该干什么，这个被make\_youtiao()调用的函数就叫回调。\\
-
-\mybox{回调函数}
+\mybox{显式类型转换}
 
 \begin{lstlisting}[language=C++]
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
-void sell(int n) {
-    cout << "selling youtiao ..." << endl;
-}
-
-void make_youtiao(int n, void (*sell)(int)) {
-    cout << "making youtiao ..." << endl;
-    for(int i = 0; i < n; i++);
-    sell(n);
-}
-
-int main() {
-    make_youtiao(10000, sell);
-    return 0;
+int main()
+{
+	int total = 821;
+	int num = 10;
+	double average = (double)total / num;
+	cout << "Average = " << fixed << setprecision(2) << average << endl;
+	return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-making youtiao ...
-selling youtiao ...
+Average = 82.10
 	\end{verbatim}
 \end{tcolorbox}
-
-\newpage
-
-\section{内存管理}
-
-\subsection{malloc() / free()}
-
-C语言使用malloc()分配内存，使用free()释放已分配的内存。当malloc()分配的内存过多/不够时，可以使用realloc()重新分配内存。\\
-
-malloc()的功能是向系统申请指定的内存空间（以字节为单位），使用该函数需要包含头文件stdlib.h。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C]
-void* malloc(size_t size);
-\end{lstlisting}
-
-malloc()的返回值为void *类型，表示一个指向申请到的空间的首地址，是一个无类型的指针，开发者需要自行转换为自己需要的类型。如果malloc()申请内存失败，则会返回空指针NULL。\\
-
-通过malloc()申请来的空间是需要归还给操作系统的，否则程序长时间运行内存会逐渐下降。通过free()可以把申请来的空间释放，但是有两点需要注意：
-
-\begin{enumerate}
-	\item 只能释放通过malloc()申请得到的空间。
-	\item 只能通过空间的首地址进行释放。
-\end{enumerate}
-
-\vspace{0.5cm}
-
-\mybox{malloc() / free()}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <cstdlib>
-
-using namespace std;
-
-int main() {
-    const int n = 10;
-    int *arr = (int *)malloc(sizeof(int) * n);
-    if(!arr) {
-        cerr << "Memory allocation failed." << endl;
-        return 1;
-    }
-    for(int i = 0; i < n; i++) {
-        arr[i] = i;
-        cout << arr[i] << " ";
-    }
-    cout << endl;
-    free(arr);
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-0 1 2 3 4 5 6 7 8 9
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{new / delete}
-
-C++中可以通过new运算符实现动态内存分配，如果空间内配失败，程序则抛出bad\_alloc异常。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-T *p = new T;
-T *p = new T[N];
-\end{lstlisting}
-
-其中T为任意类型名，p是类型为T *的指针。\\
-
-通过new动态内存分配所得的空间在使用完后需要使用delete运算符释放空间。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-delete p;
-delete[] p;
-\end{lstlisting}
-
-如果动态分配new一个数组，但是却用delete释放，而不是delete[]，会导致动态分配的数据没有被完全释放。如果动态申请的内存空间不再使用后没有及时释放，就会导致内存泄漏（memory leak）。\\
-
-\mybox{new / delete}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-using namespace std;
-
-int main() {
-    int *p1 = new int;
-    *p1 = 928;
-    cout << "*p1 = " << *p1 << endl;
-
-    const int n = 10;
-    int *p2 = new int[n];
-    cout << "p2: ";
-    for(int i = 0; i < n; i++) {
-        p2[i] = i;
-        cout << p2[i] << " ";
-    }
-    cout << endl;
-
-    delete p1;
-    delete[] p2;
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-*p1 = 928
-p2: 0 1 2 3 4 5 6 7 8 9
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{malloc() / free()与new / delete区别}
-
-\begin{itemize}
-	\item new分配内存按照数据类型，而malloc()按照指定指定大小。
-
-	\item new返回指定对象的指针，而malloc()返回void *，因此malloc()的返回值一般都需要类型转换。
-
-	\item new是一个操作符，malloc()是一个库函数。
-
-	\item new分配失败抛出bad\_alloc异常，而malloc()失败返回NULL。
-\end{itemize}
-
-\vspace{0.5cm}
-
-\subsection{内存管理}
-
-虚拟内存中栈区的内存是由系统自动分配的，不需要程序员对其进行管理，一般用于存储函数的返回地址、参数、局部变量和返回值。而堆区的内存是动态分配的，并且需要手动释放内存。\\
-
-栈是运行时的单位，堆是存储的单位。栈解决程序运行问题（如何执行），堆解决数据存储的问题（如何存储）。 \\
-
-内存通常包括了栈区（stack）、堆区（heap）、数据区、程序代码区：
-
-\begin{itemize}
-	\item 栈区：由编译器自动分配和释放，存放函数的参数值、局部变量的值等。
-
-	\item 堆区：一般由程序员分配和释放，若程序员不释放，程序结束后被OS回收。
-
-	\item 数据区：存放全局变量和静态变量，程序结束后由系统释放。
-
-	\item 程序代码区：存放函数体的二进制代码。
-\end{itemize}
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[scale=0.7]
-		\draw[-] (0,0) -- (0,10) -- (5,10) -- (5,0) -- (0,0);
-		\draw[-] (0,2) -- (5,2);
-		\draw[-] (0,4) -- (5,4);
-		\draw[-] (0,6) -- (5,6);
-		\draw[-] (0,8) -- (5,8);
-
-		\draw (0,0) node[left] {0};
-		\draw (0,10) node[left] {max};
-
-		\draw (2.5,1) node {Text};
-		\draw (2.5,3) node {Data};
-		\draw (2.5,5) node {Heap};
-		\draw (2.5,9) node {Stack};
-
-		\draw[->] (2.5,8) -- (2.5,7.5);
-		\draw[->] (2.5,6) -- (2.5,6.5);
-	\end{tikzpicture}
-	\caption{内存管理}
-\end{figure}
 
 \newpage

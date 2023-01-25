@@ -1,0 +1,309 @@
+\chapter{I/O库}
+
+\section{标准I/O}
+
+\subsection{标准I/O}
+
+C++不直接处理输入输出，而是通过标准库中的一组类来处理I/O。输入流istream提供输入，输出流ostream提供输出。\\
+
+标准输入输出有以下特点：
+
+\begin{enumerate}
+	\item cin是istream的对象，从标准输入读取数据。
+	\item cout是ostream的对象，向标准输出写数据。
+	\item cerr是ostream的对象，用于输出错误信息，写到标准错误。
+	\item 【>>】运算符从istream对象读取输入。
+	\item 【<<】运算符从ostream对象写输出。
+	\item getline()从给定的`istream`读取一行数据，存入string对象。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{I/O格式化}
+
+每个iostream对象维护一个格式状态来控制I/O的细节，如进制、精度、宽度等。操纵符改变流的格式状态时，通常改变后的状态对所有后续I/O都生效。\\
+
+标准库定义了一组操纵符用来修改流的格式状态：
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|l|}
+			\hline
+			\textbf{操纵符} & \textbf{功能}                           \\
+			\hline
+			boolalpha       & 将true和false输出为字符串               \\
+			\hline
+			noboolalpha     & 将true和false输出为1和0                 \\
+			\hline
+			showbase        & 对整型值输出表示进制的前缀              \\
+			\hline
+			noshowbase      & 不生成表示进制的前缀                    \\
+			\hline
+			showpoint       & 浮点数总是显示小数点                    \\
+			\hline
+			noshowpoint     & 只有浮点数包含小数部分才显示小数点      \\
+			\hline
+			showpos         & 非负数显示【+】                         \\
+			\hline
+			noshowpos       & 非负数不显示【+】                       \\
+			\hline
+			uppercase       & 在十六进制中打印0X，在科学计数法中打印E \\
+			\hline
+			nouppercase     & 在十六进制中打印0x，在科学计数法中打印e \\
+			\hline
+			dec             & 整型显示为十进制                        \\
+			\hline
+			hex             & 整型显示为十六进制                      \\
+			\hline
+			oct             & 整型显示为八进制                        \\
+			\hline
+			left            & 在值的左侧添加填充字符                  \\
+			\hline
+			right           & 在值的右侧添加填充字符                  \\
+			\hline
+			internal        & 在符号和值之间添加填充字符              \\
+			\hline
+			fixed           & 浮点数显示为定点十进制                  \\
+			\hline
+			scientific      & 浮点数显示为科学计数法                  \\
+			\hline
+			unitbuf         & 每次输出操作后刷新缓冲区                \\
+			\hline
+			nounitbuf       & 恢复正常的缓冲区刷新方式                \\
+			\hline
+			skipws          & 输入运算符跳过空白符                    \\
+			\hline
+			noskipws        & 输入运算符不跳过空白符                  \\
+			\hline
+			flush           & 刷新ostream缓冲区                       \\
+			\hline
+			ends            & 插入空字符，然后刷新ostream缓冲区       \\
+			\hline
+			endl            & 插入换行符，然后刷新ostream缓冲区       \\
+			\hline
+			setfill(ch)     & 用ch填充空白                            \\
+			\hline
+			setprecision(n) & 将浮点精度设置为n                       \\
+			\hline
+			setw(n)         & 读或写值的宽度为n个字符                 \\
+			\hline
+			setbase(n)      & 将整数输出为n进制                       \\
+			\hline
+		\end{tabular}
+	}
+	\caption{操纵符}
+\end{table}
+
+\mybox{格式化输出}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+int main() {
+    cout << "布尔：";
+    cout << boolalpha << true << " " << false << endl;
+    cout << "------------------------------" << endl;
+    
+    cout << "十进制：";
+    cout << dec << 20 << " " << 1024 << endl;
+    
+    cout << "十六进制：";
+    cout << showbase << hex 
+        << 20 << " "<< 1024
+        << noshowbase << endl;
+    
+    cout << "八进制：";
+    cout << oct << 20 << " " << 1024 << dec << endl;
+    cout << "------------------------------" << endl;
+    
+    cout << "科学计数法：";
+    cout << scientific
+        << 100 * sqrt(2)
+        << defaultfloat << endl;
+    cout << "------------------------------" << endl;
+    
+    cout << "默认输出浮点数：";
+    cout << 10.0 << endl;
+    
+    cout << "浮点数打印小数点：";
+    cout << showpoint << 10.0 << noshowpoint << endl;
+    cout << "------------------------------" << endl;
+    
+    cout << "精度：";
+    cout << setprecision(3) << fixed << sqrt(2) << endl;
+    cout << "------------------------------" << endl;
+    
+    cout << "宽度填充：";
+    cout << setfill('0') << setw(4) << 2021 << "/"
+         << setw(2) << 9 << "/"
+         << setw(2) << 2 << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+布尔：true false
+------------------------------
+十进制：20 1024
+十六进制：0x14 0x400
+八进制：24 2000
+------------------------------
+科学计数法：1.414214e+02
+------------------------------
+默认输出浮点数：10
+浮点数打印小数点：10.0000
+------------------------------
+精度：1.414
+------------------------------
+宽度填充：2021/09/02
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{文件I/O}
+
+\subsection{文件I/O}
+
+程序不仅要从控制台进行I/O，还需要读写文件和字符串。\\
+
+标准库的I/O类型在3个头文件中：
+
+\begin{enumerate}
+	\item <iostream>定义了读写流的基本类型。
+	\item <fstream>定义了读写文件的类型。
+	\item <sstream>定义了读写string对象的类型。
+\end{enumerate}
+
+<fstream>中定义了3个I/O类来读写文件：
+
+\begin{enumerate}
+	\item ifstream从给定文件读数据。
+	\item ofstream向给定文件写数据。
+	\item fstream可读写文件。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{文件打开模式}
+
+每个流都有一个关联的文件模式，在打开文件时可以指定文件模式。
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|l|}
+			\hline
+			\textbf{打开模式} & \textbf{作用}                                   \\
+			\hline
+			ios::in           & 以读方式打开                                    \\
+			\hline
+			ios::out          & 以写方式打开                                    \\
+			\hline
+			ios::app          & 以追加方式打开                                  \\
+			\hline
+			ios::ate          & 打开文件定位到文件末尾                          \\
+			\hline
+			ios::trunc        & 如果文件存在，其内容将被截断，即把文件长度设为0 \\
+			\hline
+		\end{tabular}
+	}
+	\caption{文件打开模式}
+\end{table}
+
+\mybox{文件I/O}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    string name;
+    int id;
+    cout << "Enter name: ";
+    cin >> name;
+    cout << "Enter id: ";
+    cin >> id;
+    
+    ofstream out("info.txt");
+    out << name << " " << id << endl;
+    out.close();
+    
+    ifstream in("info.txt");
+    in >> name >> id;
+    in.close();
+    
+    cout << "name = " << name << ", id = " << id << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Enter name: Terry
+Enter id: 979489
+name = Terry, id = 979489
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{string流}
+
+\subsection{string流}
+
+<sstream>定义了3个类来支持内存IO：
+
+\begin{enumerate}
+	\item istringstream从string读数据。
+	\item ostringstream向string写数据。
+	\item stringstream可读写string。
+\end{enumerate}
+
+\mybox{string流}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string line;
+    cout << "convert a string to Python list format: ";
+    getline(cin, line);
+
+    ostringstream out;
+    istringstream in(line);
+    string token;
+
+    out << "[";
+    while(in >> token) {
+        out << token << ", ";
+    }
+    out << "\b\b]";
+    cout << out.str() << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+convert a string to Python list format: This is a test
+[This, is, a, test]
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage

@@ -1,174 +1,368 @@
-\chapter{异常}
+\chapter{函数}
 
-\section{异常}
+\section{函数}
 
-\subsection{异常（Exception）}
+\subsection{函数（Function）}
 
-异常就是程序在运行过程中出现的非正常的情况。异常本身是一个类，产生异常就是创建异常对象并抛出一个异常对象。Java处理异常的方法是中断处理。\\
+数学中的函数$ y = f(x) $，通过输入$ x $的值，经过计算可以得到$ y $的值。计算机中的函数也是如此，将输入传给函数，经过处理后，会得到输出。\\
 
-C++异常处理涉及到三个关键字：
-
-\begin{enumerate}
-	\item throw：当问题出现时，程序会抛出一个异常。
-	\item try：放置可能抛出异常的代码。
-	\item catch：捕获并处理异常。
-\end{enumerate}
+函数是一段可重复使用的代码，做了一个特定的任务。例如printf()和strlen()就是函数，其中printf()的功能是输出字符串，strlen()的功能是计算字符串的长度。\\
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{img/C5/5-1/1.png}
+	\begin{tikzpicture}[scale=0.5]
+		\draw[-] (5,-2) -- (10,-2) -- (10,2) -- (5,2) -- (5,-2);
+		\draw[->] (0,0) -- (5,0);
+		\draw[->] (10,0) -- (15,0);
+
+		\draw (-2,0) node {Input};
+		\draw (17,0) node {Output};
+		\draw (7.5,0) node {Function};
+	\end{tikzpicture}
+	\caption{函数}
 \end{figure}
 
-\mybox{除以0}
+除了这些内置的函数以外，开发者还可以自定义函数，将程序中会被多次使用的代码或做了一件特定的任务的代码写成一个函数，这样就能避免重复写相同的代码，提高开发效率，也利于维护。\\
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
+在编写函数时需要：
 
-using namespace std;
+\begin{enumerate}
+	\item 确定函数的功能
+	      \begin{itemize}
+		      \item 函数名
+		      \item 确保一个函数只做一件事
+	      \end{itemize}
 
-int divide(int num1, int num2) {
-    if(num2 == 0) {
-        throw "division by zero";
-    }
-    return num1 / num2;
-}
+	\item 确定函数的输入（参数）
+	      \begin{itemize}
+		      \item 是否需要参数
+		      \item 参数个数
+		      \item 参数类型
+	      \end{itemize}
+
+	\item 确定函数的输出（返回值）
+	      \begin{itemize}
+		      \item 是否需要返回值
+		      \item 返回值类型
+	      \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\mybox{最大值}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int max(int num1, int num2);  // function prototype
 
 int main() {
-    try {
-        int result = divide(5, 0);
-        cout << result << endl;
-    } catch(const char *msg) {
-        cerr << msg << endl;
-    }
+	printf("%d\n", max(4, 12));
+	printf("%d\n", max(54, 33));
+	printf("%d\n", max(-999, -774));
+	return 0;
+}
 
-    return 0;
+int max(int num1, int num2) {
+	// if(num1 > num2) {
+	//     return num1;
+	// } else {
+	//     return num2;
+	// }
+
+	return num1 > num2 ? num1 : num2;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-division by zero
+12
+54
+-774
 	\end{verbatim}
 \end{tcolorbox}
 
-普通的异常会导致程序无法完成编译，这样的异常被称为非运行时异常（non-runtime exception），但是由于异常是发生在编译时期的，因此常常称为编译时异常。在运行中如果遇到了异常，会导致程序执行的强制停止，这样的异常被称为运行时异常。
+函数也可以没有返回值，因为它执行完函数中的代码，并不需要将结果返回给调用者，此时函数的返回值类型为void。\\
 
-\newpage
+\mybox{棋盘}
 
-\section{异常类}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
 
-C++提供了一系列标准的异常，定义在<exception>中。
+void print_board() {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 2; j++) {
+			printf("   |");
+		}
+		printf("\n");
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|c|l|}
-			\hline
-			\textbf{异常}          & \textbf{描述}         \\
-			\hline
-			std::exception         & 所有标准C++异常的父类 \\
-			\hline
-			std::bad\_alloc        & 通过new抛出           \\
-			\hline
-			std::bad\_cast         & 通过dynamic\_cast抛出 \\
-			\hline
-			std::bad\_exception    & 处理无法预期的异常    \\
-			\hline
-			std::bad\_typeid       & 通过typeid抛出        \\
-			\hline
-			std::logic\_error      & 逻辑错误              \\
-			\hline
-			std::domain\_error     & 使用了无效的定义域    \\
-			\hline
-			std::invalid\_argument & 使用了无效的参数      \\
-			\hline
-			std::length\_error     & 创建过长的std::string \\
-			\hline
-			std::out\_of\_range    & 访问定义外的元素      \\
-			\hline
-			std::runtime\_error    & 运行时错误            \\
-			\hline
-			std::overflow\_error   & 发生上溢              \\
-			\hline
-			std::underflow\_error  & 发生下溢              \\
-			\hline
-			std::range\_error      & 存储超出范围的值      \\
-			\hline
-		\end{tabular}
+		if (i < 2) {
+			printf("---+---+---\n");
+		}
 	}
-	\caption{异常类}
-\end{table}
-
-what()是异常类提供的一个公共方法，它已被所有子异常类重载。\\
-
-\mybox{bad\_alloc}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <exception>
-
-using namespace std;
+}
 
 int main() {
-    try {
-        char *p = new char[0xfffffffff];
-        delete p;
-    } catch(bad_alloc &e) {
-        cerr << e.what() << endl;
-    }
-    return 0;
+	print_board();
+	return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-std::bad_alloc
+   |   |
+---+---+---
+   |   |
+---+---+---
+   |   |
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{函数调用}
+
+当调用函数时，程序会记录下当前的执行位置，并跳转到被调用的函数处执行。当被调用的函数执行结束后，程序会回到之前的位置继续执行。\\
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[]
+		\draw (0,4.5) node {Caller};
+		\draw[->] (0,4) -- (0,0.5);
+		\draw[->] (0,-0.5) -- (0,-4);
+		\draw (0,0) node {调用foo()};
+
+		\draw (4,4) node {foo()};
+		\draw[->] (4,3) -- (4,0.5);
+		\draw[->] (4,-0.5) -- (4,-3);
+		\draw (4,0) node {调用bar()};
+
+		\draw (8,3) node {bar()};
+		\draw[->] (8,2) -- (8,-2);
+
+		\draw[->] (0.5,0.5) -- (3.5,3);
+		\draw[->] (3.5,-3) -- (0.5,-0.5);
+		\draw[->] (4.5,0.5) -- (7.5,2);
+		\draw[->] (7.5,-2) -- (4.5,-0.5);
+	\end{tikzpicture}
+	\caption{函数调用}
+\end{figure}
+
+\vspace{0.5cm}
+
+\mybox{两点间距离}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <math.h>
+
+double square(double x) {
+	return x * x;
+}
+
+double distance(double x1, double y1, double x2, double y2) {
+	return sqrt(square(x1 - x2) + square(y1 - y2));
+}
+
+int main() {
+	double x1, y1, x2, y2;
+	printf("Enter (x1, y1): ");
+	scanf("%lf%lf", &x1, &y1);
+	printf("Enter (x2, y2): ");
+	scanf("%lf%lf", &x2, &y2);
+
+	printf("Distance: %.2f\n", distance(x1, y1, x2, y2));
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Enter (x1, y1): 0 0
+Enter (x2, y2): 3 4
+Distance: 5.00
 	\end{verbatim}
 \end{tcolorbox}
 
 \newpage
 
-\section{自定义异常}
+\section{作用域}
 
-\subsection{自定义异常}
+\subsection{局部变量（Local Variable）}
 
-系统中提供了很多的异常类型，但是异常类型提供地再多，也无法满足所有的需求。当需要的异常类型系统没有提供的时候，此时就需要自定义异常了。通过继承和重载exception类可以定义新的异常。\\
+定义在块中的变量称为局部变量，在进入块时变量才会被创建，当离开块时变量就会被销毁。因此，局部变量的生命周期为从声明时开始到所在块结束。\\
 
-\mybox{自定义异常}
+例如有些变量只在程序的某一段代码中使用，而在其它地方不会被使用。这时就可以将这些变量定义在一个块（if、for、函数等）中，这样可以避免变量名冲突的问题。最典型的一个例子就是在for循环中，循环变量i被定义被块中，因为i的作用仅用于控制循环次数，在离开循环后就没有存在的必要了。
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
-#include <exception>
+\vspace{-0.5cm}
 
-using namespace std;
+\begin{lstlisting}[language=C]
+for(int i = 0; i < 5; i++)
+\end{lstlisting}
 
-class AgeException : public exception {
-public:
-    AgeException(string msg) : msg(msg) {}
+块与块之间的局部变量是互相独立的，即使变量名相同，它们也不是同一个变量。\\
 
-    virtual const char* what() const noexcept override {
-        return msg.c_str();
-    }
+例如在函数调用中，函数的参数也是局部变量，它们的作用域仅限于函数内。\\
 
-private:
-    string msg;
-};
+例如一个用于交换两个变量的函数swap()，在main()中的变量a和b与swap()中的a和b并不是同一个变量。在调用swap()时，是将main()中的a和b的值复制给swap()中的a和b。swap()交换的是其内部的局部变量，并不会对main()中的a和b产生任何影响。\\
+
+\mybox{局部变量}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+void swap(int a, int b) {
+	int temp = a;
+	a = b;
+	b = temp;
+	printf("swap(): a = %d, b = %d\n", a, b);
+}
 
 int main() {
-    try {
-        int age;
-        cout << "Enter age: ";
-        cin >> age;
-        if(age < 0 || age > 130) {
-            throw AgeException("invalid age");
-        }
-    } catch(AgeException& e) {
-        cout << e.what() << endl;
-    }
+	int a = 1;
+	int b = 2;
 
+	printf("Before: a = %d, b = %d\n", a, b);
+	swap(a, b);
+	printf("After: a = %d, b = %d\n", a, b);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Before: a = 1, b = 2
+swap(): a = 2, b = 1
+After: a = 1, b = 2
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{全局变量（Global Variable）}
+
+全局变量拥有比局部变量更长的生命周期，它的生命周期贯穿整个程序。全局变量可以被程序中所有函数访问。\\
+
+全局变量一般用于：
+
+\begin{itemize}
+	\item 定义在整个程序中都会被使用到的常量（例如数组容量）
+	\item 被函数间共享的变量（例如计数器）
+\end{itemize}
+
+\vspace{0.5cm}
+
+\mybox{全局变量}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int a, b;
+
+void swap() {
+	int temp = a;
+	a = b;
+	b = temp;
+	printf("swap(): a = %d, b = %d\n", a, b);
+}
+
+int main() {
+	a = 1;
+	b = 2;
+
+	printf("Before: a = %d, b = %d\n", a, b);
+	swap(a, b);
+	printf("After: a = %d, b = %d\n", a, b);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Before: a = 1, b = 2
+swap(): a = 2, b = 1
+After: a = 2, b = 1
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{递归} \label{recursion}
+
+\subsection{递归（Recursion）}
+
+要理解递归，得先理解递归（见\ref{recursion}章节）。\\
+
+一个函数调用自己的过程被称为递归。递归可以轻松地解决一些复杂的问题，很多著名的算法都利用了递归的思想。
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{img/Chapter5/5-3/1.png}
+\end{figure}
+
+\vspace{0.5cm}
+
+\mybox{讲故事}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <string.h>
+
+void tell_story() {
+	char story[1024] = {0};
+	strcat(story, "从前有座山，山里有座庙\n");
+	strcat(story, "庙里有个老和尚\n");
+	strcat(story, "老和尚在对小和尚讲故事：\n");
+	printf("%s", story);
+
+	tell_story();
+}
+
+int main() {
+	tell_story();
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+从前有座山，山里有座庙
+庙里有个老和尚
+老和尚在对小和尚讲故事：
+从前有座山，山里有座庙
+庙里有个老和尚
+老和尚在对小和尚讲故事：
+从前有座山，山里有座庙
+庙里有个老和尚
+老和尚在对小和尚讲故事：
+...
+	\end{verbatim}
+\end{tcolorbox}
+
+一个永远无法结束的递归函数最终会导致栈溢出。因此递归函数需要确定一个结束条件，确保在递归过程中能在合适的地方停止并返回。\\
+
+\mybox{阶乘}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int factorial(int n) {
+    if(n == 0 || n == 1) {
+        return 1;
+    }
+    return n * factorial(n-1);
+}
+
+int main() {
+    printf("5! = %d\n", factorial(5));
     return 0;
 }
 \end{lstlisting}
@@ -176,9 +370,237 @@ int main() {
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-Enter age: -1
-invalid age
+5! = 120
 	\end{verbatim}
 \end{tcolorbox}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[]
+		\draw (0,0) rectangle (3,1.5);
+		\draw (3,-2) rectangle (6,-0.5);
+		\draw (6,-4) rectangle (9,-2.5);
+		\draw (9,-6) rectangle (12,-4.5);
+		\draw (12,-8) rectangle (15,-6.5);
+
+		\draw (12.75,-10.75) rectangle (14.25,-9.25);
+		\draw (9.75,-8.75) rectangle (11.25,-7.25);
+		\draw (6.75,-6.75) rectangle (8.25,-5.25);
+		\draw (3.75,-4.75) rectangle (5.25,-3.25);
+		\draw (0.75,-2.75) rectangle (2.25,-1.25);
+
+		\draw (1.5,0.75) node {$ factorial(5) $};
+		\draw (4.5,-1.25) node {$ factorial(4) $};
+		\draw (7.5,-3.25) node {$ factorial(3) $};
+		\draw (10.5,-5.25) node {$ factorial(2) $};
+		\draw (13.5,-7.25) node {$ factorial(1) $};
+
+		\draw (13.5,-10) node {$ 1 $};
+		\draw (10.5,-8) node {$ 2 $};
+		\draw (7.5,-6) node {$ 6 $};
+		\draw (4.5,-4) node {$ 24 $};
+		\draw (1.5,-2) node {$ 120 $};
+
+		\draw[->] (3,0.75) -- (4.5,0.75) -- (4.5,-0.5);
+		\draw[->] (6,-1.25) -- (7.5,-1.25) -- (7.5,-2.5);
+		\draw[->] (9,-3.25) -- (10.5,-3.25) -- (10.5,-4.5);
+		\draw[->] (12,-5.25) -- (13.5,-5.25) -- (13.5,-6.5);
+
+		\draw[->] (12.75,-10) -- (10.5,-10) -- (10.5,-8.75);
+		\draw[->] (9.75,-8) -- (7.5,-8) -- (7.5,-6.75);
+		\draw[->] (6.75,-6) -- (4.5,-6) -- (4.5,-4.75);
+		\draw[->] (3.75,-4) -- (1.5,-4) -- (1.5,-2.75);
+
+		\draw (4.5,1) node {$ 5 * factorial(4) $};
+		\draw (7.5,-1) node {$ 4 * factorial(3) $};
+		\draw (10.5,-3) node {$ 3 * factorial(2) $};
+		\draw (13.5,-5) node {$ 2 * factorial(1) $};
+
+		\draw (11,-10.5) node {$ 2 * 1 $};
+		\draw (8,-8.5) node {$ 3 * 2 $};
+		\draw (5,-6.5) node {$ 4 * 6 $};
+		\draw (2,-4.5) node {$ 5 * 24 $};
+	\end{tikzpicture}
+	\caption{阶乘}
+\end{figure}
+
+\vspace{0.5cm}
+
+\mybox{斐波那契数列}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int fibonacci(int n) {
+    if (n == 1 || n == 2) {
+        return n;
+    }
+    return fibonacci(n - 2) + fibonacci(n - 1);
+}
+
+int main() {
+	int n = 7;
+	printf("%d\n", fibonacci(n));
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+21
+	\end{verbatim}
+\end{tcolorbox}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+			level distance=2.4cm,
+			level 1/.style={sibling distance=6cm},
+			level 2/.style={sibling distance=3cm},
+			level 3/.style={sibling distance=2cm}
+		]
+		\node {$ f(5) $}
+		child {
+				node {$ f(3) $}
+				child {node {$ f(1) $}}
+				child {node {$ f(2) $}}
+			}
+		child {
+				node {$ f(4) $}
+				child {node {$ f(2) $}}
+				child {
+						node {$ f(3) $}
+						child {node {$ f(1) $}}
+						child {node {$ f(2) $}}
+					}
+			};
+	\end{tikzpicture}
+	\caption{递归树}
+\end{figure}
+
+递归的特点就是将一个复杂的大问题逐步简化为一个可以解决的小问题，然后再逐步计算出大问题的解。\\
+
+递归的优点在于代码简洁易懂，但是缺点也很明显，就是效率很低。每次递归都会产生函数调用，而函数调用的开销是很大的，不适合用来解决大规模的问题。\\
+
+例如在计算斐波那契数列的第40项时，递归需要花费大量时间，因为其中包含了大量的重复计算。相比而言，使用循环的方式能够节省大量的时间。因此像阶乘和斐波那契数列这样的情况，通常会采用循环，而不是递归进行计算。\\
+
+然而还存在很多问题不得不使用递归的思想才能解决。\\
+
+\mybox{阿克曼函数}
+
+\begin{align}\nonumber
+	A(m, n) =
+	\begin{cases}
+		n + 1             & m = 0        \\
+		A(m-1, 1)         & m > 0, n = 0 \\
+		A(m-1, A(m, n-1)) & m > 0, n > 0 \\
+	\end{cases}
+\end{align}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int A(int m, int n) {
+	if (m == 0) {
+		return n + 1;
+	} else if (m > 0 && n == 0) {
+		return A(m - 1, 1);
+	} else {
+		return A(m - 1, A(m, n - 1));
+	}
+}
+
+int main() {
+	printf("%d\n", A(3, 4));
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+125
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\mybox{汉诺塔}\\
+
+有三根柱子A、B、C，A柱子上从下到上套有n个圆盘，要求将A柱子上的圆盘移动到C柱子上。每次只能移动一个圆盘，且大圆盘始终不能叠在小圆盘上面。\\
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=0.5]
+		\draw[-, gray] (0,0) -- (24,0);
+		\draw[-, very thick] (4,0) -- (4,7);
+		\draw[-, very thick] (12,0) -- (12,7);
+		\draw[-, very thick] (20,0) -- (20,7);
+
+		\draw[fill=red] (2.5,3) rectangle (5.5,4);
+		\draw[fill=green] (2,2) rectangle (6,3);
+		\draw[fill=blue] (1.5,1) rectangle (6.5,2);
+		\draw[fill=yellow] (1,0) rectangle (7,1);
+	\end{tikzpicture}
+	\caption{汉诺塔}
+\end{figure}
+
+递归算法求解汉诺塔问题：
+
+\begin{enumerate}
+	\item 将n-1个圆盘从A借助C移到B。
+	\item 将第n个圆盘从A移到C。
+	\item 将n-1个圆盘从B借助A移到C。
+\end{enumerate}
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int move = 0;
+
+void hanoi(int n, char src, char mid, char dst) {
+	if (n == 1) {
+		printf("%c -> %c\n", src, dst);
+		move++;
+	} else {
+		// move top n-1 disks from src to mid
+		hanoi(n - 1, src, dst, mid);
+		printf("%c -> %c\n", src, dst);
+		move++;
+		// move top n-1 disks from mid to dst
+		hanoi(n - 1, mid, src, dst);
+	}
+}
+
+int main() {
+	hanoi(3, 'A', 'B', 'C');
+	printf("Moves: %d\n", move);
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+A -> C
+A -> B
+C -> B
+A -> C
+B -> A
+B -> C
+A -> C
+Moves: 7
+	\end{verbatim}
+\end{tcolorbox}
+
+假设每次移动花费1秒，解决一个64层的汉诺塔问题大约需要5800亿年。\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[]{img/Chapter5/5-3/2.png}
+\end{figure}
 
 \newpage

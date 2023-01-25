@@ -1,1534 +1,843 @@
-\chapter{STL标准模板库}
+\chapter{指针}
 
-\section{模板}
+\section{指针}
 
-\subsection{泛型编程（Generic Programming）}
+\subsection{指针（Pointer）}
 
-面向对象编程（OOP）和泛型编程（GP）都能处理在编写程序时类型未知的情况，OOP能处理运行时获取类型的情况，GP能处理编译期可获取类型的情况。\\
+每个变量都会在内存中占用一定的空间，不同类型的变量占用的空间大小也不同。每个空间都有一个地址，一般采用十六进制表示，如0x0060FEFC。\\
 
-模板是泛型编程的基础，泛型编程就是以一种独立于任何特定类型的方式编写代码。C++标准库的容器、迭代器、算法都是泛型编程的例子。\\
+有时候需要通过变量的地址对变量进行操作，这时候就需要将变量的地址保存起来，保存地址的变量就成为指针。
 
-\subsection{函数模板}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,0) rectangle node{3} (1,1);
+        \draw (0.5,1.5) node{data};
+        \draw (0.5,-0.5) node{0x0060FEFC};
 
-通过定义一个通用的函数模板可以处理参数为多种类型的情形，而不是为每个类型都定义一个重载。模板定义使用template关键字，后跟模板参数列表。模板参数表示函数或类定义中用到的类型，使用模板时需要隐式或显式提供模板实参，将其绑定到模板参数。\\
+        \draw (5,0.5) circle (0.5);
+        \draw (5,1.5) node{p};
+        \draw (5,-0.5) node{0x0060FEF8};
 
-\mybox{函数模板}
+        \draw[->] (5,0.5) -- (1,0.5);
+    \end{tikzpicture}
+\end{figure}
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
+*用于声明一个指针变量，例如int *p表示p是一个指针，指向一个int类型的变量的地址。通过取地址运算符\&可以获取变量的地址，占位符\%p能够以十六进制的形式输出地址。\\
 
-using namespace std;
+既然指针保存了另一个变量的地址，那么通过指针就可以访问到那个变量上的数据。在指针变量前使用*运算符，就可以获取到指针所指向的变量的值。
 
-template <typename T>
-inline T getMax(const T& val1, const T& val2) {
-    return val1 > val2 ? val1 : val2;
-}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,0) rectangle node{5} (1,1);
+        \draw (0.5,1.5) node{data};
+        \draw (0.5,-0.5) node{0x0060FEFC};
+
+        \draw (5,0.5) circle (0.5);
+        \draw (5,1.5) node{p};
+        \draw (5,-0.5) node{0x0060FEF8};
+
+        \draw[->] (5,0.5) -- (1,0.5);
+    \end{tikzpicture}
+\end{figure}
+
+\mybox{指针}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
 
 int main() {
-    int iVal1 = 28;
-    int iVal2 = 92;
-    cout << getMax(iVal1, iVal2) << endl;
+    int data = 3;
+    int *p = &data;
 
-    double dVal1 = 3.14;
-    double dVal2 = 3.71;
-    cout << getMax(dVal1, dVal2) << endl;
+    printf("Value of data: %d\n", data);
+    printf("Address of data: %p\n", &data);
+    
+    printf("Value of p: %p\n", p);
+    printf("Address of p: %p\n", &p);
+    printf("Value of data pointed by p: %d\n", *p);
+    
+    *p = 5;
 
-    string sVal1 = "hello";
-    string sVal2 = "world";
-    cout << getMax(sVal1, sVal2) << endl;
+    printf("Value of data: %d\n", data);
+    printf("Value of data pointed by p: %d\n", *p);
+
     return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-92
-3.71
-world
+    \mybox{运行结果}
+    \begin{verbatim}
+Value of data: 3
+Address of data: 000000000061FE1C
+Value of p: 000000000061FE1C     
+Address of p: 000000000061FE10   
+Value of data pointed by p: 3
+Value of data: 5
+Value of data pointed by p: 5
 	\end{verbatim}
 \end{tcolorbox}
 
-函数模板仅仅是函数的规范，本身并不会占用内存。当编译器遇到对模板函数的调用时，才会在内存中创建该函数的实例。\\
+为什么不直接修改变量的值，还要多此一举通过指针修改呢？\\
 
-\subsection{类模板}
+例如需要实现swap()用于交换两个变量的值，由于传递参数是按值传递（pass by value），所以交换的仅仅只是swap()中局部变量的值。\\
 
-类模板用来生成类的蓝图，与函数模板不同的是，类模板在实例化时编译器无法为类模板推导模板参数类型，而是必须在模板名后用【<>】提供实参。根据显式提供的模板实参列表，编译器使用这些模板参数来实例化特定的类。\\
+这种情况下就需要使用指针，将需要交换的变量的地址传递给swap()，然后在swap()中交换这两个地址上的值。\\
 
-编译器从类模板实例化一个类时，会重写模板，将模板参数的每个实例替换为给定的模板实参。因此类模板的每个实例都是独立的类，使用不同模板实参实例化出的类之间没有关联，也没有特殊的访问权限。\\
+\mybox{交换}
 
-\mybox{类模板}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <sstream>
-#include <algorithm>
-
-using namespace std;
-
-template<class T>
-class SortedArray {
-public:
-    SortedArray(int capacity = 1);
-    SortedArray(T *arr, int capacity);
-    ~SortedArray();
-
-    string data();
-    void add(T val);
-    void remove(T val);
-
-private:
-    T *arr;
-    int len;
-    int capacity;
-    void resize(int size);
-};
-
-template<class T>
-SortedArray<T>::SortedArray(int capacity) {
-    this->len = 0;
-    this->capacity = capacity;
-    this->arr = new T[capacity];
+void swap(int *data1, int *data2) {
+    int temp = *data1;
+    *data1 = *data2;
+    *data2 = temp;
 }
 
-template<class T>
-SortedArray<T>::SortedArray(T *arr, int len) {
-    this->len = len;
-    this->capacity = len;
-    this->arr = new T[len];
-    for(int i = 0; i < len; i++) {
-        this->arr[i] = arr[i];
+int main() {
+    int a = 3;
+    int b = 5;
+
+    printf("Before: a = %d, b = %d\n", a, b);
+    swap(&a, &b);
+    printf("After: a = %d, b = %d\n", a, b);
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Before: a = 3, b = 5
+After: a = 5, b = 3
+	\end{verbatim}
+\end{tcolorbox}
+
+函数最多只能返回一个值，但如果需要有多个值需要返回，就可以使用指针将数据带回。\\
+
+\mybox{一元二次方程}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
+
+/**
+ * Solve quadratic equation ax^2 + bx + c = 0.
+ * @param a coefficient of x^2
+ * @param b coefficient of x
+ * @param c constant
+ * @param x1 pointer to the first root
+ * @param x2 pointer to the second root
+ * @return true if the equation has real roots, false otherwise.
+ */
+bool solver(double a, double b, double c, double *x1, double *x2) {
+    double delta = b * b - 4 * a * c;
+    if (delta < 0) {
+        return false;
     }
+    *x1 = (-b + sqrt(delta)) / (2 * a);
+    *x2 = (-b - sqrt(delta)) / (2 * a);
+    return true;
 }
 
-template<class T>
-SortedArray<T>::~SortedArray() {
-    delete arr;
-}
+int main() {
+    double a, b, c;
+    double x1, x2;
 
-template<class T>
-string SortedArray<T>::data() {
-    if(len == 0) {
-        return "[]";
+    printf("Quadratic equation ax^2 + bx + c = 0\n");
+    printf("Enter coefficients a, b, c: ");
+    scanf("%lf%lf%lf", &a, &b, &c);
+
+    if (solver(a, b, c, &x1, &x2)) {
+        printf("x1 = %.2f, x2 = %.2f\n", x1, x2);
+    } else {
+        printf("No real roots\n");
     }
 
-    sort(this->arr, this->arr + len);
-    ostringstream out;
-    out << "[";
-    for(int i = 0; i < len; i++) {
-        out << arr[i] << ", ";
-    }
-    out << "\b\b]";
-    return out.str();
+    return 0;
 }
+\end{lstlisting}
 
-template<class T>
-void SortedArray<T>::resize(int size) {
-    T *temp = new T[size];
-    for(int i = 0; i < len; i++) {
-        temp[i] = arr[i];
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Quadratic equation ax^2 + bx + c = 0
+Enter coefficients a, b, c: 1 -9 20
+x1 = 5.00, x2 = 4.00
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{NULL}
+
+如果一个变量声明时没有初始化，那么它的值是不确定的。声明指针时如果不对指针进行初始化，那么它就会指向一块不确定的内存地址，这种指针被称为野指针。\\
+
+使用野指针可能会导致程序崩溃，因为它可能指向一个不可访问的内存地址。因此，如果指针没有指向一个确定的内存地址时，应该将其赋值为空指针NULL。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+int *p = NULL;
+\end{lstlisting}
+
+\newpage
+
+\section{指针与数组}
+
+\subsection{指针与数组}
+
+数组名本质上就是一个指针，它指向数组的首地址。因此在获取数组的地址时，可以不使用\&运算符。\\
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,1) circle (0.5);
+        \draw (-1,1) node{arr};
+
+        \draw (0,-1) circle (0.5);
+        \draw (-1,-1) node{p};
+
+        \draw (3,-0.5) rectangle (7,0.5);
+        \draw (4,-0.5) -- (4,0.5);
+        \draw (5,-0.5) -- (5,0.5);
+        \draw (6,-0.5) -- (6,0.5);
+
+        \draw (3.5,0) node {4};
+        \draw (4.5,0) node {1};
+        \draw (5.5,0) node {6};
+        \draw (6.5,0) node {7};
+
+        \draw (3.5,-1) node {0};
+        \draw (4.5,-1) node {1};
+        \draw (5.5,-1) node {2};
+        \draw (6.5,-1) node {3};
+
+        \draw[->] (0,1) -- (3,0);
+        \draw[->] (0,-1) -- (3,0);
+    \end{tikzpicture}
+\end{figure}
+
+当对一个指向数组的指针进行加减运算时（如p++和p--），并不是将地址加1或减1，而是根据指针的类型加或减对应字节的长度。例如p是一个int型指针，那么p++会将地址加4（int占4个字节）、p -= 2会将地址减8。\\
+
+\mybox{指针与数组}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main() {
+    int arr[] = {4, 1, 6, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int *p = arr;
+
+    printf("Address of arr: %p\n", arr);
+    for (int i = 0; i < n; i++) {
+        printf("Address of arr[%d]: %p\n", i, &arr[i]);
     }
-    delete arr;
-    arr = temp;
-}
 
-template<class T>
-void SortedArray<T>::add(T val) {
-    if(len == capacity) {
-        capacity *= 2;
-        resize(capacity);
+    printf("Value of p: %p\n", p);
+    for (int i = 1; i < n; i++) {
+        printf("Value of p + %d: %p\n", i, p + i);
     }
-    arr[len++] = val;
-}
 
-template<class T>
-void SortedArray<T>::remove(T val) {
-    for(int i = 0; i < len; i++) {
-        if(arr[i] == val) {
-            arr[i] = arr[len-1];
-            len--;
-            if(len <= capacity / 2) {
-                capacity /= 2;
-                resize(capacity);
-            }
-            break;
+    *p = 9;
+    *(p + 1) = 8;
+    *(p + 2) = 7;
+    *(p + 3) = 6;
+
+    for (int i = 0; i < n; i++) {
+        printf("arr[%d]: %d\n", i, arr[i]);
+    }
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Address of arr: 000000000061FDF0
+Address of arr[0]: 000000000061FDF0
+Address of arr[1]: 000000000061FDF4
+Address of arr[2]: 000000000061FDF8
+Address of arr[3]: 000000000061FDFC
+Value of p: 000000000061FDF0
+Value of p + 1: 000000000061FDF4
+Value of p + 2: 000000000061FDF8
+Value of p + 3: 000000000061FDFC
+arr[0]: 9
+arr[1]: 8
+arr[2]: 7
+arr[3]: 6
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{数组与函数}
+
+数组作为函数参数时，会将数组的地址传递给函数，函数接收到的是一个指向数组首地址的指针。由于在函数中失去了数组长度的信息，并不能通过sizeof()计算出数组的长度（计算得到的是一个指针变量所占的空间），因此将数组传入函数时，还需要将其长度一并作为参数传给函数。\\
+
+\mybox{查找}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int search(int *arr, int n, int key) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == key) {
+            return i;
         }
     }
+    return -1;
 }
 
 int main() {
-    int arr[] = {7, 7, 3, 9, 7, 1, 3};
+    int arr[] = {4, 7, 1, 3, 9, 2};
     int n = sizeof(arr) / sizeof(arr[0]);
 
-    SortedArray<int> sortedArray(arr, n);
-    cout << sortedArray.data() << endl;
-
-    sortedArray.add(28);
-    sortedArray.add(12);
-    cout << sortedArray.data() << endl;
-
-    sortedArray.remove(7);
-    sortedArray.remove(9);
-    cout << sortedArray.data() << endl;
+    int index = search(arr, n, 3);
+    if (index == -1) {
+        printf("Not found\n");
+    } else {
+        printf("Found at index %d\n", index);
+    }
 
     return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-[1, 3, 3, 7, 7, 7, 9] 
-[1, 3, 3, 7, 7, 7, 9, 12, 28]
-[1, 3, 3, 7, 7, 12, 28]
+    \mybox{运行结果}
+    \begin{verbatim}
+Found at index 3
 	\end{verbatim}
 \end{tcolorbox}
 
 \newpage
 
-\section{容器}
+\section{指针与字符串}
 
-\subsection{容器（Container）}
+\subsection{指针与字符串}
 
-容器是特定类型对象的集合，容器分为顺序容器和关联容器：
+数组和指针都可以用于定义一个字符串，但是它们内存分配的方式不同，从而导致它们的使用方式也不同。\\
 
-\begin{itemize}
-	\item 顺序容器：元素的顺序与其加入容器的位置对应。
-	\item 关联容器：元素的顺序由其关联的关键字决定，关联容器分为有序关联容器和无序关联容器。
-\end{itemize}
+以数组形式定义的字符串，每个字符保存在一个字符数组中。这样的字符串是可以修改的，与普通的数组类似。\\
 
-所有容器类共享公有接口，不同容器按不同方式扩展。\\
+但是如果让一个指针指向一个字符串，那么这个字符串会被存储在常量区。常量区中的数据是不可以修改的，因此使用指针去修改字符串会导致程序崩溃。\\
 
-C++新标准容器的性能比旧版本快很多，其性能与最精心优化过的同类数据结构一样好。现代C++程序应该使用标准库容器，而不是更原始的数据结构。\\
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,0) circle (0.5);
+        \draw (-1,0) node{s1};
 
-\subsection{顺序容器}
+        \draw (3,-0.5) rectangle (9,0.5);
+        \draw (4,-0.5) -- (4,0.5);
+        \draw (5,-0.5) -- (5,0.5);
+        \draw (6,-0.5) -- (6,0.5);
+        \draw (7,-0.5) -- (7,0.5);
+        \draw (8,-0.5) -- (8,0.5);
 
-每个容器都定义于一个头文件中，文件名与容器名相同。容器都定义为模板类，顺序容器几乎可以保存任意类型的元素，还可以在容器中保存容器。
+        \draw (3.5,0) node {h};
+        \draw (4.5,0) node {e};
+        \draw (5.5,0) node {l};
+        \draw (6.5,0) node {l};
+        \draw (7.5,0) node {o};
+        \draw (8.5,0) node {$ \backslash $0};
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|c|l|}
-			\hline
-			\textbf{容器} & \textbf{描述}                                      \\
-			\hline
-			array         & 固定大小数组，支持快速随机访问，不能增删元素       \\
-			\hline
-			vector        & 可变大小数组，支持快速随机访问，非尾部位置增删较慢 \\
-			\hline
-			string        & 专门用于保存字符，随机访问快，在尾部增删速度快     \\
-			\hline
-			deque         & 双端队列，支持快速随机访问，在头尾位置增删速度很快 \\
-			\hline
-			list          & 双向链表，支持双向顺序访问，在任何位置增删都很快   \\
-			\hline
-			forward\_list & 单向链表，只支持单向顺序访问，在任何位置增删都很快 \\
-			\hline
-		\end{tabular}
-	}
-	\caption{顺序容器}
-\end{table}
+        \draw[->] (0,0) -- (3,0);
 
-array和内置数组一样大小固定，但操作更安全。除固定大小的array外，其它容器都提供高效灵活的内存管理，可以添加、删除、扩展和收缩容器的大小。\\
+        \draw (0,-2) circle (0.5);
+        \draw (-1,-2) node{s2};
+        \draw (4,-2) node {"hello"};
+        \draw[->] (0,-2) -- (3,-2);
+    \end{tikzpicture}
+\end{figure}
 
-vector和string将元素存储在连续空间中，故通过下标的随机访问很快。在尾部添加元素很快，但中间和头部插入或删除很慢。添加元素可能造成空间的重新分配和元素拷贝。\\
+\vspace{-0.5cm}
 
-deque支持快速随机访问，在两端插入或删除很快，但在中间插入或删除元素很慢。\\
+\begin{lstlisting}[language=C]
+char s1[] = "hello";
+s1[0] = 'H';
+printf("s1 = %s\n", s1);
 
-list和forward\_list的设计目的是让任何位置的插入或删除都快速高效且不需重新分配内存，但是不支持随机访问，为访问一个元素需要遍历整个链表。\\
+char *s2 = "hello";
+s2[0] = 'H';        // error
+printf("s2 = %s\n", s2);
+\end{lstlisting}
 
-\subsection{迭代器（Iterator）}
+在对指向字符串的指针进行赋值操作的时候，并不会产生新的字符串，只是让两个指针都指向同一个字符串，对任意一个指针做的操作都会影响另一个指针。\\
 
-迭代器比下标访问更通用，所有标准库容器都支持迭代器，但只有几种支持下标。迭代器提供了对容器对象的间接访问，类似于指针。begin()返回指向首元素的迭代器，end()返回指向尾元素下一位置（尾后）的迭代器。如果容器为空，则begin()和end()返回的都是尾后迭代器。任何可能改变容器容量的操作都会使容器的迭代器失效。
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,1) circle (0.5);
+        \draw (-1,1) node{s};
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{容器}            & \textbf{描述}                  \\
-			\hline
-			iterator                 & 容器的迭代器                   \\
-			\hline
-			begin()                  & 返回指向首元素的迭代器         \\
-			\hline
-			end()                    & 返回尾后迭代器                 \\
-			\hline
-			const\_iterator          & 只读迭代器                     \\
-			\hline
-			cbegin()                 & 返回指向首元素的只读迭代器     \\
-			\hline
-			cend()                   & 返回尾后只读迭代器             \\
-			\hline
-			reverse\_iterator        & 按逆序寻址元素的迭代器         \\
-			\hline
-			rbegin()                 & 返回指向尾元素的逆序迭代器     \\
-			\hline
-			rend()                   & 返回首前逆序迭代器             \\
-			\hline
-			const\_reverse\_iterator & 只读逆序迭代器                 \\
-			\hline
-			crbegin()                & 返回指向尾元素的只读逆序迭代器 \\
-			\hline
-			crend()                  & 返回首前只读逆序迭代器         \\
-			\hline
-		\end{tabular}
-	}
-	\caption{迭代器}
-\end{table}
+        \draw (0,-1) circle (0.5);
+        \draw (-1,-1) node{t};
 
-迭代器可以进行算术运算，将迭代器与整数相加减可以得到向前或向后若干位置的迭代器。使用关系运算符【<】、【<=】、【>】、【>=】和【==】可以对迭代器所指位置比较大小。将两个迭代器相减，结果是两个迭代器的距离。\\
+        \draw (3,-0.5) rectangle (9,0.5);
+        \draw (4,-0.5) -- (4,0.5);
+        \draw (5,-0.5) -- (5,0.5);
+        \draw (6,-0.5) -- (6,0.5);
+        \draw (7,-0.5) -- (7,0.5);
+        \draw (8,-0.5) -- (8,0.5);
 
-\mybox{迭代器}
+        \draw (3.5,0) node {h};
+        \draw (4.5,0) node {e};
+        \draw (5.5,0) node {l};
+        \draw (6.5,0) node {l};
+        \draw (7.5,0) node {o};
+        \draw (8.5,0) node {$ \backslash $0};
+        \draw (6,1) node {str};
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
+        \draw[->] (0,1) -- (3,0);
+        \draw[->] (0,-1) -- (3,0);
+    \end{tikzpicture}
+\end{figure}
 
-using namespace std;
+\mybox{指向字符串的指针}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
 
 int main() {
-    string s = "hello world";
+    char str[] = "hello";
+    char *s = str;
+    char *t = s;
 
-    string::iterator iter = s.begin();
-    cout << "[";
-    while(iter != s.end()) {
-        cout << *iter << ", ";
-        iter++;
-    }
-    cout << "\b\b]" << endl;
+    s[0] = 'H';
+    printf("s = %s\n", s);
+    printf("t = %s\n", t);
 
     return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-[h, e, l, l, o,  , w, o, r, l, d]
+    \mybox{运行结果}
+    \begin{verbatim}
+s = Hello
+t = Hello
 	\end{verbatim}
 \end{tcolorbox}
 
 \newpage
 
-\section{STL数组}
+\section{二级指针}
 
-\subsection{array}
+\subsection{二级指针（Pointer to pointer）}
 
-array容器是C++11标准中新增的序列容器，它在普通数组的基础上，添加了一些成员函数和全局函数。在使用上，它比普通数组更安全，且效率并没有因此变差。和其它容器不同，array的大小是固定的，无法动态的扩展或收缩。与内置数组不同的是，array允许做整个容器的拷贝和赋值，要求两个array大小和元素类型都一样。\\
+既然指针也是一个变量，那么一个指针也可以指向另一个指针，这样的指针称为二级指针。
 
-array以类模板的形式定义在<array>头文件，array具有固定大小，其大小也是类型的一部分，定义时模板参数包含元素类型和大小。
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,0) circle (0.5);
+        \draw (0,1) node{q};
+        \draw (4,0) circle (0.5);
+        \draw (4,1) node{p};
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|c|l|}
-			\hline
-			\textbf{成员函数} & \textbf{功能}                            \\
-			\hline
-			size()            & 返回容器中当前元素的数量                 \\
-			\hline
-			max\_size()       & 返回容器可容纳元素的最大数量             \\
-			\hline
-			empty()           & 判断容器是否为空                         \\
-			\hline
-			at(n)             & 返回容器中第n个元素的引用                \\
-			\hline
-			front()           & 返回容器中第一个元素的直接引用           \\
-			\hline
-			back()            & 返回容器中最后一个元素的直接应用         \\
-			\hline
-			data()            & 返回一个指向容器首个元素的指针           \\
-			\hline
-			fill(val)         & 将val赋值给容器中的每个元素              \\
-			\hline
-			arr1.swap(arr2)   & 交换相同长度和类型的arr1和arr2中所有元素 \\
-			\hline
-		\end{tabular}
-	}
-	\caption{array成员函数}
-\end{table}
+        \draw (7,-0.5) rectangle (8,0.5);
+        \draw (7.5,0) node {5};
+        \draw (7.5,1) node {data};
 
-\mybox{array}
+        \draw[->] (0,0) -- (3.5,0);
+        \draw[->] (4,0) -- (7,0);
+    \end{tikzpicture}
+\end{figure}
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <array>
+其中p是一个int型的指针（int *），指向了data；q是一个指向int型指针的指针（int **），即q指向了一个指向int的指针。\\
 
-using namespace std;
+\mybox{二级指针}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
 
 int main() {
-    array<int, 10> arr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    cout << "size = " << arr.size() << endl;
-    array<int, 10>::iterator begin = arr.begin();
-    array<int, 10>::iterator end = arr.end();
-    while(begin != end) {
-        cout << *begin << " ";
-        begin++;
-    }
-    cout << endl;
+    int data = 5;
+    int *p = &data;
+    int **q = &p;
+
+    printf("data = %d\n", data);
+    printf("*p = %d\n", *p);
+    printf("**q = %d\n", **q);
+
+    printf("Address of data = %p\n", &data);
+    printf("Address of p = %p\n", &p);
+    printf("Address of q = %p\n", &q);
+
+    printf("Value of p = %p\n", p);
+    printf("Value of q = %p\n", q);
+
     return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-size = 10
-0 1 2 3 4 5 6 7 8 9
+    \mybox{运行结果}
+    \begin{verbatim}
+data = 5
+*p = 5
+**q = 5
+Address of data = 000000000061FE1C
+Address of p = 000000000061FE10
+Address of q = 000000000061FE08
+Value of p = 000000000061FE1C
+Value of q = 000000000061FE10
 	\end{verbatim}
 \end{tcolorbox}
 
 \vspace{0.5cm}
 
-\subsection{vector}
+\subsection{指针与二维数组}
 
-vector表示对象的集合，由于vector容纳其它的对象，所以是一种容器。使用vector需要包含头文件<vector>。vector是一个类模板，模板可以看作编译器生成类或函数的一份说明。
+二级指针还可以用于表示二维数组。与一维数组类似，可以使用下标或*运算符来访问二维数组中的元素。\\
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{初始化}              & \textbf{功能}                            \\
-			\hline
-			vector<T> v                  & 创建一个空的vector                       \\
-			\hline
-			vector<T> v2(v1)             & 用v1中所有元素的副本创建v2               \\
-			\hline
-			vector<T> v2 = v1            & 等价于v2(v1)                             \\
-			\hline
-			vector<T> v(n, val)          & v中包含了n个值为val的元素                \\
-			\hline
-			vector<T> v(n)               & v中包含了n个值为默认初始化的元素         \\
-			\hline
-			vector<T> v{a, b, c, ...}    & 用列表元素初始化v                        \\
-			\hline
-			vector<T> v = {a, b, c, ...} & 等价于v{a, b, c, ...}                    \\
-			\hline
-			vector<T> v (begin, end)     & 根据迭代器范围[begin, end)复制到vector中 \\
-			\hline
-		\end{tabular}
-	}
-	\caption{vecor初始化}
-\end{table}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,1.5) circle (0.5);
+        \draw (0,2.5) node{arr};
+        \draw (4,1.5) circle (0.5);
 
-\mybox{vector初始化}
+        \draw (7,-2) rectangle (11,2);
+        \draw (8,-2) -- (8,2);
+        \draw (9,-2) -- (9,2);
+        \draw (10,-2) -- (10,2);
+        \draw (7,-1) -- (11,-1);
+        \draw (7,0) -- (11,0);
+        \draw (7,1) -- (11,1);
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <iterator>
+        \draw[->] (0,1.5) -- (3.5,1.5);
+        \draw[->] (4,1.5) -- (7,1.5);
+    \end{tikzpicture}
+\end{figure}
 
-using namespace std;
+例如，arr[2][1]也可以写成*(*(arr + 2) + 1)。
 
-template <typename T>
-ostream& operator<<(ostream& out, const vector<T>& v) {
-    if(!v.empty()) {
-        out << "[";
-        copy(v.begin(), v.end(), ostream_iterator<T>(out, ", "));
-        out << "\b\b]";
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,1.5) circle (0.5);
+        \draw (0,2.5) node{arr};
+        \draw (4,1.5) circle (0.5);
+
+        \draw (7,-2) rectangle (11,2);
+        \draw (8,-2) -- (8,2);
+        \draw (9,-2) -- (9,2);
+        \draw (10,-2) -- (10,2);
+        \draw (7,-1) -- (11,-1);
+        \draw (7,0) -- (11,0);
+        \draw (7,1) -- (11,1);
+
+        \draw[->] (0,1.5) -- (3.5,1.5);
+        \draw[->] (4,1.5) -- (8.5,-0.5);
+    \end{tikzpicture}
+\end{figure}
+
+当如果命令行运行时，可以向main()函数传递命令行参数。传递参数的数量和值可以通过argc（argument count）和argv（argument vector）来获取。argv为一个二维数组，每个元素都是一个字符串，其中argv[0]为当前程序的名称。\\
+
+\mybox{命令行参数}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+char *lower(char *s) {
+    char *p = s;
+    while (*p) {
+        *p = tolower(*p);
+        p++;
     }
-    return out;
+    return s;
 }
 
-int main() {
-    vector<int> v1(10);         // 有10个元素，都是0
-    vector<int> v2{10};         // 有1个元素，值是10
-    vector<int> v3(10, 1);      // 有10个元素，都是1
-    vector<int> v4{10, 1};      // 有2个元素，10和1
-    vector<string> v5{"hello"}; // 有1个元素，是字符串"hello"
-    
-    cout << "v1 = " << v1 << endl;
-    cout << "v2 = " << v2 << endl;
-    cout << "v3 = " << v3 << endl;
-    cout << "v4 = " << v4 << endl;
-    cout << "v5 = " << v5 << endl;
+char *upper(char *s) {
+    char *p = s;
+    while (*p) {
+        *p = toupper(*p);
+        p++;
+    }
+    return s;
+}
+
+void usage(const char *program) {
+    printf("Usage: %s [option] [string]\n", program);
+    printf("--lower: convert string to lower case\n");
+    printf("--upper: convert string to upper case\n");
+}
+
+int main(int argc, char **argv) {
+    if (argc != 3) {
+        usage(argv[0]);
+        return 1;
+    }
+
+    char *option = argv[1];
+    char *string = argv[2];
+
+    if (strcmp(option, "--lower") == 0) {
+        printf("Lower: %s\n", lower(string));
+    } else if (strcmp(option, "--upper") == 0) {
+        printf("Upper: %s\n", upper(string));
+    } else {
+        usage(argv[0]);
+        return 1;
+    }
+
     return 0;
 }
 \end{lstlisting}
 
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-v1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
-v2 = [10] 
-v3 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1] 
-v4 = [10, 1]
-v5 = [hello]
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{vector操作}
-
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{操作}       & \textbf{功能}                              \\
-			\hline
-			v.empty()           & 判断vector是否为空                         \\
-			\hline
-			v.size()            & 返回vector元素个数                         \\
-			\hline
-			v[n]                & 返回vector中第n个元素的引用                \\
-			\hline
-			v1 = v2             & 用v2中的元素拷贝替换v1中的元素             \\
-			\hline
-			v1 == v2、v1 != v2  & v1和v2相等当且仅当元素个数和对应元素都相同 \\
-			\hline
-			v.push\_back(val)   & 向vector尾部添加一个元素                   \\
-			\hline
-			v.insert(iter, val) & 向迭代器指向元素前添加一个元素             \\
-			\hline
-			v.pop\_back()       & 删除vector最后一个元素                     \\
-			\hline
-			v.erase(iter)       & 删除迭代器指向元素                         \\
-			\hline
-			v.erase(begin, end) & 删除迭代器返回[begin, end)范围元素         \\
-			\hline
-			v.clear()           & 清空vector                                 \\
-			\hline
-			v.swap(vector)      & 交换两个同类型vector数据                   \\
-			\hline
-			v.assign(n, val)    & 设置vector中前n个元素值为val               \\
-			\hline
-		\end{tabular}
-	}
-	\caption{vector操作}
-\end{table}
-
-vector不能使用下标添加元素，否则会造成缓冲区溢出，确保下标合法的一种有效手段就是尽可能使用for-each循环。如果循环体内部包含向vector添加元素的语句，则不能使用for-each循环。\\
-
-\mybox{vector}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-int main() {
-    vector<int> v;
-    for(int i = 0; i < 10; i++) {
-        v.push_back(i * i);
-    }
-
-    for(int& item : v) {
-        cout << item << " ";
-    }
-    cout << endl;
-    return 0;
-}
+\begin{lstlisting}
+gcc -Wall command_line.c -o command_line
+./command_line --upper "Hello World!"
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-0 1 4 9 16 25 36 49 64 81
+    \mybox{运行结果}
+    \begin{verbatim}
+Upper: HELLO WORLD!
 	\end{verbatim}
 \end{tcolorbox}
 
 \newpage
 
-\section{STL字符串}
+\section{动态内存申请}
 
-\subsection{string}
+\subsection{内存管理}
 
-string是标准库中的类型，表示可变长字符序列，使用需要包含头文件<string>。\\
-
-string的初始化分为：
+计算机的内存主要包括：
 
 \begin{enumerate}
-	\item 直接初始化：使用括号初始化，调用构造函数。
-	\item 拷贝初始化：使用赋值初始化，调用重载的赋值运算符。
+    \item 代码区：存储程序执行时使用的指令。
+    \item 数据区：存储程序运行时使用的全局变量和静态变量。
+    \item 栈区（stack）：存储函数调用时使用的局部变量，栈中的内存由编译器自动分配和释放。
+    \item 堆区（heap）：存储动态分配内存的变量，需要由程序员自己分配和释放。
 \end{enumerate}
 
-\vspace{0.5cm}
-
-\mybox{string初始化}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-int main() {
-    string s1;              // 默认初始化，为空字符串
-    string s2(s1);          // 直接初始化，s2是s1的副本
-    string s3 = s1;         // 拷贝初始化，s3是s1的副本，等价s3(s1)
-    string s4("hello");     // 直接初始化，初始化为字面值常量
-    string s5 = "hello";    // 拷贝初始化，初始化为字面值常量
-    string s6(10, 'x');     // 直接初始化，初始化为10个字符'x'
-    
-    cout << "s1 = " << s1 << endl;
-    cout << "s2 = " << s2 << endl;
-    cout << "s3 = " << s3 << endl;
-    cout << "s4 = " << s4 << endl;
-    cout << "s5 = " << s4 << endl;
-    cout << "s6 = " << s4 << endl;
-    
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-s1 = 
-s2 =
-s3 =
-s4 = hello
-s5 = hello
-s6 = hello
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{string操作}
-
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{操作}          & \textbf{功能}                                 \\
-			\hline
-			out << s               & 将s写到输出流out中                            \\
-			\hline
-			in >> s                & 从输入流中读取字符串赋给s，字符串以空白符分割 \\
-			\hline
-			getline(in, s)         & 从输入流中读取一行赋给s                       \\
-			\hline
-			s.empty()              & 判断s是否为空                                 \\
-			\hline
-			s.size()               & 返回s中字符个数                               \\
-			\hline
-			s[n]                   & 返回s中第n个字符的引用                        \\
-			\hline
-			s1 + s2                & 返回s1和s2连接后的结果                        \\
-			\hline
-			s1 = s2                & 用s2的副本替换s1                              \\
-			\hline
-			s1 == s2、s1 != s2     & 判断s1和s2是否相等                            \\
-			\hline
-			<、<=、>、>=           & 字典序比较，对大小写敏感                      \\
-			\hline
-			s1.append(s2)          & 尾部插入                                      \\
-			\hline
-			s1.insert(pos, s2)     & 在第pos个位置插入s2                           \\
-			\hline
-			s.erase(pos, n)        & 从第pos个位置删除n个字符                      \\
-			\hline
-			s1.replace(pos, n, s2) & 从第pos个位置开始替换n个字符为s2              \\
-			\hline
-			s.substr(pos, n)       & 返回一个从pos开始的n个字符的拷贝              \\
-			\hline
-			s1.find(s2)            & 查找s1中s2第一次出现的位置                    \\
-			\hline
-			s1.rfind(s2)           & 查找s1中s2最后一次出现的位置                  \\
-			\hline
-		\end{tabular}
-	}
-	\caption{string操作}
-\end{table}
-
-\mybox{string}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-int main() {
-    string s("Hello");
-
-    s.append("world");          // Helloworld
-    s.insert(s.size(), "!");    // Helloworld!
-
-    s.replace(1, 4, "i");       // Hiworld!
-    s.erase(2, 5);              // Hi!
-    s.insert(2, " C++");        // Hi C++!
-
-    cout << s << endl;
-
-    cout << s.substr(3, 3) << endl;
-    cout << s.substr(3) << endl;
-    cout << s.find("C++") << endl;
-
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-Hi C++!
-C++
-C++!
-3
-	\end{verbatim}
-\end{tcolorbox}
-
-\newpage
-
-\section{STL链表}
-
-\subsection{list}
-
-list双向链表通过指针连成逻辑意义上的线性表，由于list中结点并不要求在一段连续内存中，因此list不支持快速随机存取，迭代器只能通过【++】或【--】移动。\\
-
 \begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=3,
-					draw, rectangle split horizontal}, >=stealth, start chain]
-		\node[on chain,draw,inner sep=6pt] (NULL1) {};
-		\node[list,on chain] (A) {prev \nodepart{second} data \nodepart{third} next};
-		\node[list,on chain] (B) {prev \nodepart{second} data \nodepart{third} next};
-		\node[list,on chain] (C) {prev \nodepart{second} data \nodepart{third} next};
-		\node[on chain,draw,inner sep=6pt] (NULL2) {};
-		\draw (NULL1.north east) -- (NULL1.south west);
-		\draw (NULL1.north west) -- (NULL1.south east);
-		\draw (NULL2.north east) -- (NULL2.south west);
-		\draw (NULL2.north west) -- (NULL2.south east);
-		\draw[<-] let \p1 = (A.west), \p2 = (A.center) in (NULL1) -- (\x1,\y2);
-		\draw[<->] let \p1 = (A.east), \p2 = (A.center) in (\x1,\y2) -- (B);
-		\draw[<->] let \p1 = (B.east), \p2 = (B.center) in (\x1,\y2) -- (C);
-		\draw[->] let \p1 = (C.east), \p2 = (C.center) in (\x1,\y2) -- (NULL2);
-	\end{tikzpicture}
-	\caption{双向链表}
+    \centering
+    \begin{tikzpicture}[scale=0.7]
+        \draw[-] (0,0) -- (0,10) -- (5,10) -- (5,0) -- (0,0);
+        \draw[-] (0,2) -- (5,2);
+        \draw[-] (0,4) -- (5,4);
+        \draw[-] (0,6) -- (5,6);
+        \draw[-] (0,8) -- (5,8);
+
+        \draw (0,0) node[left] {low};
+        \draw (0,10) node[left] {high};
+
+        \draw (2.5,1) node {Text};
+        \draw (2.5,3) node {Data};
+        \draw (2.5,5) node {Heap};
+        \draw (2.5,9) node {Stack};
+
+        \draw[->] (2.5,8) -- (2.5,7.5);
+        \draw[->] (2.5,6) -- (2.5,6.5);
+    \end{tikzpicture}
+    \caption{内存区域}
 \end{figure}
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{操作}      & \textbf{功能}         \\
-			\hline
-			list<T> lst        & 创建空的list          \\
-			\hline
-			list<T> lst(n)     & 创建含有n个元素的list \\
-			\hline
-			list<T> lst1(lst2) & 使用lst2初始化lst1    \\
-			\hline
-			lst.size()         & 返回list元素个数      \\
-			\hline
-			lst.clear()        & 删除所有元素          \\
-			\hline
-			lst.empty()        & 判断list是否为空      \\
-			\hline
-			lst.front()        & 返回第一个元素        \\
-			\hline
-			lst.back()         & 返回最后一个元素      \\
-			\hline
-			lst.insert()       & 插入一个元素          \\
-			\hline
-			lst.erase()        & 删除一个元素          \\
-			\hline
-			lst.push\_front()  & 在头部添加一个元素    \\
-			\hline
-			lst.push\_back()   & 在尾部添加一个元素    \\
-			\hline
-			lst.pop\_front()   & 删除第一个元素        \\
-			\hline
-			lst.pop\_back()    & 删除最后一个元素      \\
-			\hline
-			lst.remove()       & 删除元素              \\
-			\hline
-			lst.reverse()      & 反转list              \\
-			\hline
-			lst.sort()         & 排序                  \\
-			\hline
-			lst.unique()       & 去除相邻的重复元素    \\
-			\hline
-			lst.merge()        & 合并两个有序list      \\
-			\hline
-		\end{tabular}
-	}
-	\caption{list操作}
-\end{table}
+有时候需要在函数中生成一个数组，并且将数组返回给调用者。但是在函数内定义的数组是局部变量，存储于栈区。函数执行完毕后，数组所占用的内存空间会被释放。因此被返回的数组的指针指向的是一个已经被释放的内存空间，这样就会导致程序崩溃。\\
 
-其中，lst.unique()并不是把重复的元素删除，而是全部放到数组尾部，返回去重后的尾地址。unique()中不自带sort()，因此需要先使用sort()进行排序。\\
+另一种情况是，由于数组一旦声明后，其容量就不能再改变。当需要在运行时动态改变数组容量时，就可以采用动态内存申请的方式。\\
 
-\mybox{list}
+\subsection{malloc()}
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <list>
+malloc()函数定义在<stdlib.h>中，用于在堆区申请一块内存空间，其函数原型为：
 
-using namespace std;
+\vspace{-0.5cm}
 
-void printList(list<int> lst) {
-    for(list<int>::iterator iter = lst.begin();
-                            iter != lst.end();
-                            iter++) {
-        cout << *iter << " ";
+\begin{lstlisting}[language=C]
+void* malloc(size_t size);
+\end{lstlisting}
+
+malloc()接受一个参数size，表示申请空间的大小（单位：字节），并返回指向申请到的空间的首地址的指针。如果申请失败，则返回NULL。\\
+
+malloc()返回的是无类型指针void *，这是由于malloc()只负责申请指定大小的空间，并不关心这块空间将会被存放什么类型的数据。因此，开发者需要自行将其转换为对应的类型。\\
+
+\mybox{内存}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    void *p;
+    int cnt = 0;
+
+    // allocate 100MB memory each time
+    while ((p = malloc(100 * 1024 * 1024))) {
+        cnt++;
     }
-    cout << endl;
-}
-
-int main() {
-    list<int> lst;
-
-    lst.push_back(11);       // [11]
-    lst.push_front(22);      // [22, 11]
-    cout << lst.front() << endl;    // 22
-    cout << lst.back() << endl;     // 11
-
-    lst.insert(++lst.begin(), 3);   // [22, 3, 11]
-    lst.insert(--lst.end(), 2);     // [22, 3, 2, 11]
-    lst.push_back(2);               // [22, 3, 2, 11, 2]
-    printList(lst);
-
-    lst.pop_front();                // [3, 2, 11, 2]
-    lst.sort();                     // [2, 2, 3, 11]
-    lst.unique();                   // [2, 3, 11]
-    printList(lst);
-
-    lst.sort();                     // [2, 3, 11]
-    printList(lst);
-
-    list<int> lst2{1, 2, 8};
-    lst.merge(lst2);                // [1, 2, 2, 3, 8, 11]
-    printList(lst);
+    printf("Allocated %d MB memory\n", cnt * 100);
 
     return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-22
-11
-22 3 2 11 2
-2 3 11
-2 3 11
-1 2 2 3 8 11
+    \mybox{运行结果}
+    \begin{verbatim}
+Allocated 57700 MB memory
 	\end{verbatim}
 \end{tcolorbox}
 
 \vspace{0.5cm}
 
-\subsection{forward\_list}
+\subsection{free()}
 
-forward\_list和list的区别在于前者是单向链表，每个元素内部只有一个链接指向下一个元素，因此在存储方面list会消耗更多的空间。\\
+通过动态申请来的内存空间需要是需要归还给操作系统，因此需要程序员自行在不需要使用时将其释放。如果不释放内存，这些动态申请的内存空间就会一直占用着，直到程序结束统一被操作系统释放。\\
 
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-					draw, rectangle split horizontal}, >=stealth, start chain]
-		\node[list,on chain] (A) {data};
-		\node[list,on chain] (B) {data};
-		\node[list,on chain] (C) {data};
-		\node[on chain,draw,inner sep=6pt] (D) {};
-		\draw (D.north east) -- (D.south west);
-		\draw (D.north west) -- (D.south east);
-		\draw[*->] let \p1 = (A.two), \p2 = (A.center) in (\x1,\y2) -- (B);
-		\draw[*->] let \p1 = (B.two), \p2 = (B.center) in (\x1,\y2) -- (C);
-		\draw[*->] let \p1 = (C.two), \p2 = (C.center) in (\x1,\y2) -- (D);
-	\end{tikzpicture}
-	\caption{单向链表}
-\end{figure}
+不释放内存会导致内存泄漏（memory leak），如果一直分配内存而不是释放，最终将会耗尽所有可用的内存，导致程序运行变慢或者崩溃。\\
 
-forward\_list不支持反向迭代器，并且没有指向尾元素的迭代器，因此不提供back()、push\_back()、pop\_back()等操作。
+free()函数用于释放动态申请的内存空间，其接受一个参数ptr，表示要释放的内存空间的首地址。其函数原型为：
 
-\newpage
+\vspace{-0.5cm}
 
-\section{容器适配器}
+\begin{lstlisting}[language=C]
+void free(void *ptr);
+\end{lstlisting}
 
-\subsection{stack}
+\vspace{0.5cm}
 
-栈，又名堆栈，是一种运算受限的线性数据结构，栈只能在表尾进行插入和删除操作。\\
+\mybox{斐波那契数列}
 
-栈中的元素只能先进后出（FILO, First In Last Out）。最早进入栈的元素所存放的位置叫作栈底（bottom），最后进入栈的元素存放的位置叫作栈顶（top）。\\
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdlib.h>
 
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}
-		\matrix[queue] (Q1) {
-		|[fill=none, draw=none]|\\
-		|(front)| C\\
-		B\\
-		|(rear)| A\\};
-		\draw[green,thick,-] (Q1.north west) |-(Q1.south)-| (Q1.north east);
-		\draw[<-] ([xshift=.2cm]front.east) -- ++ (0:.5) node[right] {top};
-		\draw[<-] ([xshift=.2cm]rear.east) -- ++ (0:.5) node[right] {bottom};
-		\draw[<-,very thick] (Q1.north) to[out=90,in=190] ++ (1,1) node[right, queue element] (D) {D};
-		\node[below=3mm of Q1.south east] {before};
+int *generate_fibonacci(int n) {
+    int *arr = (int *)malloc(n * sizeof(int));
+    if (!arr) {
+        return NULL;
+    }
 
-		\scope[xshift=3.5cm]
-		\matrix[queue] (Q1) {
-			|(front)| D \\
-			C           \\
-			B           \\
-			|(rear)| A\\};
-		\draw[green,thick,-] (Q1.north west) |-(Q1.south)-| (Q1.north east);
-		\draw[<-] ([xshift=.2cm]front.east) -- ++ (0:.5) node[right] {top};
-		\draw[<-] ([xshift=.2cm]rear.east) -- ++ (0:.5) node[right] {bottom};
-		\node[below=3mm of Q1.south east] {after};
-		\endscope
-	\end{tikzpicture}
-	\caption{栈}
-\end{figure}
-
-向一个栈插入新元素的操作称为入栈push（或进栈、压栈），从一个栈删除元素的操作称为出栈pop（或退栈、弹栈）。入栈操作就是把新元素放入栈中，只允许从栈顶一侧放入元素，新元素的位置将会成为新的栈顶。出栈操作就是把新元素从栈中弹出，只有栈顶元素才允许出栈，出栈元素的前一个元素将会成为新的栈顶。
-
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{操作} & \textbf{功能}                        \\
-			\hline
-			empty()       & 判断栈是否为空                       \\
-			\hline
-			size()        & 返回栈中元素个数                     \\
-			\hline
-			push()        & 入栈，调用底层容器的push\_back()实现 \\
-			\hline
-			pop()         & 出栈                                 \\
-			\hline
-			top()         & 返回栈顶元素的引用                   \\
-			\hline
-		\end{tabular}
-	}
-	\caption{stack操作}
-\end{table}
-
-\mybox{stack}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <stack>
-
-using namespace std;
+    arr[0] = 1;
+    arr[1] = 1;
+    for (int i = 2; i < n; i++) {
+        arr[i] = arr[i - 1] + arr[i - 2];
+    }
+    return arr;
+}
 
 int main() {
-	stack<int> s;
-	s.push(1);
-	s.push(2);
-	s.push(3);
-	cout << s.top() << endl;
+    int n = 10;
+    int *arr = generate_fibonacci(n);
 
-	while(!s.empty()) {
-		cout << s.top() << endl;
-		s.pop();
-	}
-	return 0;
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    free(arr);
+    return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-3
-3
-2
-1
+    \mybox{运行结果}
+    \begin{verbatim}
+1 1 2 3 5 8 13 21 34 55
 	\end{verbatim}
 \end{tcolorbox}
 
 \vspace{0.5cm}
 
-\subsection{deque}
+\subsection{calloc()}
 
-deque双端队列是一种同时具有队列和栈的性质的数据结构，双端队列可以从其两端插入和删除元素。
+calloc()与malloc()功能类似，也是用于动态申请内存空间的。只是malloc()只接受一个参数作为申请空间的大小，申请到的空间并不会进行初始化；而calloc()接受两个参数，可以申请多个指定大小的空间，并将这些空间初始化为0。calloc()的函数原型为：
 
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}
-		\fill[green!20] (6.6,.35) rectangle (-.6,-.35);
-		\draw[green,thick] (-.6,.35) -- (6.6,.35) |- (-.6,-.35);
-		\foreach \i/\name in {0/A,1/B,2/C,3/D,4/E}
-		\node[queue element] (\name) at (1.5*\i,0) {\name};
-		\draw[<-] ([yshift=.2cm]E.north) -- ++ (0,.5) node[above] {rear};
-		\draw[<-] ([yshift=.2cm]A.north) -- ++ (0,.5) node[above] {front};
+\vspace{-0.5cm}
 
-		\draw[->,very thick] (-0.9,0.3) -- (-1.7,0.3);
-		\draw[->,very thick] (-1.7,-0.3) --  (-0.9,-0.3);
-
-		\draw[<-,very thick] (7,0.3) -- (7.8,0.3);
-		\draw[<-,very thick] (7.8,-0.3) -- (7,-0.3);
-	\end{tikzpicture}
-	\caption{双端队列}
-\end{figure}
-
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{操作} & \textbf{功能}       \\
-			\hline
-			empty()       & 判断deque是否为空   \\
-			\hline
-			size()        & 返回deque中元素个数 \\
-			\hline
-			front()       & 返回首元素引用      \\
-			\hline
-			back()        & 返回尾元素引用      \\
-			\hline
-			push\_front() & 在头部添加一个元素  \\
-			\hline
-			push\_back()  & 在尾部添加一个元素  \\
-			\hline
-			pop\_front()  & 在头部删除一个元素  \\
-			\hline
-			pop\_back()   & 在尾部删除一个元素  \\
-			\hline
-			clear()       & 清空deque           \\
-			\hline
-		\end{tabular}
-	}
-	\caption{deque操作}
-\end{table}
-
-\mybox{deque}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <deque>
-
-using namespace std;
-
-int main() {
-	deque<int> deq;
-	
-	deq.push_front(1);
-	deq.push_front(2);
-	deq.push_back(3);
-	deq.push_back(4);
-	cout << deq.front() << endl;
-	cout << deq.back() << endl;
-
-	deq.pop_back();
-	deq.pop_front();
-	cout << deq.front() << endl;
-	cout << deq.back() << endl;
-
-	return 0;
-}
+\begin{lstlisting}[language=C]
+void *calloc(size_t nitems, size_t size);
 \end{lstlisting}
 
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-2
-4
-1
-3
-	\end{verbatim}
-\end{tcolorbox}
+例如需要申请一个长度为n的int数组，并将其初始化为0：
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+int *arr = (int *)calloc(n, sizeof(int));
+\end{lstlisting}
 
 \vspace{0.5cm}
 
-\subsection{priority\_queue}
+\subsection{realloc()}
 
-普通的队列是一种先进先出（FIFO, First In First Out）的数据结构，元素在队尾添加，在队头删除。\\
+realloc()用于对已经动态申请的内存空间进行重新分配（扩容/缩小），其函数原型为：
 
-在优先队列priority\_queue中，元素被赋予优先级，当访问元素时，具有最高优先级的元素最先被访问。使用priority\_queue需要包含头文件<queue>。
+\vspace{-0.5cm}
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|l|l|}
-			\hline
-			\textbf{操作} & \textbf{功能}      \\
-			\hline
-			empty()       & 判断队列是否为空   \\
-			\hline
-			size()        & 返回队列中元素个数 \\
-			\hline
-			top()         & 访问队头           \\
-			\hline
-			push()        & 插入元素           \\
-			\hline
-			pop()         & 弹出队头           \\
-			\hline
-		\end{tabular}
-	}
-	\caption{priority\_queue操作}
-\end{table}
+\begin{lstlisting}[language=C]
+void *realloc(void *ptr, size_t size);
+\end{lstlisting}
 
-\mybox{priority\_deque}
+realloc()接受两个参数，第一个参数ptr指向需要重新分配内存空间，第二个参数size表示重新分配空间的大小（单位：字节）。realloc()会将原来内存块中的数据复制到新分配的内存块中，并返回指向新内存块的指针。如果重新分配失败，则返回NULL。\\
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <queue>
+\mybox{strip}
 
-using namespace std;
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+char *strip(char *str) {
+    int i = 0;
+    int j = strlen(str) - 1;
+
+    while (isspace(str[i]) && str[i] != '\0') {
+        i++;
+    }
+
+    while (isspace(str[j]) && j >= 0) {
+        j--;
+    }
+
+    int k = 0;
+    while (i <= j) {
+        str[k++] = str[i++];
+    }
+    str[k] = '\0';
+
+    str = (char *)realloc(str, (k + 1) * sizeof(char));
+    return str;
+}
 
 int main() {
-	priority_queue<int> pq;
-	pq.push(9);
-	pq.push(2);
-	pq.push(8);
+    int len = 32;
+    char *str = (char *)calloc(len + 1, sizeof(char));
 
-	while(!pq.empty()) {
-		cout << pq.top() << endl;
-		pq.pop();
-	}
-	return 0;
+    strcpy(str, "     Hello World! \n\t ");
+    printf("Before: [%s]\n", str);
+
+    str = strip(str);
+
+    printf("After: [%s]\n", str);
+
+    free(str);
+    return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-9
-8
-2
+    \mybox{运行结果}
+    \begin{verbatim}
+Before: [     Hello World! 
+     ]
+After: [Hello World!]
 	\end{verbatim}
 \end{tcolorbox}
 
 \newpage
-
-\section{关联容器}
-
-\subsection{关联容器}
-
-顺序容器的元素是按照在容器中的位置来保存和访问的，关联容器的元素按照关键字来保存和访问。关联容器支持高效地关键字查询和访问。所有关联容器都支持通用容器操作，但不支持顺序容器特有的操作，例如push\_front()或push\_back()。\\
-
-set和map是两种关联容器，set中的元素只包含关键字，而map中的元素是键值对（key-value pair）。
-
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{3mm}{
-		\begin{tabular}{|l|l|l|}
-			\hline
-			\textbf{关联容器}   & \textbf{描述}               & \textbf{头文件}  \\
-			\hline
-			set                 & 只保存关键字的容器          & <set>            \\
-			\hline
-			multiset            & 关键字可以重复出现的set     & <set>            \\
-			\hline
-			unordered\_set      & 用哈希函数组织的set         & <unordered\_set> \\
-			\hline
-			unordered\_multiset & 哈希组织的set，关键字可重复 & <unordered\_set> \\
-			\hline
-			map                 & 保存键值对的容器            & <map>            \\
-			\hline
-			multimap            & 关键字可重复出现的map       & <map>            \\
-			\hline
-			unordered\_map      & 用哈希函数组织的map         & <unordered\_map> \\
-			\hline
-			unordered\_multimap & 哈希组织的map，关键字可重复 & <unordered\_map> \\
-			\hline
-		\end{tabular}
-	}
-	\caption{关联容器}
-\end{table}
-
-set是关键字的集合，其底层实现使用的是红黑树，当想要查找一个值是否存在时可以使用。set是模板，使用时必须在模板参数中指定元素类型。\\
-
-map是模板，使用时必须在模板参数中指定key和value的类型。map常称为关联数组或字典，但是其下标不必是整数，而是通过关键字来查找值。\\
-
-map的元素都是pair类型，pair也是模板，定义在<utility>中，一个pair保存两个public的数据成员，分别叫first和second。\\
-
-\mybox{关键词提取}
-
-\begin{lstlisting}[title=summary.txt, breaklines=true, breakatwhitespace=false]
-Internet of Things allows billions of physical objects to 
-be connected to collect and exchange data for offering various 
-applications, such as environmental monitoring, infrastructure 
-management, and home automation. On the other hand, IoT has 
-unsupported features that are critical for some IoT applications, 
-including smart traffic lights, home energy management and 
-augmented reality. To support these features, fog computing is 
-integrated into IoT to extend computing, storage and networking 
-resources to the network edge. Unfortunately, it is confronted 
-with various security and privacy risks, which raise serious 
-concerns towards users.
-\end{lstlisting}
-
-\begin{lstlisting}[title=excludes.txt]
-the a an is this
-that of at in on for
-and it with to we I
-into which these those are
-be as has have or
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=STL\_set\_map.cpp]
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <set>
-#include <map>
-#include <cctype>
-#include <algorithm>
-
-using namespace std;
-
-string getSummary(string filename) {
-	ifstream in(filename);
-	string summary;
-	string line;
-	while (getline(in, line)) {
-		summary += line;
-	}
-	in.close();
-	return summary;
-}
-
-set<string> getExcludes(string filename) {
-	ifstream in(filename);
-	set<string> excludes;
-	string token;
-	while (in >> token) {
-		excludes.insert(token);
-	}
-	in.close();
-	return excludes;
-}
-
-int main() {
-	string summary = getSummary("summary.txt");
-	vector<string> tokens;
-
-	istringstream in(summary);
-	string token;
-	while (in >> token) {
-		// eliminate the trailing punctuation
-		if (!isalpha(token.back())) {
-			token.pop_back();
-		}
-
-		// convert to lower case
-		transform(
-			token.begin(), token.end(),
-			token.begin(), ::tolower);
-
-		tokens.push_back(token);
-	}
-
-	set<string> excludes = getExcludes("excludes.txt");
-	map<string, int> keywords;
-
-	for (string token : tokens) {
-		// not in excludes set
-		if (excludes.find(token) == excludes.end()) {
-			keywords[token]++;
-		}
-	}
-
-	for (auto& p : keywords) {
-		// print keywords that appear more than once
-		if (p.second > 1) {
-			cout << p.first << ": " << p.second << endl;
-		}
-	}
-
-	return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-applications: 2
-computing: 2
-features: 2
-home: 2
-iot: 3
-management: 2
-various: 2
-	\end{verbatim}
-\end{tcolorbox}
-
-\newpage
-
-\section{泛型算法}
-
-\subsection{泛型算法（Generic Algorithm）}
-
-标准库未给容器添加大量功能，而是提供一组独立于容器的泛型算法。它们实现了一些经典算法的公共接口，可用于不同类型的容器和元素。标准库算法不直接操作容器，而是遍历两个迭代器指定的元素范围。指针类似于内置数组上的迭代器，故泛型算法也可操作内置数组和指针。\\
-
-大多数算法定义在<algorithm>中，另外一组数值算法定义在<numeric>中。\\
-
-大多标准库算法都对一个范围内的元素操作，这个范围称为输入范围，接受输入范围的算法总是用前两个参数来表示输入范围。多数算法遍历输入范围的方式相似，但使用元素的方法不同，如是否读、是否写、是否重排等。\\
-
-\subsection{只读算法}
-
-只读算法只读取输入范围的元素，但不改变它们。使用只读算法，最好用cbegin()和cend()。\\
-
-find()的作用是将范围中每一个元素与给定值比较，返回第一个等于给定值的元素的迭代器，如果没有匹配则返回该范围的尾后迭代器。find()会调用给定值类型的【==】运算符来比较。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class InputIterator, class T>
-InputIterator find(
-	InputIterator first, InputIterator last, const T& val
-);
-\end{lstlisting}
-
-count()的作用是将范围中每一个元素与给定值比较，返回给定值在范围中出现的次数。\\
-
-accumulate()定义于<numeric>，其作用是对范围中元素求和，再加上给定值，返回求值结果。accumulate()会调用给定值类型的【+】运算符来求和。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class InputIterator, class T>
-T accumulate(InputIterator first, InputIterator last, T init);
-\end{lstlisting}
-
-equal()的作用是确定两个序列的值是否相同，若果所有元素都相等时返回true，否则false。函数接受有3个参数，前两个是第一个序列的输入范围，第三个参数是第二个范围的首迭代器。equal()会调用【==】运算符来比较，元素类型不必严格一致。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class InputIterator1, class InputIterator2>
-bool equal(
-	InputIterator1 first1, InputIterator1 last1, 
-	InputIterator2 first2
-);
-\end{lstlisting}
-
-\vspace{0.5cm}
-
-\mybox{只读算法}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <numeric>
-
-using namespace std;
-
-int main() {
-	vector<int> v1 = {40, 9, 20, 34, 7, 34, 85, 9};
-	vector<int> v2 = {40, 9, 20, 34, 7, 34, 85, 9};
-	int key = 34;
-	
-	vector<int>::iterator iter = find(
-		v1.begin(), v1.end(), key
-	);
-	if(iter != v1.end()) {
-		cout << "key found in vector: " << *iter << endl;
-	} else {
-		cout << "key not found" << endl;
-	}
-	
-	cout << key << " appears "
-		 << count(v1.begin(), v1.end(), key) << endl;
-	cout << "sum = "
-		 << accumulate(v1.begin(), v1.end(), 0) << endl;
-	cout << "v1 == v2? " << boolalpha
-		 << equal(v1.begin(), v1.end(), v2.begin()) << endl;
-		 
-	return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-key found in vector: 34
-34 appears 2
-sum = 238
-v1 == v2? true
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{写容器元素算法}
-
-写容器元素算法可对序列中元素重新赋值，要求原序列大小不小于要写入的元素数目。\\
-
-fill()的作用是用给定值填满输入范围，函数接受3个参数，前2个是输入范围，第3个是给定值。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class ForwardIterator, class T>
-void fill(
-	ForwardIterator first, ForwardIterator last, const T& val
-);
-\end{lstlisting}
-
-copy()的作用是将输入范围的值拷贝到目标序列，返回目标序列的尾后迭代器。函数接受3个参数，前2个是输入范围，第3个是目标序列的起始位置。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class InputIterator, class OutputIterator>
-OutputIterator copy(
-	InputIterator first, InputIterator last,
-	OutputIterator result
-);
-\end{lstlisting}
-
-replace()的作用是将序列中所有等于给定值的元素换为另一个值，函数接受4个参数，前2个是输入范围，后2个分别是要搜索的值和新值。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class ForwardIterator, class T>
-void replace(
-	ForwardIterator first, ForwardIterator last, 
-	const T& old_value, const T& new_value
-);
-\end{lstlisting}
-
-\vspace{0.5cm}
-
-\mybox{写容器元素算法}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
-ostream& operator<<(ostream& out, vector<int>& v) {
-	for(vector<int>::iterator iter = v.begin(); 
-	iter != v.end(); 
-	iter++
-	) {
-		out << *iter << " ";
-	}
-	return out;
-}
-
-int main() {
-	vector<int> v1 = {9, 2, 8, 8, 2, 1, 0, 1, 2};
-	vector<int> v2(10);
-	
-	fill(v2.begin(), v2.end(), 0);
-	cout << v2 << endl;
-
-	copy(v1.begin(), v1.end(), v2.begin());
-	cout << v2 << endl;
-
-	replace(v2.begin(), v2.end(), 1, 7);
-	cout << v2 << endl;
-	return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-0 0 0 0 0 0 0 0 0 0 
-9 2 8 8 2 1 0 1 2 0
-9 2 8 8 2 7 0 7 2 0
-	\end{verbatim}
-\end{tcolorbox}
-
-\vspace{0.5cm}
-
-\subsection{重排容器元素算法}
-
-重排容器元素算法可对容器中元素重新排列顺序。\\
-
-sort()的作用是重排输入序列的元素使其有序，函数接受2个参数表示输入范围，函数会调用序列元素类型的【<】运算符。\\
-
-标准库允许在执行算法时用自定义操作代替默认算符，而不需要在类型中重载。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class RandomAccessIterator>
-void sort(
-	RandomAccessIterator first, RandomAccessIterator last
-);
-
-template <class RandomAccessIterator, class Compare>
-void sort(
-	RandomAccessIterator first, RandomAccessIterator last, 
-	Compare comp
-);
-\end{lstlisting}
-
-谓词（predicate）是一个可调用的表达式，其返回值（true / false）可用作条件。按照参数的数量分为一元谓词和二元谓词。接受谓词的算法用该谓词代替默认的算符来操作元素。\\
-
-unique()的作用是重排输入序列，消除相邻重复项，返回消除后的无相邻重复值的尾后迭代器。unique()不真正删除元素，只是将后面的不重复值前移来覆盖前面的重复值，真正删除元素需要使用容器操作。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=C++]
-template <class ForwardIterator>
-ForwardIterator unique(
-	ForwardIterator first, ForwardIterator last
-);
-
-template <class ForwardIterator, class BinaryPredicate>
-ForwardIterator unique(
-	ForwardIterator first, ForwardIterator last,
-	BinaryPredicate pred
-);
-\end{lstlisting}
-
-\vspace{0.5cm}
-
-\mybox{重排容器元素算法}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
-ostream& operator<<(ostream& out, vector<string>& v) {
-	for(vector<string>::iterator iter = v.begin();
-								iter != v.end();
-								iter++) {
-		out << *iter << " ";
-	}
-	return out;
-}
-
-bool isLonger(const string& s1, const string& s2) {
-	return s1.size() > s2.size();
-}
-
-int main() {
-	vector<string> v = {
-		"C++", "Java", "Python",
-		"C++", "C", "JavaScript", 
-		"Golang", "C++"
-	};
-	
-	sort(v.begin(), v.end());
-	cout << v << endl;
-	
-	sort(v.begin(), v.end(), isLonger);
-	cout << v << endl;
-	
-	vector<string>::iterator endUnique = unique(
-	v.begin(), v.end()
-);
-	v.erase(endUnique, v.end());
-	cout << v << endl;
-	return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-C C++ C++ C++ Golang Java JavaScript Python 
-JavaScript Golang Python Java C++ C++ C++ C
-JavaScript Golang Python Java C++ C
-	\end{verbatim}
-\end{tcolorbox}

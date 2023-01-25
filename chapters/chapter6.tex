@@ -1,308 +1,243 @@
-\chapter{I/O库}
+\chapter{预处理}
 
-\section{标准I/O}
+\section{预处理}
 
-\subsection{标准I/O}
+\subsection{宏（Macro）}
 
-C++不直接处理输入输出，而是通过标准库中的一组类来处理I/O。输入流istream提供输入，输出流ostream提供输出。\\
+宏是一种简单的文本替换工具，可以用于定义一个特定的常量或表达式，一般用大写表示。宏定义使用\#define指令，在编译期间，编译器会将程序中所有的宏替换为其内容。\\
 
-标准输入输出有以下特点：
+与变量的定义不同的是，宏没有类型，也不占内存空间。\\
 
-\begin{enumerate}
-	\item cin是istream的对象，从标准输入读取数据。
-	\item cout是ostream的对象，向标准输出写数据。
-	\item cerr是ostream的对象，用于输出错误信息，写到标准错误。
-	\item 【>>】运算符从istream对象读取输入。
-	\item 【<<】运算符从ostream对象写输出。
-	\item getline()从给定的`istream`读取一行数据，存入string对象。
-\end{enumerate}
+\mybox{圆}
 
-\vspace{0.5cm}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#define PI 3.14159
 
-\subsection{I/O格式化}
+double perimeter(double r) {
+    return 2 * PI * r;
+}
 
-每个iostream对象维护一个格式状态来控制I/O的细节，如进制、精度、宽度等。操纵符改变流的格式状态时，通常改变后的状态对所有后续I/O都生效。\\
-
-标准库定义了一组操纵符用来修改流的格式状态：
-
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|c|l|}
-			\hline
-			\textbf{操纵符} & \textbf{功能}                           \\
-			\hline
-			boolalpha       & 将true和false输出为字符串               \\
-			\hline
-			noboolalpha     & 将true和false输出为1和0                 \\
-			\hline
-			showbase        & 对整型值输出表示进制的前缀              \\
-			\hline
-			noshowbase      & 不生成表示进制的前缀                    \\
-			\hline
-			showpoint       & 浮点数总是显示小数点                    \\
-			\hline
-			noshowpoint     & 只有浮点数包含小数部分才显示小数点      \\
-			\hline
-			showpos         & 非负数显示【+】                         \\
-			\hline
-			noshowpos       & 非负数不显示【+】                       \\
-			\hline
-			uppercase       & 在十六进制中打印0X，在科学计数法中打印E \\
-			\hline
-			nouppercase     & 在十六进制中打印0x，在科学计数法中打印e \\
-			\hline
-			dec             & 整型显示为十进制                        \\
-			\hline
-			hex             & 整型显示为十六进制                      \\
-			\hline
-			oct             & 整型显示为八进制                        \\
-			\hline
-			left            & 在值的左侧添加填充字符                  \\
-			\hline
-			right           & 在值的右侧添加填充字符                  \\
-			\hline
-			internal        & 在符号和值之间添加填充字符              \\
-			\hline
-			fixed           & 浮点数显示为定点十进制                  \\
-			\hline
-			scientific      & 浮点数显示为科学计数法                  \\
-			\hline
-			unitbuf         & 每次输出操作后刷新缓冲区                \\
-			\hline
-			nounitbuf       & 恢复正常的缓冲区刷新方式                \\
-			\hline
-			skipws          & 输入运算符跳过空白符                    \\
-			\hline
-			noskipws        & 输入运算符不跳过空白符                  \\
-			\hline
-			flush           & 刷新ostream缓冲区                       \\
-			\hline
-			ends            & 插入空字符，然后刷新ostream缓冲区       \\
-			\hline
-			endl            & 插入换行符，然后刷新ostream缓冲区       \\
-			\hline
-			setfill(ch)     & 用ch填充空白                            \\
-			\hline
-			setprecision(n) & 将浮点精度设置为n                       \\
-			\hline
-			setw(n)         & 读或写值的宽度为n个字符                 \\
-			\hline
-			setbase(n)      & 将整数输出为n进制                       \\
-			\hline
-		\end{tabular}
-	}
-	\caption{操纵符}
-\end{table}
-
-\mybox{格式化输出}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <cmath>
-#include <iomanip>
-
-using namespace std;
+double area(double r) {
+    return PI * r * r;
+}
 
 int main() {
-    cout << "布尔：";
-    cout << boolalpha << true << " " << false << endl;
-    cout << "------------------------------" << endl;
-    
-    cout << "十进制：";
-    cout << dec << 20 << " " << 1024 << endl;
-    
-    cout << "十六进制：";
-    cout << showbase << hex 
-        << 20 << " "<< 1024
-        << noshowbase << endl;
-    
-    cout << "八进制：";
-    cout << oct << 20 << " " << 1024 << dec << endl;
-    cout << "------------------------------" << endl;
-    
-    cout << "科学计数法：";
-    cout << scientific
-        << 100 * sqrt(2)
-        << defaultfloat << endl;
-    cout << "------------------------------" << endl;
-    
-    cout << "默认输出浮点数：";
-    cout << 10.0 << endl;
-    
-    cout << "浮点数打印小数点：";
-    cout << showpoint << 10.0 << noshowpoint << endl;
-    cout << "------------------------------" << endl;
-    
-    cout << "精度：";
-    cout << setprecision(3) << fixed << sqrt(2) << endl;
-    cout << "------------------------------" << endl;
-    
-    cout << "宽度填充：";
-    cout << setfill('0') << setw(4) << 2021 << "/"
-         << setw(2) << 9 << "/"
-         << setw(2) << 2 << endl;
+    double radius;
+    printf("Enter radius: ");
+    scanf("%lf", &radius);
+
+    printf("Perimeter: %.2f\n", perimeter(radius));
+    printf("Area: %.2f\n", area(radius));
+
     return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-布尔：true false
-------------------------------
-十进制：20 1024
-十六进制：0x14 0x400
-八进制：24 2000
-------------------------------
-科学计数法：1.414214e+02
-------------------------------
-默认输出浮点数：10
-浮点数打印小数点：10.0000
-------------------------------
-精度：1.414
-------------------------------
-宽度填充：2021/09/02
+    \mybox{运行结果}
+    \begin{verbatim}
+Enter radius: 5
+Perimeter: 31.42
+Area: 78.54
 	\end{verbatim}
 \end{tcolorbox}
 
-\newpage
+宏也可以像函数一样传递参数，但是宏的参数不会进行类型检查，宏最终同样也会在编译期间被展开。\\
 
-\section{文件I/O}
+但是由于宏定义的内容在编译时会被替换到代码中，有时候会导致运算的优先级发生改变。
 
-\subsection{文件I/O}
+\vspace{-0.5cm}
 
-程序不仅要从控制台进行I/O，还需要读写文件和字符串。\\
+\begin{lstlisting}[language=C]
+#define SQUARE x * x
+\end{lstlisting}
 
-标准库的I/O类型在3个头文件中：
+例如SQUARE(2 + 3)会被展开为2 + 3 * 2 + 3，而不是(2 + 3) * (2 + 3)。因此，最好在宏中使用括号来避免这种情况。
 
-\begin{enumerate}
-	\item <iostream>定义了读写流的基本类型。
-	\item <fstream>定义了读写文件的类型。
-	\item <sstream>定义了读写string对象的类型。
-\end{enumerate}
+\vspace{-0.5cm}
 
-<fstream>中定义了3个I/O类来读写文件：
-
-\begin{enumerate}
-	\item ifstream从给定文件读数据。
-	\item ofstream向给定文件写数据。
-	\item fstream可读写文件。
-\end{enumerate}
+\begin{lstlisting}[language=C]
+#define SQUARE (x * x)
+\end{lstlisting}
 
 \vspace{0.5cm}
 
-\subsection{文件打开模式}
+\subsection{条件编译}
 
-每个流都有一个关联的文件模式，在打开文件时可以指定文件模式。
+条件编译是一种在编译时根据宏的定义来决定是否编译某段代码的方法。\\
 
-\begin{table}[H]
-	\centering
-	\setlength{\tabcolsep}{5mm}{
-		\begin{tabular}{|c|l|}
-			\hline
-			\textbf{打开模式} & \textbf{作用}                                   \\
-			\hline
-			ios::in           & 以读方式打开                                    \\
-			\hline
-			ios::out          & 以写方式打开                                    \\
-			\hline
-			ios::app          & 以追加方式打开                                  \\
-			\hline
-			ios::ate          & 打开文件定位到文件末尾                          \\
-			\hline
-			ios::trunc        & 如果文件存在，其内容将被截断，即把文件长度设为0 \\
-			\hline
-		\end{tabular}
-	}
-	\caption{文件打开模式}
-\end{table}
+\mybox{斐波那契数列}
 
-\mybox{文件I/O}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
 
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <fstream>
+#define RECURSION
 
-using namespace std;
-
-int main() {
-    string name;
-    int id;
-    cout << "Enter name: ";
-    cin >> name;
-    cout << "Enter id: ";
-    cin >> id;
-    
-    ofstream out("info.txt");
-    out << name << " " << id << endl;
-    out.close();
-    
-    ifstream in("info.txt");
-    in >> name >> id;
-    in.close();
-    
-    cout << "name = " << name << ", id = " << id << endl;
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-Enter name: Terry
-Enter id: 979489
-name = Terry, id = 979489
-	\end{verbatim}
-\end{tcolorbox}
-
-\newpage
-
-\section{string流}
-
-\subsection{string流}
-
-<sstream>定义了3个类来支持内存IO：
-
-\begin{enumerate}
-	\item istringstream从string读数据。
-	\item ostringstream向string写数据。
-	\item stringstream可读写string。
-\end{enumerate}
-
-\mybox{string流}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-#include <sstream>
-#include <string>
-
-using namespace std;
-
-int main() {
-    string line;
-    cout << "convert a string to Python list format: ";
-    getline(cin, line);
-
-    ostringstream out;
-    istringstream in(line);
-    string token;
-
-    out << "[";
-    while(in >> token) {
-        out << token << ", ";
+#ifdef RECURSION
+int fibonacci(int n) {
+    if (n == 0) {
+        return 0;
+    } else if (n == 1) {
+        return 1;
     }
-    out << "\b\b]";
-    cout << out.str() << endl;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+#else
+int fibonacci(int n) {
+    int seq[n];
+    seq[0] = 0;
+    seq[1] = 1;
+
+    for (int i = 2; i <= n; i++) {
+        seq[i] = seq[i - 1] + seq[i - 2];
+    }
+
+    return seq[n];
+}
+#endif
+
+int main() {
+    int n;
+    printf("Enter n: ");
+    scanf("%d", &n);
+    printf("%d\n", fibonacci(n));
     return 0;
 }
 \end{lstlisting}
 
 \begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-convert a string to Python list format: This is a test
-[This, is, a, test]
+    \mybox{运行结果}
+    \begin{verbatim}
+Enter n: 7
+13
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{多文件编译}
+
+\subsection{编译（Compile）}
+
+集成开发环境IDE（Integrated Development Environment）包含了文本编辑器、编译器、调试器和其它工具，可以很方便地进行开发。但是对于大型项目，使用命令行编译更加灵活和高效。\\
+
+\mybox{交换}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+#define SWAP(a, b) {int t; t = a; a = b; b = t;}
+
+int main() {
+    int a = 1;
+    int b = 2;
+
+    printf("Before: a = %d, b = %d\n", a, b);
+    SWAP(a, b);
+    printf("After: a = %d, b = %d\n", a, b);
+
+    return 0;
+}
+\end{lstlisting}
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}
+gcc -Wall swap.c -o swap
+./swap
+\end{lstlisting}
+
+其中gcc表示编译器的名称，-Wall表示要输出所有警告信息，swap.c为需编译的源文件，-o用于指定输出的可执行文件的名称为swap。编译成功后使用./swap即可运行。\\
+
+一个完整的编译过程包含4个步骤：
+
+\begin{enumerate}
+    \item 预处理：将头文件、宏定义等展开
+          \vspace{-0.5cm}
+          \begin{lstlisting}
+gcc -E swap.c -o swap.i
+            \end{lstlisting}
+
+    \item 编译：将预处理后的代码转换为汇编代码
+          \vspace{-0.5cm}
+          \begin{lstlisting}
+gcc -S swap.i -o swap.s
+            \end{lstlisting}
+
+    \item 汇编：将汇编代码转换为机器码
+          \vspace{-0.5cm}
+          \begin{lstlisting}
+gcc -c swap.s -o swap.o
+            \end{lstlisting}
+
+    \item 链接：将目标文件链接为可执行文件
+          \vspace{-0.5cm}
+          \begin{lstlisting}
+gcc swap.o -o swap
+            \end{lstlisting}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{多文件编译}
+
+模块化编程的目的是为了将程序分解成多个独立、可重用的部分。当程序变得复杂时，分成多个文件可以使得程序逻辑更加清晰、易于维护。\\
+
+在多文件中，每个模板一般都分为.h和.c两部分，其中.h文件用于声明函数原型，.c文件用于实现函数。这样其它文件只需要包含.h文件即可使用这些函数，就像包含头文件stdio.h一样，只不过自定义的头文件一般使用双引号包含。\\
+
+由于一个头文件可以被多个源文件包含，为了避免重复定义，一般在头文件的开头使用条件编译来判断是否已经被包含。\\
+
+\mybox{面积}
+
+\begin{lstlisting}[language=C, title=geometry.h]
+#ifndef _GEOMETRY_H_
+#define _GEOMETRY_H_
+
+double circle_area(double radius);
+
+double triangle_area(double base, double height);
+
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[language=C, title=geometry.c]
+#include "geometry.h"
+
+#define PI 3.1415926
+
+double circle_area(double radius) {
+    return PI * radius * radius;
+}
+
+double triangle_area(double base, double height) {
+    return base * height / 2;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C, title=area.c]
+#include <stdio.h>
+#include "geometry.h"
+
+int main() {
+    printf("Area of circle: %.2f\n", circle_area(5));
+    printf("Area of triangle: %.2f\n", triangle_area(5, 10));
+    return 0;
+}
+\end{lstlisting}
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}
+gcc -Wall geometry.c area.c -o area
+./area
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Area of circle: 78.54
+Area of triangle: 25.00
 	\end{verbatim}
 \end{tcolorbox}
 

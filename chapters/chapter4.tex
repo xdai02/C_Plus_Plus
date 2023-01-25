@@ -1,112 +1,101 @@
-\chapter{多态}
+\chapter{数组}
 
-\section{多态}
+\section{数组}
 
-\subsection{多态（Polymorphism）}
+\subsection{数组（Array）}
 
-多态是同一个行为具有多个不同表现形式或形态的能力。例如可以把一只哈士奇，当成它的父类去看待，因此哈士奇是一只狗、一个动物或一个生物。\\
+数组能够存储一组类型相同的元素，数组在声明时必须指定它的大小（容量），数组的大小是固定的，无法在运行时动态改变。数组通过下标（index）来访问某一位置上的元素，下标从0开始。
 
-通过父类引用指向子类对象，例如Animal animal = new Dog()，从而产生多种形态。父类引用仅能访问父类所声明的属性和方法，不能访问子类独有的属性和方法。\\
+\vspace{-0.5cm}
 
-通过父类引用指向子类对象，从而产生多种形态。父类引用仅能访问父类所声明的属性和方法，不能访问子类独有的属性和方法。\\
-
-在一对有继承关系的类中都有一个方法，其方法名、参数列表、返回值均相同，通过调用方法实现不同类对象完成不同的事件。\\
-
-构成多态需要满足三个条件：
-
-\begin{enumerate}
-	\item 必须存在继承关系。
-	\item 继承关系中必须有同名的虚函数。
-	\item 存在基类类型的指针或引用，通过该指针或引用调用虚函数。
-\end{enumerate}
-
-\newpage
-
-\section{虚函数}
-
-\subsection{虚函数}
-
-虚函数是定义在基类中的函数，子类必须对其进行重写/覆盖（override），虚函数需要在类的成员函数前面加上virtual关键字。\\
-
-重写/覆盖是指子类中存在重新定义的函数，其函数名、参数列表、返回值类型都与父类中被重写的函数一致。被重写的函数必须是虚函数。\\
-
-子类若重写了父类的函数，那么子类将会隐藏其父类中被重写的函数。但是子类通过强制类型转换成父类后可以重新调用父类中被重写的函数。\\
-
-\mybox{虚函数}
-
-\begin{lstlisting}[language=C++, title=programmer.h]
-#ifndef _PROGRAMMER_H_
-#define _PROGRAMMER_H_
-
-#include <string>
-
-class Programmer {
-public:
-	Programmer(std::string title = "programmer");
-	virtual void work();
-	
-private:
-	std::string title;
-};
-
-#endif
+\begin{lstlisting}[language=C]
+int arr[5] = {3, 6, 8, 2, 4};
 \end{lstlisting}
 
-\begin{lstlisting}[language=C++, title=programmer.cpp]
-#include "programmer.h"
-#include <iostream>
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale=0.5]
+		\draw[-] (0,0) -- (5,0) -- (10,0) -- (15,0) -- (20,0) -- (25,0) -- (25,2.6) -- (20,2.6) -- (15,2.6) -- (10,2.6) -- (5,2.6) -- (0,2.6) -- (0,0);
+		\draw[-] (5,0) -- (5,2.6);
+		\draw[-] (10,0) -- (10,2.6);
+		\draw[-] (15,0) -- (15,2.6);
+		\draw[-] (20,0) -- (20,2.6);
 
-using namespace std;
+		\draw (2.5,1.3) node {arr[0]};
+		\draw (7.5,1.3) node {arr[1]};
+		\draw (12.5,1.3) node {arr[2]};
+		\draw (17.5,1.3) node {arr[3]};
+		\draw (22.5,1.3) node {arr[4]};
+	\end{tikzpicture}
+\end{figure}
 
-Programmer::Programmer(string title) : title(title) {}
+如果在声明数组时没有指定数组的大小，那么将根据初始化的元素个数来确定。
 
-void Programmer::work() {
-	cout << "programming" << endl;
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+int arr[] = {3, 6, 8, 2, 4, 0, 1, 7};
+\end{lstlisting}
+
+通过下标可以访问数组中的元素，下标的有效范围是0 $ \sim $ 数组的长度 - 1，如果使用不合法的下标就会导致数组越界。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+printf("%d\n", arr[0]);		// 3
+printf("%d\n", arr[3]);		// 2
+printf("%d\n", arr[7]);		// 7
+\end{lstlisting}
+
+当数组的容量比较大时，可以使用循环来初始化数组。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+int arr[10];
+
+for(int i = 0; i < 10; i++) {
+	arr[i] = i + 1;
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=C++, title=java\_programmer.h]
-#ifndef _JAVA_PROGRAMMER_H_
-#define _JAVA_PROGRAMMER_H_
+\vspace{0.5cm}
 
-#include "programmer.h"
-#include <string>
+\mybox{查找数据}
 
-class JavaProgrammer : public Programmer {
-public:
-	JavaProgrammer(std::string title = "Java Programmer");
-	virtual void work() override;
-};
-
-#endif
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=java\_programmer.cpp]
-#include "java_programmer.h"
-#include <iostream>
-
-using namespace std;
-
-JavaProgrammer::JavaProgrammer(string title) 
-	: Programmer(title) {}
-
-void JavaProgrammer::work() {
-	cout << "Android Development" << endl;
-}
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=test\_programmer.cpp]
-#include <iostream>
-#include "programmer.h"
-#include "java_programmer.h"
-
-using namespace std;
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdbool.h>
 
 int main() {
-	JavaProgrammer javaProgrammer;
-	javaProgrammer.work();
-	Programmer programmer = (Programmer)javaProgrammer;
-	programmer.work();
+	int n;
+	printf("Enter the number of elements: ");
+	scanf("%d", &n);
+
+	int arr[n];
+	printf("Enter the elements: ");
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &arr[i]);
+	}
+
+	int key;
+	printf("Enter the key: ");
+	scanf("%d", &key);
+
+	bool found = false;
+	for (int i = 0; i < n; i++) {
+		if (arr[i] == key) {
+			found = true;
+			break;
+		}
+	}
+
+	if (found) {
+		printf("%d exists.\n", key);
+	} else {
+		printf("%d not found!\n", key);
+	}
+
 	return 0;
 }
 \end{lstlisting}
@@ -114,231 +103,37 @@ int main() {
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-Android Development
-programming
-	\end{verbatim}
-\end{tcolorbox}
-
-\newpage
-
-\section{纯虚函数}
-
-\subsection{纯虚函数}
-
-在虚函数后加上【= 0】后可以让这个函数变成纯虚函数，包含纯虚函数的类叫做抽象类（abstract class）或接口类（interface）。\\
-
-抽象类不能被用于实例化对象，只是提供了所有的子类共有的部分。例如在动物园中，存在的都是动物具体的子类对象，并不存在动物对象，所以动物类不应该被独立创建成对象。\\
-
-抽象类的作用是可以被子类继承，提供共性的属性和方法。父类提供的方法很难满足子类不同的需求，如果不定义该方法，则表示所有的子类都不具有该行为。如果定义该方法，所有的子类都在重写，那么这个方法在父类中是没有必要实现的，显得多余。\\
-
-被virtual关键字修饰的方法称为纯虚函数。纯虚函数只有声明，没有实现。纯虚函数只能包含在抽象类中。产生继承关系后，子类必须重写父类中所有的纯虚函数，否则子类还是抽象类。\\
-
-\mybox{纯虚函数}
-
-\begin{lstlisting}[language=C++, title=shape.h]
-#ifndef _SHAPE_H_
-#define _SHAPE_H_
-
-class Shape {
-public:
-	virtual double getArea() = 0;
-};
-
-#endif
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=rectangle.h]
-#ifndef _RECTANGLE_H_
-#define _RECTANGLE_H_
-
-#include "shape.h"
-
-class Rectangle : public Shape {
-public:
-	Rectangle(double length = 0, double width = 0);
-	virtual double getArea() override;
-
-private:
-	double length;
-	double width;
-};
-
-#endif
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=rectangle.cpp]
-#include "rectangle.h"
-
-Rectangle::Rectangle(double length, double width)
-	: length(length), width(width) {}
-
-double Rectangle::getArea() {
-	return length * width;
-}
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=circle.h]
-#ifndef _CIRCLE_H_
-#define _CIRCLE_H_
-
-#include "shape.h"
-
-class Circle : public Shape {
-public:
-	Circle(double raidus = 0);
-	virtual double getArea() override;
-
-private:
-	double radius;
-};
-
-#endif
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=circle.cpp]
-#include "circle.h"
-
-Circle::Circle(double radius) : radius(radius) {}
-
-double Circle::getArea() {
-	return 3.14159 * radius * radius;
-}
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=test\_shape.cpp]
-#include <iostream>
-#include "rectangle.h"
-#include "circle.h"
-
-using namespace std;
-
-int main() {
-	Rectangle rectangle(7, 5);
-	Circle circle(6);
-	cout << "rectangle: " << rectangle.getArea() << endl;
-	cout << "circle: " << circle.getArea() << endl;
-	return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-rectangle: 35
-circle: 113.097
+Enter the number of elements: 5
+Enter the elements: 4 8 9 2 3
+Enter the key: 2
+2 exists.
 	\end{verbatim}
 \end{tcolorbox}
 
 \vspace{0.5cm}
 
-\subsection{接口（Interface）}
+\mybox{最大值/最小值}
 
-在面向对象中会使用抽象类为外部提供一个通用的、标准化的接口。\\
-
-宏观上来讲，接口是一种标准。例如常见的USB接口，电脑通过USB接口连接各种外设设备，每一个接口不用关心连接的外设设备是什么，只要这个外设设备实现了USB的标准，就可以连接到电脑上。\\
-
-从程序上来讲，接口代表了某种能力和约定。当父类的方法无法满足子类需求时，可实现接口扩充子类的能力，接口中方法的定义代表能力的具体要求。\\
-
-使用接口可以进行对行为的约束和规则的制定，接口表示一组能力，那么一个类可以接受多种能力的约束。因此一个类可以实现多个接口，实现多个接口的时候，必须要把每一个接口中的方法都实现。\\
-
-\mybox{接口}
-
-\begin{lstlisting}[language=C++, title=language.h]
-#ifndef _LANGUAGE_H_
-#define _LANGUAGE_H_
-
-class Language {
-public:
-	virtual void translate() = 0;
-};
-
-#endif
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=english.h]
-#ifndef _ENGLISH_H_
-#define _ENGLISH_H_
-
-#include "language.h"
-#include <string>
-
-class English : public Language {
-public:
-	English(std::string content = "");
-	virtual void translate() override;
-
-private:
-	std::string content;
-};
-
-#endif
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=english.cpp]
-#include "english.h"
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-English::English(string content) : content(content) {}
-
-void English::translate() {
-	cout << content << endl;
-}
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=chinese.h]
-#ifndef _CHINESE_H_
-#define _CHINESE_H_
-
-#include "language.h"
-#include <string>
-
-class Chinese : public Language {
-public:
-	Chinese(std::string content = "");
-	virtual void translate() override;
-
-private:
-	std::string content;
-};
-
-#endif
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=chinese.cpp]
-#include "chinese.h"
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-Chinese::Chinese(string content) : content(content) {}
-
-void Chinese::translate() {
-	cout << content << endl;
-}
-\end{lstlisting}
-
-\begin{lstlisting}[language=C++, title=test\_language.cpp]
-#include <iostream>
-#include "language.h"
-#include "english.h"
-#include "chinese.h"
-
-using namespace std;
-
-void show(Language& language) {
-	language.translate();
-}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
 
 int main() {
-	English english("Hello!");
-	show(english);
+	int num[] = {7, 6, 2, 9, 3, 1, 4, 0, 5, 8};
+	int n = sizeof(num) / sizeof(num[0]);
+	int max = num[0];
+	int min = num[0];
 
-	Chinese chinese("你好！");
-	show(chinese);
+	for(int i = 1; i < n; i++) {
+		if(num[i] > max) {
+			max = num[i];
+		}
+		if(num[i] < min) {
+			min = num[i];
+		}
+	}
+
+	printf("Max = %d\n", max);
+	printf("Min = %d\n", min);
 	return 0;
 }
 \end{lstlisting}
@@ -346,9 +141,512 @@ int main() {
 \begin{tcolorbox}
 	\mybox{运行结果}
 	\begin{verbatim}
-Hello!
-你好
+Max = 9
+Min = 0
 	\end{verbatim}
 \end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{二维数组（2-Dimensional Array）}
+
+二维数组由行和列两个维度组成，行和列的下标同样也都是从0开始。在声明二维数组时，需要指定行和列的大小。二维数组可以看成是由多个一维数组组成的，因此二维数组中的每个元素都是一个一维数组。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+int arr[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+\end{lstlisting}
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{5mm}{
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			arr[0][0] & arr[0][1] & arr[0][2] & arr[0][3] \\
+			\hline
+			arr[1][0] & arr[1][1] & arr[1][2] & arr[1][3] \\
+			\hline
+			arr[2][0] & arr[2][1] & arr[2][2] & arr[2][3] \\
+			\hline
+		\end{tabular}
+	}
+\end{table}
+
+在初始化二维数组时，为了能够更直观地看出二维数组的结构，可以将每一行单独写在一行中。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+int arr[3][4] = {
+	{1, 2, 3, 4},
+	{5, 6, 7, 8},
+	{9, 10, 11, 12},
+};
+\end{lstlisting}
+
+对于容量较大的二维数组，可以通过两层循环进行初始化。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+int arr[3][4];
+
+for(int i = 0; i < 3; i++) {
+	for(int j = 0; j < 4; j++) {
+		arr[i][j] = 0;
+	}
+}
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\mybox{矩阵运算}
+
+\begin{align}\nonumber
+	\left[\begin{matrix}
+			1 & 3 \\
+			1 & 0 \\
+			1 & 2 \\
+		\end{matrix} \right]
+	+
+	\left[\begin{matrix}
+			0 & 0 \\
+			7 & 5 \\
+			2 & 1 \\
+		\end{matrix} \right]
+	=
+	\left[\begin{matrix}
+			1+0 & 3+0 \\
+			1+7 & 0+5 \\
+			1+2 & 2+1 \\
+		\end{matrix} \right]
+	=
+	\left[\begin{matrix}
+			1 & 3 \\
+			8 & 5 \\
+			3 & 3 \\
+		\end{matrix} \right]
+\end{align}
+
+\begin{align}\nonumber
+	\left[\begin{matrix}
+			1 & 3 \\
+			1 & 0 \\
+			1 & 2 \\
+		\end{matrix} \right]
+	-
+	\left[\begin{matrix}
+			0 & 0 \\
+			7 & 5 \\
+			2 & 1 \\
+		\end{matrix} \right]
+	=
+	\left[\begin{matrix}
+			1-0 & 3-0 \\
+			1-7 & 0-5 \\
+			1-2 & 2-1 \\
+		\end{matrix} \right]
+	=
+	\left[\begin{matrix}
+			1  & 3  \\
+			-6 & -5 \\
+			-1 & 1  \\
+		\end{matrix} \right]
+\end{align}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main() {
+	int A[3][2] = {
+		{1, 3},
+		{1, 0},
+		{1, 2}
+	};
+	int B[3][2] = {
+		{0, 0},
+		{7, 5},
+		{2, 1}
+	};
+	int C[3][2];
+
+	printf("Matrix Addition\n");
+	for(int i = 0; i < 3; i++) {
+		for(int j = 0; j < 2; j++) {
+			C[i][j] = A[i][j] + B[i][j];
+			printf("%3d", C[i][j]);
+		}
+		printf("\n");
+	}
+	
+	printf("Matrix Subtraction\n");
+	for(int i = 0; i < 3; i++) {
+		for(int j = 0; j < 2; j++) {
+			C[i][j] = A[i][j] - B[i][j];
+			printf("%3d", C[i][j]);
+		}
+		printf("\n");
+	}
+	
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Matrix Addition
+  1  3
+  8  5
+  3  3
+Matrix Subtraction
+  1  3
+  -6 -5
+  -1  1
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{字符串}
+
+\subsection{ASCII}
+
+美国信息交换标准代码ASCII（American Standard Code for Information Interchange）一共定义了128个字符。\\
+
+\begin{longtable}{|c|c|c|c|c|c|c|c|}
+	\hline
+	\textbf{ASCII} & \textbf{字符} & \textbf{ASCII} & \textbf{字符} & \textbf{ASCII} & \textbf{字符}          & \textbf{ASCII} & \textbf{字符}          \\
+	\hline
+	0              & NUT           & 32             & (space)       & 64             & @                      & 96             & \lstinline|`| \\
+	\hline
+	1              & SOH           & 33             & !             & 65             & A                      & 97             & a                      \\
+	\hline
+	2              & STX           & 34             & \text{"}      & 66             & B                      & 98             & b                      \\
+	\hline
+	3              & ETX           & 35             & \#            & 67             & C                      & 99             & c                      \\
+	\hline
+	4              & EOT           & 36             & \$            & 68             & D                      & 100            & d                      \\
+	\hline
+	5              & ENQ           & 37             & \%            & 69             & E                      & 101            & e                      \\
+	\hline
+	6              & ACK           & 38             & \&            & 70             & F                      & 102            & f                      \\
+	\hline
+	7              & BEL           & 39             & \text{'}      & 71             & G                      & 103            & g                      \\
+	\hline
+	8              & BS            & 40             & (             & 72             & H                      & 104            & h                      \\
+	\hline
+	9              & HT            & 41             & )             & 73             & I                      & 105            & i                      \\
+	\hline
+	10             & LF            & 42             & *             & 74             & J                      & 106            & j                      \\
+	\hline
+	11             & VT            & 43             & +             & 75             & K                      & 107            & k                      \\
+	\hline
+	12             & FF            & 44             & ,             & 76             & L                      & 108            & l                      \\
+	\hline
+	13             & CR            & 45             & -             & 77             & M                      & 109            & m                      \\
+	\hline
+	14             & SO            & 46             & .             & 78             & N                      & 110            & n                      \\
+	\hline
+	15             & SI            & 47             & /             & 79             & O                      & 111            & o                      \\
+	\hline
+	16             & DLE           & 48             & 0             & 80             & P                      & 112            & p                      \\
+	\hline
+	17             & DC1           & 49             & 1             & 81             & Q                      & 113            & q                      \\
+	\hline
+	18             & DC2           & 50             & 2             & 82             & R                      & 114            & r                      \\
+	\hline
+	19             & DC3           & 51             & 3             & 83             & S                      & 115            & s                      \\
+	\hline
+	20             & DC4           & 52             & 4             & 84             & T                      & 116            & t                      \\
+	\hline
+	21             & NAK           & 53             & 5             & 85             & U                      & 117            & u                      \\
+	\hline
+	22             & SYN           & 54             & 6             & 86             & V                      & 118            & v                      \\
+	\hline
+	23             & TB            & 55             & 7             & 87             & W                      & 119            & w                      \\
+	\hline
+	24             & CAN           & 56             & 8             & 88             & X                      & 120            & x                      \\
+	\hline
+	25             & EM            & 57             & 9             & 89             & Y                      & 121            & y                      \\
+	\hline
+	26             & SUB           & 58             & :             & 90             & Z                      & 122            & z                      \\
+	\hline
+	27             & ESC           & 59             & ;             & 91             & [                      & 123            & \{                     \\
+			\hline
+	28             & FS            & 60             & <             & 92             & $ \backslash $         & 124            & |                      \\
+			\hline
+	29             & GS            & 61             & =             & 93             & ]                      & 125            & \}                     \\
+	\hline
+	30             & RS            & 62             & >             & 94             & \lstinline|^| & 126            & \lstinline|~| \\
+	\hline
+	31             & US            & 63             & ?             & 95             & \_                     & 127            & DEL                    \\
+	\hline
+\end{longtable}
+
+\vspace{0.5cm}
+
+\mybox{ASCII}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main() {
+	for(int i = 0; i < 128; i++) {
+		printf("%d - %c\n", i, i);
+	}
+	return 0;
+}
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\subsection{字符串（String）}
+
+字符数组通常被称为字符串，字符串有两种初始化的方式。一种与普通数组的初始化类似，逐个写出每一个字符，最后需要手动添加$ \backslash $0字符，表示字符串的结束符；另一种是直接使用双引号，这种写法无需手动添加$ \backslash $0。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+char str[8] = {'p', 'r', 'o', 'g', 'r', 'a', 'm', '\0'};
+char str[8] = "program";
+\end{lstlisting}
+
+$ \backslash $0占一个字符的大小，因此在设置字符串的大小时需要考虑$ \backslash $0。\\
+
+占位符\%s可以对字符串进行输入输出操作，使用scanf()和gets()都可以用于读取字符串，但是scanf()只会读取到空格为止，而gets()会读取到回车为止。\\
+
+\mybox{字符串输入输出}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main() {
+	char str1[32];
+	printf("Enter string 1: ");
+	gets(str1);
+	puts(str1);
+
+	char str2[32];
+	printf("Enter string 2: ");
+	scanf("%s", str2);
+	printf("%s\n", str2);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Enter string 1: hello world
+hello world
+Enter string 2: hello world
+hello
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\mybox{字符统计}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main() {
+	char str[32];
+	printf("Enter a string: ");
+	gets(str);
+	printf("Character to search: ");
+	char c = getchar();
+
+	int cnt = 0;
+	int i = 0;
+	while (str[i] != '\0') {
+		if (str[i] == c) {
+			cnt++;
+		}
+		i++;
+	}
+
+	printf("\'%c\' appears %d times in \"%s\".\n", c, cnt, str);
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Enter a string: this is a test
+Character to search: t
+'t' appears 3 times in "this is a test".
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{字符串函数}
+
+头文件<string.h>中定义了一些常用的字符串处理函数。
+
+\subsubsection{strlen()}
+
+计算字符串的长度。\\
+
+\mybox{strlen()}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+	char s[] = "hello world";
+	printf("Length: %d\n", strlen(s));
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Length: 11
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsubsection{strcpy()}
+
+字符串复制，调用者需要确保字符串的大小足够。\\
+
+\mybox{strcpy()}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+	char s1[32] = "hello world";
+	char s2[32] = "program";
+
+	strcpy(s1, s2);
+	printf("s1 = %s\n", s1);
+	printf("s2 = %s\n", s2);
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+s1 = program
+s2 = program
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsubsection{strcat()}
+
+字符串拼接，调用者需要确保字符串的大小足够。\\
+
+\mybox{strcat()}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+	char s1[32] = "hello";
+	char s2[32] = "world";
+
+	strcat(s1, s2);
+	printf("s1 = %s\n", s1);
+	printf("s2 = %s\n", s2);
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+s1 = helloworld
+s2 = world
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsubsection{strcmp()}
+
+字符串比较，依次比较字符串中每个字符的ASCII码值。通过判断strcmp()的返回值，可以得知两个字符串比较后的结果。
+
+\begin{itemize}
+	\item 负数：字符串1 < 字符串2
+	\item 正数：字符串1 > 字符串2
+	\item 0：字符串1 == 字符串2
+\end{itemize}
+
+\vspace{0.5cm}
+
+\mybox{strcmp()}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+	char s1[32] = "communication";
+	char s2[32] = "compare";
+	printf("%d\n", strcmp(s1, s2));
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+-1
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{字符串数组}
+
+字符串数组是一个二维的字符数组，或者可以理解为是由多个字符串组成的数组。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C]
+char str[4][12] = {"C++", "Java", "Python", "JavaScript"};
+\end{lstlisting}
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{4mm}{
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+			\hline
+			           & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3}      & \textbf{4}      & \textbf{5} & \textbf{6}      & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10}     & \textbf{11} \\
+			\hline
+			\textbf{0} & C          & +          & +          & $ \backslash $0 &                 &            &                 &            &            &            &                 &             \\
+			\hline
+			\textbf{1} & J          & a          & v          & a               & $ \backslash $0 &            &                 &            &            &            &                 &             \\
+			\hline
+			\textbf{2} & P          & y          & t          & h               & o               & n          & $ \backslash $0 &            &            &            &                 &             \\
+			\hline
+			\textbf{3} & J          & a          & v          & a               & S               & c          & r               & i          & p          & t          & $ \backslash $0 &             \\
+			\hline
+		\end{tabular}
+	}
+\end{table}
+
+\begin{lstlisting}[language=C]
+printf("str[0] = %s\n", str[0]);		// C++
+printf("str[1] = %s\n", str[1]);		// Java
+printf("str[0][0] = %c\n", str[0][0]);	// C
+printf("str[0][1] = %c\n", str[0][1]);	// +
+\end{lstlisting}
 
 \newpage

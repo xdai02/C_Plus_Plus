@@ -1,0 +1,875 @@
+\chapter{封装}
+
+\section{类与对象}
+
+\subsection{类与对象}
+
+类（class）表示同一类具有相同特征和行为的对象的集合，类定义了对象的属性和方法。\\
+
+对象（object）是类的实例，对象拥有属性和方法。\\
+
+类的设计需要使用关键字class，类名是一个标识符，遵循大驼峰命名法。类中可以包含属性和方法。其中，属性通过变量表示，又称实例变量；方法用于描述行为，又称实例方法。\\
+
+通过关键字new进行对象的实例化，实例化对象会调用类中的构造函数完成。类是一种引用数据类型，对象的实例化在堆上开辟空间。\\
+
+\mybox{类和对象}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+public:
+    string name;
+    int age;
+
+    void eat() {
+        cout << "吃饭" << endl;
+    }
+
+    void sleep() {
+        cout << "睡觉" << endl;
+    }
+};
+
+int main() {
+    Person person;
+
+    person.name = "小灰";
+    person.age = 17;
+    cout << "姓名：" << person.name << endl;
+    cout << "年龄：" << person.age << endl;
+
+    person.eat();
+    person.sleep();
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+姓名：小灰
+年龄：17
+吃饭
+睡觉
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{封装}
+
+\subsection{封装（Encapsulation）}
+
+封装是面向对象方法的重要原则，就是把对象的属性和方法结合为一个独立的整体，并尽可能隐藏对象的内部实现细节。\\
+
+封装可以认为是一个保护屏障，防止该类的数据被外部类随意访问。要访问该类的数据，必须通过严格的接口控制。合适的封装可以让代码更容易理解和维护，也加强了程序的安全性。\\
+
+实现封装的步骤：
+
+\begin{enumerate}
+	\item 修改属性的可见性来限制对属性的访问，一般限制为private。
+	\item 对每个属性提供对外的公共方法访问，也就是提供一对setter / getter，用于对私有属性的访问。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{访问权限}
+
+属性和方法的访问权限一般分为3种：
+
+\begin{enumerate}
+	\item public：属性和方法在类的内部和外部都可以访问。
+	\item private：属性和方法只能在类内访问。
+	\item protected：属性和方法只能在类的内部和其派生类中访问。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{this指针}
+
+每一个对象都能通过this指针来访问自身的地址，this指针是所有成员方法的隐含参数，在成员方法内部可以用来指向调用对象。\\
+
+在类中，属性的名字可以和局部变量的名字相同。此时，如果直接使用名字来访问，优先访问的是局部变量。因此，需要使用this指针来访问当前对象的属性。\\
+
+当需要访问的属性与局部变量没有重名的时候，this可以省略。\\
+
+\mybox{封装}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+public:
+    void setName(string name) {
+        this->name = name;
+    }
+
+    string getName() {
+        return name;
+    }
+
+    void setAge(int age) {
+        this->age = age;
+    }
+
+    int getAge() {
+        return age;
+    }
+
+private:
+    string name;
+    int age;
+};
+
+int main() {
+    Person person;
+
+    person.setName("小灰");
+    person.setAge(17);
+
+    cout << "姓名：" << person.getName() << endl;
+    cout << "年龄：" << person.getAge() << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+姓名：小灰
+年龄：17
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{构造函数与析构函数}
+
+\subsection{构造函数（Constructor）}
+
+构造函数也是一个函数，用于实例化对象，在实例化对象的时候调用。一般情况下，使用构造函数是为了在实例化对象的同时，给一些属性进行初始化赋值。\\
+
+构造函数和普通函数的区别：
+
+\begin{enumerate}
+	\item 构造函数的名字必须和类名一致。
+	\item 构造函数没有返回值，返回值类型部分不写。
+\end{enumerate}
+
+如果一个类中没有构造函数，系统会自动提供一个public权限的无参构造函数以便实例化对象。如果一个类中已有构造函数，系统将不再提供任何默认的构造函数。\\
+
+\mybox{构造函数}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+public:
+    Person();
+    Person(string name, int age);
+    string toString();
+
+private:
+    string name;
+    int age;
+};
+
+// 无参构造函数
+Person::Person() {
+    cout << "Person::Person()" << endl;
+}
+
+// 有参构造函数
+Person::Person(string name, int age) {
+    cout << "Person::Person(string, int)" << endl;
+    this->name = name;
+    this->age = age;
+}
+
+string Person::toString() {
+    return "姓名：" + name + "，年龄：" + to_string(age);
+}
+
+int main() {
+    Person p1;
+    Person p2("小灰", 17);
+    cout << p2.toString() << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Person::Person()
+Person::Person(string, int)
+姓名：小灰，年龄：17
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{初始化列表}
+
+与其它函数不同，构造函数还可以有初始化列表。初始化列表以【:】开头，后跟一些列以逗号分割的初始化字段。\\
+
+\mybox{初始化列表}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+public:
+    Person(string name, int age);
+    string toString();
+
+private:
+    string name;
+    int age;
+};
+
+Person::Person(string name, int age) : name(name), age(age) {
+    cout << "Person::Person(string, int)" << endl;
+}
+
+string Person::toString() {
+    return "姓名：" + name + "，年龄：" + to_string(age);
+}
+
+int main() {
+    Person person("小灰", 17);
+    cout << person.toString() << endl;    
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Person::Person(string, int)
+姓名：小灰，年龄：17
+	\end{verbatim}
+\end{tcolorbox}
+
+有些时候初始化列表是不可或缺的，以下情况必须使用初始化列表：
+
+\begin{enumerate}
+	\item 常量成员：常量只能初始化不能赋值。
+
+	\item 引用类型：引用必须在定义时初始化，且不能重新赋值。
+
+	\item 没有默认构造函数的类类型：使用初始化列表可以不必调用默认构造函数来初始化，而是直接调用拷贝构造函数初始化。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{析构函数（Destructor）}
+
+析构函数与构造函数相反，当对象的生命周期结束时，会自动执行析构函数，用于做清理善后的事情。\\
+
+析构函数的名称以【~】为前缀，后加类名称，它没有返回值和参数。\\
+
+\mybox{析构函数}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+public:
+    Person(string name, int age);
+    ~Person();
+
+private:
+    string name;
+    int age;
+};
+
+Person::Person(string name, int age) : name(name), age(age) {
+    cout << "Person::Person(string, int)" << endl;
+}
+
+Person::~Person() {
+    cout << "Person::~Person()" << endl;
+}
+
+int main() {
+    Person p1("小灰", 17);
+    Person *p2 = new Person("小白", 21);
+    delete p2;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Person::Person(string, int)
+Person::Person(string, int)
+Person::~Person()
+Person::~Person()
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{拷贝构造函数（Copy Constructor）}
+
+拷贝构造函数是构造函数的一种，它只有一个参数，参数类型为本类的引用。参数可以使const引用，也可以是非const引用，但是一般使用前者。\\
+
+如果没有编写拷贝构造函数，编译器会自动生成一个默认的拷贝构造函数。\\
+
+\mybox{拷贝构造函数}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+public:
+    Person(const Person &p);
+    Person(string name, int age);
+
+private:
+    string name;
+    int age;
+};
+
+Person::Person(const Person &p) {
+    cout << "Person::Person(const Person &)" << endl;
+    this->name = p.name;
+    this->age = p.age;
+}
+
+Person::Person(string name, int age) {
+    cout << "Person::Person(string, int)" << endl;
+    this->name = name;
+    this->age = age;
+}
+
+int main() {
+    Person p1("小灰", 17);
+    Person p2(p1);
+    Person p3 = p1;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Person::Person(string, int)
+Person::Person(const Person &)
+Person::Person(const Person &)
+	\end{verbatim}
+\end{tcolorbox}
+
+拷贝构造函数会在三种情况下被调用：
+
+\begin{enumerate}
+	\item 用一个对象去初始化同类的另一个对象。
+	\item 函数参数是类的对象。
+	\item 函数的返回值是类的对象。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{浅拷贝 / 深拷贝}
+
+当使用浅拷贝（shallow copy）时，仅仅是拷贝指针字面值，如果原来的对象调用析构函数释放掉指针所指向的数据，则会产生空悬指针（dangling pointer），因为所指向的内存空间已经被释放了。\\
+
+\mybox{浅拷贝}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
+
+class User {
+public:
+    User();
+    ~User();
+    void printDataAddress();
+
+private:
+    int *data;
+};
+
+User::User() {
+    this->data = new int;
+}
+
+User::~User() {
+    delete data;
+    data = nullptr;
+}
+
+void User::printDataAddress() {
+    cout << data << endl;
+}
+
+int main() {
+    User user1;
+    user1.printDataAddress();
+    User user2(user1);
+    user2.printDataAddress();  
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+0x26c2b90
+0x26c2b90
+	\end{verbatim}
+\end{tcolorbox}
+
+深拷贝（deep copy）可以解决浅拷贝出现的问题，通过定义一个拷贝构造函数，当被拷贝对象存在动态分配的存储空间时，需要先动态申请一块存储空间，然后逐字节拷贝内容。\\
+
+\mybox{深拷贝}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
+
+class User {
+public:
+    User();
+    User(const User& user);
+    ~User();
+    void printDataAddress();
+
+private:
+    int *data;
+};
+
+User::User() {
+    this->data = new int;
+}
+
+User::User(const User& user) {
+    this->data = new int;
+    *(this->data) = *(user.data);
+}
+
+User::~User() {
+    delete data;
+    data = nullptr;
+}
+
+void User::printDataAddress() {
+    cout << data << endl;
+}
+
+int main() {
+    User user1;
+    user1.printDataAddress();
+    User user2(user1);
+    user2.printDataAddress();  
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+0x6b17b0
+0x6b17d0
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{静态成员}
+
+\subsection{静态成员}
+
+类的静态成员在编译时创建并初始化，在该类的任何对象建立之前就已经存在。静态成员不属于任何对象，并且在类中只有一份，为所有此类对象共享。\\
+
+在静态成员函数的实现中不能直接引用类中的非静态成员，但可以引用类中的静态成员。如果静态成员函数中要引用非静态成员时，需要通过对象来引用。\\
+
+\mybox{静态成员}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class User {
+public:
+    User(int id, string name) : id(id), name(name) {
+        totalUsers++;
+    }
+
+    static int getTotalUsers() {
+        return totalUsers;
+    }
+
+private:
+    static int totalUsers;
+    int id;
+    string name;
+};
+
+int User::totalUsers = 0;       // 初始用户数量
+
+int main() {
+    cout << User::getTotalUsers() << endl;
+
+    for(int i = 0; i < 10; i++) {
+        User user(i, "User-" + to_string(i));
+    }
+
+    cout << User::getTotalUsers() << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+0
+10
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{友元}
+
+\subsection{友元函数}
+
+封装使得类的数据对外隐藏，但是有些函数不是类的一部分，却又需要频繁访问类的数据成员，这时可以将这些函数定义为该类的友元函数。一个函数可以是多个类的友元函数，只需要在各个类中分别声明。除了友元函数，还有友元类。\\
+
+友元（friend）的作用是提高程序的运行效率，减少了类型检查和安全性检查等需要的时间开销，但它破坏了类的封装性和隐藏性，使得非成员函数可以访问类的私有成员。\\
+
+友元函数是可以直接访问类的私有成员的非成员函数。它是定义在类外的普通函数，它不属于任何类，但需要在类的定义中加以声明。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C++]
+friend ret_type func_name([param_list]);
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\mybox{友元函数}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+class Coordinate {
+public:
+    Coordinate(double x, double y) : x(x), y(y) {};
+
+    friend double distance(Coordinate &c1, Coordinate &c2);
+
+private:
+    double x;
+    double y;
+};
+
+double distance(Coordinate &c1, Coordinate &c2) {
+    double deltaX = c1.x - c2.x;
+    double deltaY = c1.y - c2.y;
+    return sqrt(deltaX * deltaX + deltaY * deltaY);
+}
+
+int main() {
+    Coordinate c1(3, 5);
+    Coordinate c2(4, 6);
+    cout << distance(c1, c2) << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+1.41421
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{友元类}
+
+友元类的所有成员函数都是另一个类的友元函数，可以访问另一个类中的隐藏信息。当一个类想要存取另一个类的私有成员时，可以将该类声明为另一类的友元类。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C++]
+friend class class_name;
+\end{lstlisting}
+
+友元有以下需要注意的地方：
+
+\begin{enumerate}
+	\item 友元关系不能被继承。
+	\item 友元关系是单向的，不具有交换性。如果A是B的友元，B不一定是A的友元。
+	\item 友元关系不具有传递性。如果A是B的友元，C是A的友元，那么C不一定是B的友元。
+\end{enumerate}
+
+\newpage
+
+\section{运算符重载}
+
+\subsection{运算符重载}
+
+C++中预定义的运算符的操作对象只能是基本数据类型，但实际上对于许多用户自定义类型（例如类），也需要类似的运算操作。这时就必须在C++中重新定义这些运算符，赋予已有运算符新的功能，使它能够用于特定类型执行特定的操作。运算符重载的实质是函数重载，它提供了可扩展性。\\
+
+运算符重载是通过创建运算符函数实现的，运算符函数定义了重载的运算符将要进行的操作。运算符函数的定义与其它函数的定义类似，惟一的区别是运算符函数的函数名是由关键字operator和要重载的运算符符号构成。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C++]
+ret_type operator op([param_list]) {
+    // code
+}
+\end{lstlisting}
+
+运算符重载需要遵循以下规则：
+
+\begin{enumerate}
+	\item 除了【.】、【->】、【sizeof】、【?:】和【\#】，其它运算符都可以重载。
+
+	\item 重载后的运算符不能改变优先级和结合性，也不能概念运算符的操作数个数及语法结构。
+
+	\item 运算符重载是针对新类型数据对实际需要的改造，重载后的运算符应当与原有功能相类似。
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\subsection{二元运算符重载}
+
+二元运算符需要两个操作数，例如【+】、【-】、【*】、【/】等。\\
+
+\mybox{二元运算符重载}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Complex {
+public:
+    Complex(int real, int imaginary);
+    string getNumber();
+    Complex operator+(const Complex& c);
+
+private:
+    int real;
+    int imaginary;
+};
+
+Complex::Complex(int real = 0, int imaginary = 0)
+    : real(real), imaginary(imaginary) {}
+
+string Complex::getNumber() {
+    return to_string(real) + "+" + to_string(imaginary) + "i";
+}
+
+Complex Complex::operator+(const Complex& c) {
+    Complex complex;
+    complex.real = this->real + c.real;
+    complex.imaginary = this->imaginary + c.imaginary;
+    return complex;
+}
+
+int main() {
+    Complex c1(1, 2);
+    Complex c2(8, 1);
+    Complex result = c1 + c2;
+    cout << result.getNumber() << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+9+3i
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{一元运算符重载}
+
+一元运算符只对一个操作数操作，例如【++】、【--】、【-】、【!】等。\\
+
+\mybox{一元运算符重载}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+class Time {
+public:
+    Time(int hour, int minute, int second);
+    void display();
+    Time operator++();      // 前置++
+    Time operator++(int);   // 后置++
+
+private:
+    int hour;
+    int minute;
+    int second;
+};
+
+Time::Time(int hour, int minute, int second) 
+    : hour(hour), minute(minute), second(second) {}
+
+void Time::display() {
+    cout << setfill('0')
+         << setw(2) << hour << ":"
+         << setw(2) << minute << ":"
+         << setw(2) << second << endl;
+}
+
+// 前置++
+Time Time::operator++() {
+    second++;
+    if(second == 60) {
+        second %= 60;
+        minute++;
+        if(minute == 60) {
+            minute %= 60;
+            hour++;
+            if(hour == 24) {
+                hour = 0;
+            }
+        }
+    }
+    return Time(hour, minute, second);
+}
+
+// 后置++
+Time Time::operator++(int) {
+    // 保存原始值
+    Time time(hour, minute, second);
+    second++;
+    if(second == 60) {
+        second %= 60;
+        minute++;
+        if(minute == 60) {
+            minute %= 60;
+            hour++;
+            if(hour == 24) {
+                hour = 0;
+            }
+        }
+    }
+    return time;    // 返回原始值
+}
+
+int main() {
+    Time time(9, 21, 58);
+    time.display();
+
+    ++time;
+    time.display();
+
+    time++;
+    time.display();
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+09:21:58
+09:21:59
+09:22:00
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{输入输出运算符重载}
+
+C++使用流提取运算符【>>】和流插入运算符【<<】进行输入输出，通过运算符重载可以对自定义对象进行输入输出操作。通过把输入输出运算符重载函数声明为类的友元，可以直接调用函数而无需创建对象。\\
+
+\mybox{输入输出运算符重载}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+using namespace std;
+
+class User {
+public:
+    User(int id, string name);
+    friend ostream& operator<<(
+        ostream& out,
+        const User& user);
+    friend istream& operator>>(istream& in, User& user);
+
+private:
+    int id;
+    string name;
+};
+
+User::User(int id = 0, string name = "")
+    : id(id), name(name) {}
+
+ostream& operator<<(ostream& out, const User& user) {
+    out << "ID: " << to_string(user.id) << ", "
+        << "name: " << user.name;
+    return out;
+}
+
+istream& operator>>(istream& in, User& user) {
+    cout << "Enter user ID: ";
+    in >> user.id;
+    cout << "Enter user name: ";
+    in >> user.name;
+    return in;
+}
+
+int main() {
+    User user;
+    cin >> user;
+    cout << user;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Enter user ID: 1
+Enter user name: Terry
+ID: 1, name: Terry
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage

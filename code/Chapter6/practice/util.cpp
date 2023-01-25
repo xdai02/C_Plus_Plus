@@ -1,5 +1,5 @@
 #include "util.h"
-#include <math.h>
+#include <cmath>
 
 #define EPSILON 1e-6
 

@@ -1,8 +1,6 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#include <stdbool.h>
-
 double max(double arr[], int n);
 
 double min(double arr[], int n);

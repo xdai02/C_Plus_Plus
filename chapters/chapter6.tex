@@ -207,7 +207,7 @@ double triangle_area(double base, double height);
 #endif
 \end{lstlisting}
 
-\begin{lstlisting}[language=C, title=geometry.c]
+\begin{lstlisting}[language=C, title=geometry.cpp]
 #include "geometry.h"
 
 #define PI 3.1415926
@@ -221,13 +221,20 @@ double triangle_area(double base, double height) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=C, title=area.c]
-#include <stdio.h>
+\begin{lstlisting}[language=C, title=area.cpp]
+#include <iostream>
+#include <iomanip>
 #include "geometry.h"
 
+using namespace std;
+
 int main() {
-    printf("Area of circle: %.2f\n", circle_area(5));
-    printf("Area of triangle: %.2f\n", triangle_area(5, 10));
+    cout << "Area of circle: "
+            << fixed << setprecision(2) << circle_area(5) << endl;
+    
+    cout << "Area of triangle: "
+            << fixed << setprecision(2) << triangle_area(5, 10) << endl;
+    
     return 0;
 }
 \end{lstlisting}
@@ -235,7 +242,7 @@ int main() {
 \vspace{-0.5cm}
 
 \begin{lstlisting}
-gcc -Wall geometry.c area.c -o area
+g++ -Wall geometry.cpp area.cpp -o area
 ./area
 \end{lstlisting}
 

@@ -51,15 +51,17 @@
 
 \mybox{最大值}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int max(int num1, int num2);  // function prototype
 
 int main() {
-	printf("%d\n", max(4, 12));
-	printf("%d\n", max(54, 33));
-	printf("%d\n", max(-999, -774));
+	cout << max(4, 12) << endl;
+	cout << max(54, 33) << endl;
+	cout << max(-999, -774) << endl;
 	return 0;
 }
 
@@ -87,18 +89,20 @@ int max(int num1, int num2) {
 
 \mybox{棋盘}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 void print_board() {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 2; j++) {
-			printf("   |");
+			cout << "   |";
 		}
-		printf("\n");
+		cout << endl;
 
 		if (i < 2) {
-			printf("---+---+---\n");
+			cout << "---+---+---" << endl;
 		}
 	}
 }
@@ -154,9 +158,11 @@ int main() {
 
 \mybox{两点间距离}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <math.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cmath>
+
+using namespace std;
 
 double square(double x) {
 	return x * x;
@@ -168,12 +174,12 @@ double distance(double x1, double y1, double x2, double y2) {
 
 int main() {
 	double x1, y1, x2, y2;
-	printf("Enter (x1, y1): ");
-	scanf("%lf%lf", &x1, &y1);
-	printf("Enter (x2, y2): ");
-	scanf("%lf%lf", &x2, &y2);
+	cout << "Enter (x1, y1): ";
+	cin >> x1 >> y1;
+	cout << "Enter (x2, y2): ";
+	cin >> x2 >> y2;
 
-	printf("Distance: %.2f\n", distance(x1, y1, x2, y2));
+	cout << "Distance: " << distance(x1, y1, x2, y2) << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -211,23 +217,25 @@ for(int i = 0; i < 5; i++)
 
 \mybox{局部变量}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 void swap(int a, int b) {
 	int temp = a;
 	a = b;
 	b = temp;
-	printf("swap(): a = %d, b = %d\n", a, b);
+	cout << "swap(): a = " << a << ", b = " << b << endl;
 }
 
 int main() {
 	int a = 1;
 	int b = 2;
 
-	printf("Before: a = %d, b = %d\n", a, b);
+	cout << "Before: a = " << a << ", b = " << b << endl;
 	swap(a, b);
-	printf("After: a = %d, b = %d\n", a, b);
+	cout << "After: a = " << a << ", b = " << b << endl;
 
 	return 0;
 }
@@ -259,8 +267,10 @@ After: a = 1, b = 2
 
 \mybox{全局变量}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int a, b;
 
@@ -268,16 +278,16 @@ void swap() {
 	int temp = a;
 	a = b;
 	b = temp;
-	printf("swap(): a = %d, b = %d\n", a, b);
+	cout << "swap(): a = " << a << ", b = " << b << endl;
 }
 
 int main() {
 	a = 1;
 	b = 2;
 
-	printf("Before: a = %d, b = %d\n", a, b);
+	cout << "Before: a = " << a << ", b = " << b << endl;
 	swap(a, b);
-	printf("After: a = %d, b = %d\n", a, b);
+	cout << "After: a = " << a << ", b = " << b << endl;
 
 	return 0;
 }
@@ -311,16 +321,18 @@ After: a = 2, b = 1
 
 \mybox{讲故事}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <string.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
 
 void tell_story() {
-	char story[1024] = {0};
-	strcat(story, "从前有座山，山里有座庙\n");
-	strcat(story, "庙里有个老和尚\n");
-	strcat(story, "老和尚在对小和尚讲故事：\n");
-	printf("%s", story);
+	string story;
+	story += "从前有座山，山里有座庙\n";
+	story += "庙里有个老和尚\n";
+	story += "老和尚在对小和尚讲故事：\n";
+	cout << story;
 
 	tell_story();
 }
@@ -351,19 +363,21 @@ int main() {
 
 \mybox{阶乘}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int factorial(int n) {
-    if(n == 0 || n == 1) {
-        return 1;
-    }
-    return n * factorial(n-1);
+	if(n == 0 || n == 1) {
+		return 1;
+	}
+	return n * factorial(n-1);
 }
 
 int main() {
-    printf("5! = %d\n", factorial(5));
-    return 0;
+	cout << "5! = " << factorial(5) << endl;
+	return 0;
 }
 \end{lstlisting}
 
@@ -428,19 +442,21 @@ int main() {
 
 \mybox{斐波那契数列}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int fibonacci(int n) {
-    if (n == 1 || n == 2) {
-        return n;
-    }
-    return fibonacci(n - 2) + fibonacci(n - 1);
+	if (n == 1 || n == 2) {
+		return n;
+	}
+	return fibonacci(n - 2) + fibonacci(n - 1);
 }
 
 int main() {
 	int n = 7;
-	printf("%d\n", fibonacci(n));
+	cout << fibonacci(n) << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -498,8 +514,10 @@ int main() {
 	\end{cases}
 \end{align}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int A(int m, int n) {
 	if (m == 0) {
@@ -512,7 +530,7 @@ int A(int m, int n) {
 }
 
 int main() {
-	printf("%d\n", A(3, 4));
+	cout << A(3, 4) << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -556,20 +574,22 @@ int main() {
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
 
-int move = 0;
+using namespace std;
+
+int moves = 0;
 
 void hanoi(int n, char src, char mid, char dst) {
 	if (n == 1) {
-		printf("%c -> %c\n", src, dst);
-		move++;
+		cout << src << " -> " << dst << endl;
+		moves++;
 	} else {
 		// move top n-1 disks from src to mid
 		hanoi(n - 1, src, dst, mid);
-		printf("%c -> %c\n", src, dst);
-		move++;
+		cout << src << " -> " << dst << endl;
+		moves++;
 		// move top n-1 disks from mid to dst
 		hanoi(n - 1, mid, src, dst);
 	}
@@ -577,7 +597,7 @@ void hanoi(int n, char src, char mid, char dst) {
 
 int main() {
 	hanoi(3, 'A', 'B', 'C');
-	printf("Moves: %d\n", move);
+	cout << "Moves: " << moves << endl;
 	return 0;
 }
 \end{lstlisting}

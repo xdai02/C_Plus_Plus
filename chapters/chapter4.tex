@@ -8,7 +8,7 @@
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int arr[5] = {3, 6, 8, 2, 4};
 \end{lstlisting}
 
@@ -33,7 +33,7 @@ int arr[5] = {3, 6, 8, 2, 4};
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int arr[] = {3, 6, 8, 2, 4, 0, 1, 7};
 \end{lstlisting}
 
@@ -41,17 +41,17 @@ int arr[] = {3, 6, 8, 2, 4, 0, 1, 7};
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
-printf("%d\n", arr[0]);		// 3
-printf("%d\n", arr[3]);		// 2
-printf("%d\n", arr[7]);		// 7
+\begin{lstlisting}[language=C++]
+cout << arr[0] << endl;		// 3
+cout << arr[3] << endl;		// 2
+cout << arr[7] << endl;		// 7
 \end{lstlisting}
 
 当数组的容量比较大时，可以使用循环来初始化数组。
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int arr[10];
 
 for(int i = 0; i < 10; i++) {
@@ -63,24 +63,25 @@ for(int i = 0; i < 10; i++) {
 
 \mybox{查找数据}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdbool.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
 	int n;
-	printf("Enter the number of elements: ");
-	scanf("%d", &n);
+	cout << "Enter the number of elements: ";
+	cin >> n;
 
 	int arr[n];
-	printf("Enter the elements: ");
+	cout << "Enter the elements: ";
 	for (int i = 0; i < n; i++) {
-		scanf("%d", &arr[i]);
+		cin >> arr[i];
 	}
 
 	int key;
-	printf("Enter the key: ");
-	scanf("%d", &key);
+	cout << "Enter the key: ";
+	cin >> key;
 
 	bool found = false;
 	for (int i = 0; i < n; i++) {
@@ -91,9 +92,9 @@ int main() {
 	}
 
 	if (found) {
-		printf("%d exists.\n", key);
+		cout << key << " exists." << endl;
 	} else {
-		printf("%d not found!\n", key);
+		cout << key << " not found!" << endl;
 	}
 
 	return 0;
@@ -114,8 +115,10 @@ Enter the key: 2
 
 \mybox{最大值/最小值}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
 	int num[] = {7, 6, 2, 9, 3, 1, 4, 0, 5, 8};
@@ -123,17 +126,17 @@ int main() {
 	int max = num[0];
 	int min = num[0];
 
-	for(int i = 1; i < n; i++) {
-		if(num[i] > max) {
+	for (int i = 1; i < n; i++) {
+		if (num[i] > max) {
 			max = num[i];
 		}
-		if(num[i] < min) {
+		if (num[i] < min) {
 			min = num[i];
 		}
 	}
-
-	printf("Max = %d\n", max);
-	printf("Min = %d\n", min);
+	
+	cout << "Max = " << max << endl;
+	cout << "Min = " << min << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -148,13 +151,45 @@ Min = 0
 
 \vspace{0.5cm}
 
+\subsection{for-each}
+
+for-each循环是一种更加简洁的for循环，可以用于遍历访问数组中的每一个元素。\\
+
+\mybox{平方和}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
+
+int main() {
+	int arr[5] = {7, 6, 2, 9, 3};
+	int sum = 0;
+	for (int elem : arr) {
+		sum += elem * elem;
+	}
+	cout << "Square sum = " << sum << endl;
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+Square sum = 179
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
 \subsection{二维数组（2-Dimensional Array）}
 
 二维数组由行和列两个维度组成，行和列的下标同样也都是从0开始。在声明二维数组时，需要指定行和列的大小。二维数组可以看成是由多个一维数组组成的，因此二维数组中的每个元素都是一个一维数组。
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int arr[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
 \end{lstlisting}
 
@@ -177,7 +212,7 @@ int arr[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int arr[3][4] = {
 	{1, 2, 3, 4},
 	{5, 6, 7, 8},
@@ -189,7 +224,7 @@ int arr[3][4] = {
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int arr[3][4];
 
 for(int i = 0; i < 3; i++) {
@@ -255,8 +290,11 @@ for(int i = 0; i < 3; i++) {
 		\end{matrix} \right]
 \end{align}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 int main() {
 	int A[3][2] = {
@@ -271,22 +309,22 @@ int main() {
 	};
 	int C[3][2];
 
-	printf("Matrix Addition\n");
+	cout << "Matrix Addition" << endl;
 	for(int i = 0; i < 3; i++) {
 		for(int j = 0; j < 2; j++) {
 			C[i][j] = A[i][j] + B[i][j];
-			printf("%3d", C[i][j]);
+			cout << setw(3) << C[i][j];
 		}
-		printf("\n");
+		cout << endl;
 	}
 	
-	printf("Matrix Subtraction\n");
+	cout << "Matrix Subtraction" << endl;
 	for(int i = 0; i < 3; i++) {
 		for(int j = 0; j < 2; j++) {
 			C[i][j] = A[i][j] - B[i][j];
-			printf("%3d", C[i][j]);
+			cout << setw(3) << C[i][j];
 		}
-		printf("\n");
+		cout << endl;
 	}
 	
 	return 0;
@@ -389,12 +427,14 @@ Matrix Subtraction
 
 \mybox{ASCII}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
 	for(int i = 0; i < 128; i++) {
-		printf("%d - %c\n", i, i);
+		cout << i << " - " << (char)i << endl;
 	}
 	return 0;
 }
@@ -408,30 +448,32 @@ int main() {
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 char str[8] = {'p', 'r', 'o', 'g', 'r', 'a', 'm', '\0'};
 char str[8] = "program";
 \end{lstlisting}
 
 $ \backslash $0占一个字符的大小，因此在设置字符串的大小时需要考虑$ \backslash $0。\\
 
-占位符\%s可以对字符串进行输入输出操作，使用scanf()和gets()都可以用于读取字符串，但是scanf()只会读取到空格为止，而gets()会读取到回车为止。\\
+使用cin和cin.getline()都可以用于读取字符串，但是cin只会读取到空格为止，而cin.getline()会读取到回车为止。\\
 
 \mybox{字符串输入输出}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
 	char str1[32];
-	printf("Enter string 1: ");
-	gets(str1);
-	puts(str1);
+	cout << "Enter string 1: ";
+	cin.getline(str1, 32);
+	cout << str1 << endl;
 
 	char str2[32];
-	printf("Enter string 2: ");
-	scanf("%s", str2);
-	printf("%s\n", str2);
+	cout << "Enter string 2: ";
+	cin >> str2;
+	cout << str2 << endl;
 
 	return 0;
 }
@@ -451,15 +493,19 @@ hello
 
 \mybox{字符统计}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
 	char str[32];
-	printf("Enter a string: ");
-	gets(str);
-	printf("Character to search: ");
-	char c = getchar();
+	char c;
+
+	cout << "Enter a string: ";
+	cin.getline(str, 32);
+	cout << "Character to search: ";
+	cin >> c;
 
 	int cnt = 0;
 	int i = 0;
@@ -470,7 +516,9 @@ int main() {
 		i++;
 	}
 
-	printf("\'%c\' appears %d times in \"%s\".\n", c, cnt, str);
+	cout << "'" << c << "' appears " << cnt << " times in \""
+			<< str << "\"." << endl;
+			
 	return 0;
 }
 \end{lstlisting}
@@ -488,7 +536,7 @@ Character to search: t
 
 \subsection{字符串函数}
 
-头文件<string.h>中定义了一些常用的字符串处理函数。
+头文件<cstring>中定义了一些常用的字符串处理函数。
 
 \subsubsection{strlen()}
 
@@ -496,13 +544,15 @@ Character to search: t
 
 \mybox{strlen()}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <string.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstring>
+
+using namespace std;
 
 int main() {
 	char s[] = "hello world";
-	printf("Length: %d\n", strlen(s));
+	cout << "Length: " << strlen(s) << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -522,17 +572,19 @@ Length: 11
 
 \mybox{strcpy()}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <string.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstring>
+
+using namespace std;
 
 int main() {
 	char s1[32] = "hello world";
 	char s2[32] = "program";
 
 	strcpy(s1, s2);
-	printf("s1 = %s\n", s1);
-	printf("s2 = %s\n", s2);
+	cout << "s1 = " << s1 << endl;
+	cout << "s2 = " << s2 << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -553,17 +605,19 @@ s2 = program
 
 \mybox{strcat()}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <string.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstring>
+
+using namespace std;
 
 int main() {
 	char s1[32] = "hello";
 	char s2[32] = "world";
 
 	strcat(s1, s2);
-	printf("s1 = %s\n", s1);
-	printf("s2 = %s\n", s2);
+	cout << "s1 = " << s1 << endl;
+	cout << "s2 = " << s2 << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -592,14 +646,16 @@ s2 = world
 
 \mybox{strcmp()}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <string.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstring>
+
+using namespace std;
 
 int main() {
 	char s1[32] = "communication";
 	char s2[32] = "compare";
-	printf("%d\n", strcmp(s1, s2));
+	cout << strcmp(s1, s2) << endl;
 	return 0;
 }
 \end{lstlisting}
@@ -619,7 +675,7 @@ int main() {
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 char str[4][12] = {"C++", "Java", "Python", "JavaScript"};
 \end{lstlisting}
 
@@ -642,11 +698,109 @@ char str[4][12] = {"C++", "Java", "Python", "JavaScript"};
 	}
 \end{table}
 
-\begin{lstlisting}[language=C]
-printf("str[0] = %s\n", str[0]);		// C++
-printf("str[1] = %s\n", str[1]);		// Java
-printf("str[0][0] = %c\n", str[0][0]);	// C
-printf("str[0][1] = %c\n", str[0][1]);	// +
+\begin{lstlisting}[language=C++]
+cout << "str[0] = " << str[0] << endl;			// C++
+cout << "str[1] = " << str[1] << endl;			// Java
+cout << "str[0][0] = " << str[0][0] << endl;	// C
+cout << "str[0][1] = " << str[0][1] << endl;	// +
 \end{lstlisting}
+
+\newpage
+
+\section{string}
+
+\subsection{string}
+
+string是一种字符串类型，使用时需要包含头文件<string>。\\
+
+string提供了许多便捷的方法：
+
+\begin{table}[H]
+	\centering
+	\setlength{\tabcolsep}{1mm}{
+		\begin{tabular}{|l|l|}
+			\hline
+			\textbf{方法} & \textbf{功能}                           \\
+			\hline
+			length()      & 字符串长度                              \\
+			\hline
+			empty()       & 判断字符串是否为空                      \\
+			\hline
+			push\_back()  & 在字符串末尾添加字符                    \\
+			\hline
+			pop\_back()   & 删除字符串末尾的字符                    \\
+			\hline
+			append()      & 在字符串末尾添加字符串                  \\
+			\hline
+			insert()      & 在字符串指定位置处插入字符串            \\
+			\hline
+			erase()       & 删除字符串指定位置起n个字符             \\
+			\hline
+			replace()     & 替换字符串从指定位置起n个字符为新字符串 \\
+			\hline
+			substr()      & 获取字符串从指定位置起n个字符           \\
+			\hline
+			find()        & 查找字符串中是否存在指定字符串          \\
+			\hline
+			compare()     & 比较字符串和指定字符串的大小            \\
+			\hline
+		\end{tabular}
+	}
+	\caption{string常用方法}
+\end{table}
+
+\vspace{0.5cm}
+
+\mybox{string方法}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+	string s = "Hello World!";
+	cout << "length(): " << s.length() << endl;
+	cout << "substr(): " << s.substr(0, 5) << endl;
+	cout << "find(): " << s.find("World") << endl;
+
+	s.push_back('!');
+	cout << "push_back(): " << s << endl;
+
+	s.pop_back();
+	cout << "pop_back(): " << s << endl;
+
+	s.append("Hello World!");
+	cout << "append(): " << s << endl;
+
+	s.insert(12, " ");
+	cout << "insert(): " << s << endl;
+
+	s.erase(13, 6);
+	cout << "erase(): " << s << endl;
+
+	s.replace(13, 5, "C++");
+	cout << "replace(): " << s << endl;
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+length(): 12
+empty(): 0
+push_back(): Hello World!!
+pop_back(): Hello World!
+append(): Hello World!Hello World!
+insert(): Hello World! Hello World!
+erase(): Hello World! World!
+replace(): Hello World! C++!
+substr(): Hello
+find(): 6
+	\end{verbatim}
+\end{tcolorbox}
 
 \newpage

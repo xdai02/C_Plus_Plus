@@ -19,8 +19,8 @@ int main() {
     cout << "Sum = " << fixed << setprecision(2) << sum(arr, n) << endl;
     cout << "Average = " << fixed << setprecision(2) << average(arr, n) << endl;
 
-    cout << "0.1 + 0.2 == 0.3? " << (0.1 + 0.2 == 0.3 ? "true" : "false") << endl;
-    cout << "double_equal(0.1 + 0.2, 0.3)? " << (double_equal(0.1 + 0.2, 0.3) ? "true" : "false") << endl;
+    cout << "0.1 + 0.2 == 0.3? " << boolalpha << (0.1 + 0.2 == 0.3) << endl;
+    cout << "double_equal(0.1 + 0.2, 0.3)? " << boolalpha << double_equal(0.1 + 0.2, 0.3) << endl;
     
     return 0;
 }

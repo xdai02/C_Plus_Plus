@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int **transpose(int **matrix, int row, int col) {
     int **tranpose_matrix = (int **)malloc(sizeof(int *) * col);
@@ -38,9 +40,9 @@ int main() {
 
     for (int i = 0; i < col; i++) {
         for (int j = 0; j < row; j++) {
-            printf("%d ", tranpose_matrix[i][j]);
+            cout << tranpose_matrix[i][j] << " ";
         }
-        printf("\n");
+        cout << endl;
     }
 
     for (int i = 0; i < col; i++) {

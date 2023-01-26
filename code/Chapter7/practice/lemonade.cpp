@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 bool lemonade_change(int *bills, int bills_size) {
     int fives = 0;
@@ -35,11 +37,6 @@ int main() {
     int bills[] = {5, 5, 5, 10, 20};
     int bills_size = sizeof(bills) / sizeof(int);
 
-    if (lemonade_change(bills, bills_size)) {
-        printf("true\n");
-    } else {
-        printf("false\n");
-    }
-
+    cout << boolalpha << lemonade_change(bills, bills_size) << endl;
     return 0;
 }

@@ -1,53 +1,5 @@
 \chapter{C++基础}
 
-\section{命名空间}
-
-\subsection{命名空间（namespace）}
-
-多人共同开发时，经常会出现变量和函数定义冲突，例如编写了相同名称的函数。命名空间用于解决这个问题，它可以作为附加信息来区分不同库中的变量和函数。\\
-
-namespace表示了标识符的可见范围，C++标准库中的所有标识符都定义于一个名为std的namespace中。如果不使用using namespace std，就必须使用std::cout、std::endl等表示其中的标识符。\\
-
-\mybox{命名空间}
-
-\begin{lstlisting}[language=C++]
-#include <iostream>
-
-namespace foo {
-    int n = 123;
-    void f() {
-        std::cout << "foo::f()" << std::endl;
-    }
-};
-
-namespace bar {
-    int n = 456;
-    void f() {
-        std::cout << "bar::f()" << std::endl;
-    }
-};
-
-int main() {
-    std::cout << foo::n << std::endl;
-    foo::f();
-    std::cout << bar::n << std::endl;
-    bar::f();
-    return 0;
-}
-\end{lstlisting}
-
-\begin{tcolorbox}
-	\mybox{运行结果}
-	\begin{verbatim}
-123
-foo::f()
-456
-bar::f()
-	\end{verbatim}
-\end{tcolorbox}
-
-\newpage
-
 \section{重载函数}
 
 \subsection{函数默认参数}

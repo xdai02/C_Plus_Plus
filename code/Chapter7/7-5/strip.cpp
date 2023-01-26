@@ -1,7 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+
+using namespace std;
 
 char *strip(char *str) {
     int i = 0;
@@ -30,11 +32,11 @@ int main() {
     char *str = (char *)calloc(len + 1, sizeof(char));
 
     strcpy(str, "     Hello World! \n\t ");
-    printf("Before: [%s]\n", str);
+    cout << "Before: [" << str << "]" << endl;
 
     str = strip(str);
 
-    printf("After: [%s]\n", str);
+    cout << "After: [" << str << "]" << endl;
 
     free(str);
     return 0;

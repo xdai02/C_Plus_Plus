@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
     void *p;
@@ -9,7 +11,7 @@ int main() {
     while ((p = malloc(100 * 1024 * 1024))) {
         cnt++;
     }
-    printf("Allocated %d MB memory\n", cnt * 100);
+    cout << "Allocated " << cnt * 100 << " MB memory" << endl;
 
     return 0;
 }

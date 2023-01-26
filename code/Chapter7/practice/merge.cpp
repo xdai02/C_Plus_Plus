@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int *merge(int *arr1, int len1, int *arr2, int len2) {
     int *arr = (int *)malloc(sizeof(int) * (len1 + len2));
@@ -37,9 +39,9 @@ int main() {
 
     int *merged_arr = merge(arr1, len1, arr2, len2);
     for (int i = 0; i < len1 + len2; i++) {
-        printf("%d ", merged_arr[i]);
+        cout << merged_arr[i] << " ";
     }
-    printf("\n");
+    cout << endl;
 
     free(merged_arr);
     return 0;

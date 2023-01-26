@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int *generate_fibonacci(int n) {
     int *arr = (int *)malloc(n * sizeof(int));
@@ -20,9 +22,9 @@ int main() {
     int *arr = generate_fibonacci(n);
 
     for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
+        cout << arr[i] << " ";
     }
-    printf("\n");
+    cout << endl;
 
     free(arr);
     return 0;

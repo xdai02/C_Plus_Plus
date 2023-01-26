@@ -1,6 +1,8 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <math.h>
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
 
 /**
  * Solve quadratic equation ax^2 + bx + c = 0.
@@ -25,14 +27,15 @@ int main() {
     double a, b, c;
     double x1, x2;
 
-    printf("Quadratic equation ax^2 + bx + c = 0\n");
-    printf("Enter coefficients a, b, c: ");
-    scanf("%lf%lf%lf", &a, &b, &c);
+    cout << "Quadratic equation ax^2 + bx + c = 0" << endl;
+    cout << "Enter coefficients a, b, c: ";
+    cin >> a >> b >> c;
 
     if (solver(a, b, c, &x1, &x2)) {
-        printf("x1 = %.2f, x2 = %.2f\n", x1, x2);
+        cout << fixed << setprecision(2) 
+             << "x1 = "  << x1 << ", x2 = " << x2 << endl;
     } else {
-        printf("No real roots\n");
+        cout << "No real roots" << endl;
     }
 
     return 0;

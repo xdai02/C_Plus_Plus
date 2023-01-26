@@ -1,4 +1,6 @@
-#include <stdio.h>
+#include <iostream>
+
+using namespace std;
 
 int search(int *arr, int n, int key) {
     for (int i = 0; i < n; i++) {
@@ -15,9 +17,9 @@ int main() {
 
     int index = search(arr, n, 3);
     if (index == -1) {
-        printf("Not found\n");
+        cout << "Not found" << endl;
     } else {
-        printf("Found at index %d\n", index);
+        cout << "Found at index " << index << endl;
     }
 
     return 0;

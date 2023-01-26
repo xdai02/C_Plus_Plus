@@ -1,4 +1,6 @@
-#include <stdio.h>
+#include <iostream>
+
+using namespace std;
 
 int main() {
     char str[] = "hello";
@@ -6,8 +8,8 @@ int main() {
     char *t = s;
 
     s[0] = 'H';
-    printf("s = %s\n", s);
-    printf("t = %s\n", t);
+    cout << "s = " << s << endl;
+    cout << "t = " << t << endl;
 
     return 0;
 }

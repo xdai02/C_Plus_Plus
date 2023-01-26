@@ -44,24 +44,26 @@
 
 \mybox{指针}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
     int data = 3;
     int *p = &data;
 
-    printf("Value of data: %d\n", data);
-    printf("Address of data: %p\n", &data);
-    
-    printf("Value of p: %p\n", p);
-    printf("Address of p: %p\n", &p);
-    printf("Value of data pointed by p: %d\n", *p);
+    cout << "Value of data: " << data << endl;
+    cout << "Address of data: " << &data << endl;
+
+    cout << "Value of p: " << p << endl;
+    cout << "Address of p: " << &p << endl;
+    cout << "Value of data pointed by p: " << *p << endl;
     
     *p = 5;
 
-    printf("Value of data: %d\n", data);
-    printf("Value of data pointed by p: %d\n", *p);
+    cout << "Value of data: " << data << endl;
+    cout << "Value of data pointed by p: " << *p << endl;
 
     return 0;
 }
@@ -71,9 +73,9 @@ int main() {
     \mybox{运行结果}
     \begin{verbatim}
 Value of data: 3
-Address of data: 000000000061FE1C
-Value of p: 000000000061FE1C     
-Address of p: 000000000061FE10   
+Address of data: 0x61fe1c
+Value of p: 0x61fe1c
+Address of p: 0x61fe10
 Value of data pointed by p: 3
 Value of data: 5
 Value of data pointed by p: 5
@@ -88,8 +90,10 @@ Value of data pointed by p: 5
 
 \mybox{交换}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 void swap(int *data1, int *data2) {
     int temp = *data1;
@@ -101,9 +105,9 @@ int main() {
     int a = 3;
     int b = 5;
 
-    printf("Before: a = %d, b = %d\n", a, b);
+    cout << "Before: a = " << a << ", b = " << b << endl;
     swap(&a, &b);
-    printf("After: a = %d, b = %d\n", a, b);
+    cout << "After: a = " << a << ", b = " << b << endl;
     return 0;
 }
 \end{lstlisting}
@@ -120,10 +124,12 @@ After: a = 5, b = 3
 
 \mybox{一元二次方程}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdbool.h>
-#include <math.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
 
 /**
  * Solve quadratic equation ax^2 + bx + c = 0.
@@ -148,14 +154,15 @@ int main() {
     double a, b, c;
     double x1, x2;
 
-    printf("Quadratic equation ax^2 + bx + c = 0\n");
-    printf("Enter coefficients a, b, c: ");
-    scanf("%lf%lf%lf", &a, &b, &c);
+    cout << "Quadratic equation ax^2 + bx + c = 0" << endl;
+    cout << "Enter coefficients a, b, c: ";
+    cin >> a >> b >> c;
 
     if (solver(a, b, c, &x1, &x2)) {
-        printf("x1 = %.2f, x2 = %.2f\n", x1, x2);
+        cout << fixed << setprecision(2) 
+             << "x1 = "  << x1 << ", x2 = " << x2 << endl;
     } else {
-        printf("No real roots\n");
+        cout << "No real roots" << endl;
     }
 
     return 0;
@@ -181,7 +188,7 @@ x1 = 5.00, x2 = 4.00
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int *p = NULL;
 \end{lstlisting}
 
@@ -226,22 +233,24 @@ int *p = NULL;
 
 \mybox{指针与数组}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
     int arr[] = {4, 1, 6, 7};
     int n = sizeof(arr) / sizeof(arr[0]);
     int *p = arr;
 
-    printf("Address of arr: %p\n", arr);
+    cout << "Address of arr: " << arr << endl;
     for (int i = 0; i < n; i++) {
-        printf("Address of arr[%d]: %p\n", i, &arr[i]);
+        cout << "Address of arr[" << i << "]: " << &arr[i] << endl;
     }
 
-    printf("Value of p: %p\n", p);
+    cout << "Value of p: " << p << endl;
     for (int i = 1; i < n; i++) {
-        printf("Value of p + %d: %p\n", i, p + i);
+        cout << "Value of p + " << i << ": " << p + i << endl;
     }
 
     *p = 9;
@@ -250,7 +259,7 @@ int main() {
     *(p + 3) = 6;
 
     for (int i = 0; i < n; i++) {
-        printf("arr[%d]: %d\n", i, arr[i]);
+        cout << "arr[" << i << "]: " << arr[i] << endl;
     }
 
     return 0;
@@ -260,15 +269,15 @@ int main() {
 \begin{tcolorbox}
     \mybox{运行结果}
     \begin{verbatim}
-Address of arr: 000000000061FDF0
-Address of arr[0]: 000000000061FDF0
-Address of arr[1]: 000000000061FDF4
-Address of arr[2]: 000000000061FDF8
-Address of arr[3]: 000000000061FDFC
-Value of p: 000000000061FDF0
-Value of p + 1: 000000000061FDF4
-Value of p + 2: 000000000061FDF8
-Value of p + 3: 000000000061FDFC
+Address of arr: 0x61fdf0   
+Address of arr[0]: 0x61fdf0
+Address of arr[1]: 0x61fdf4
+Address of arr[2]: 0x61fdf8
+Address of arr[3]: 0x61fdfc
+Value of p: 0x61fdf0
+Value of p + 1: 0x61fdf4
+Value of p + 2: 0x61fdf8
+Value of p + 3: 0x61fdfc
 arr[0]: 9
 arr[1]: 8
 arr[2]: 7
@@ -284,8 +293,10 @@ arr[3]: 6
 
 \mybox{查找}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int search(int *arr, int n, int key) {
     for (int i = 0; i < n; i++) {
@@ -302,9 +313,9 @@ int main() {
 
     int index = search(arr, n, 3);
     if (index == -1) {
-        printf("Not found\n");
+        cout << "Not found" << endl;
     } else {
-        printf("Found at index %d\n", index);
+        cout << "Found at index " << index << endl;
     }
 
     return 0;
@@ -361,14 +372,14 @@ Found at index 3
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 char s1[] = "hello";
 s1[0] = 'H';
-printf("s1 = %s\n", s1);
+cout << s1 << endl;
 
 char *s2 = "hello";
 s2[0] = 'H';        // error
-printf("s2 = %s\n", s2);
+cout << s2 << endl;
 \end{lstlisting}
 
 在对指向字符串的指针进行赋值操作的时候，并不会产生新的字符串，只是让两个指针都指向同一个字符串，对任意一个指针做的操作都会影响另一个指针。\\
@@ -404,8 +415,10 @@ printf("s2 = %s\n", s2);
 
 \mybox{指向字符串的指针}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
     char str[] = "hello";
@@ -413,8 +426,8 @@ int main() {
     char *t = s;
 
     s[0] = 'H';
-    printf("s = %s\n", s);
-    printf("t = %s\n", t);
+    cout << "s = " << s << endl;
+    cout << "t = " << t << endl;
 
     return 0;
 }
@@ -457,24 +470,26 @@ t = Hello
 
 \mybox{二级指针}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
 
 int main() {
     int data = 5;
     int *p = &data;
     int **q = &p;
 
-    printf("data = %d\n", data);
-    printf("*p = %d\n", *p);
-    printf("**q = %d\n", **q);
+    cout << "data = " << data << endl;
+    cout << "*p = " << *p << endl;
+    cout << "**q = " << **q << endl;
 
-    printf("Address of data = %p\n", &data);
-    printf("Address of p = %p\n", &p);
-    printf("Address of q = %p\n", &q);
+    cout << "Address of data = " << &data << endl;
+    cout << "Address of p = " << &p << endl;
+    cout << "Address of q = " << &q << endl;
 
-    printf("Value of p = %p\n", p);
-    printf("Value of q = %p\n", q);
+    cout << "Value of p = " << p << endl;
+    cout << "Value of q = " << q << endl;
 
     return 0;
 }
@@ -484,13 +499,13 @@ int main() {
     \mybox{运行结果}
     \begin{verbatim}
 data = 5
-*p = 5
+*p = 5  
 **q = 5
-Address of data = 000000000061FE1C
-Address of p = 000000000061FE10
-Address of q = 000000000061FE08
-Value of p = 000000000061FE1C
-Value of q = 000000000061FE10
+Address of data = 0x61fe1c
+Address of p = 0x61fe10
+Address of q = 0x61fe08
+Value of p = 0x61fe1c
+Value of q = 0x61fe10
 	\end{verbatim}
 \end{tcolorbox}
 
@@ -546,10 +561,12 @@ Value of q = 000000000061FE10
 
 \mybox{命令行参数}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cctype>
+#include <cstring>
+
+using namespace std;
 
 char *lower(char *s) {
     char *p = s;
@@ -570,9 +587,9 @@ char *upper(char *s) {
 }
 
 void usage(const char *program) {
-    printf("Usage: %s [option] [string]\n", program);
-    printf("--lower: convert string to lower case\n");
-    printf("--upper: convert string to upper case\n");
+    cout << "Usage: " << program << " [option] [string]" << endl;
+    cout << "--lower: convert string to lower case" << endl;
+    cout << "--upper: convert string to upper case" << endl;
 }
 
 int main(int argc, char **argv) {
@@ -585,9 +602,9 @@ int main(int argc, char **argv) {
     char *string = argv[2];
 
     if (strcmp(option, "--lower") == 0) {
-        printf("Lower: %s\n", lower(string));
+        cout << "Lower: " << lower(string) << endl;
     } else if (strcmp(option, "--upper") == 0) {
-        printf("Upper: %s\n", upper(string));
+        cout << "Upper: " << upper(string) << endl;
     } else {
         usage(argv[0]);
         return 1;
@@ -598,7 +615,7 @@ int main(int argc, char **argv) {
 \end{lstlisting}
 
 \begin{lstlisting}
-gcc -Wall command_line.c -o command_line
+g++ -Wall command_line.cpp -o command_line
 ./command_line --upper "Hello World!"
 \end{lstlisting}
 
@@ -653,11 +670,11 @@ Upper: HELLO WORLD!
 
 \subsection{malloc()}
 
-malloc()函数定义在<stdlib.h>中，用于在堆区申请一块内存空间，其函数原型为：
+malloc()函数定义在<cstdlib>中，用于在堆区申请一块内存空间，其函数原型为：
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 void* malloc(size_t size);
 \end{lstlisting}
 
@@ -667,9 +684,11 @@ malloc()返回的是无类型指针void *，这是由于malloc()只负责申请�
 
 \mybox{内存}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdlib.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
     void *p;
@@ -679,7 +698,7 @@ int main() {
     while ((p = malloc(100 * 1024 * 1024))) {
         cnt++;
     }
-    printf("Allocated %d MB memory\n", cnt * 100);
+    cout << "Allocated " << cnt * 100 << " MB memory" << endl;
 
     return 0;
 }
@@ -704,7 +723,7 @@ free()函数用于释放动态申请的内存空间，其接受一个参数ptr�
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 void free(void *ptr);
 \end{lstlisting}
 
@@ -712,9 +731,11 @@ void free(void *ptr);
 
 \mybox{斐波那契数列}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdlib.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int *generate_fibonacci(int n) {
     int *arr = (int *)malloc(n * sizeof(int));
@@ -735,9 +756,9 @@ int main() {
     int *arr = generate_fibonacci(n);
 
     for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
+        cout << arr[i] << " ";
     }
-    printf("\n");
+    cout << endl;
 
     free(arr);
     return 0;
@@ -759,7 +780,7 @@ calloc()与malloc()功能类似，也是用于动态申请内存空间的。只�
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 void *calloc(size_t nitems, size_t size);
 \end{lstlisting}
 
@@ -767,7 +788,7 @@ void *calloc(size_t nitems, size_t size);
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int *arr = (int *)calloc(n, sizeof(int));
 \end{lstlisting}
 
@@ -779,7 +800,7 @@ realloc()用于对已经动态申请的内存空间进行重新分配（扩容/�
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 void *realloc(void *ptr, size_t size);
 \end{lstlisting}
 
@@ -787,11 +808,13 @@ realloc()接受两个参数，第一个参数ptr指向需要重新分配内存�
 
 \mybox{strip}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+
+using namespace std;
 
 char *strip(char *str) {
     int i = 0;
@@ -820,11 +843,11 @@ int main() {
     char *str = (char *)calloc(len + 1, sizeof(char));
 
     strcpy(str, "     Hello World! \n\t ");
-    printf("Before: [%s]\n", str);
+    cout << "Before: [" << str << "]" << endl;
 
     str = strip(str);
 
-    printf("After: [%s]\n", str);
+    cout << "After: [" << str << "]" << endl;
 
     free(str);
     return 0;

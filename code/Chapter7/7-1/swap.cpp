@@ -1,4 +1,6 @@
-#include <stdio.h>
+#include <iostream>
+
+using namespace std;
 
 void swap(int *data1, int *data2) {
     int temp = *data1;
@@ -10,8 +12,8 @@ int main() {
     int a = 3;
     int b = 5;
 
-    printf("Before: a = %d, b = %d\n", a, b);
+    cout << "Before: a = " << a << ", b = " << b << endl;
     swap(&a, &b);
-    printf("After: a = %d, b = %d\n", a, b);
+    cout << "After: a = " << a << ", b = " << b << endl;
     return 0;
 }

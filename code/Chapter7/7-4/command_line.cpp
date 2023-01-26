@@ -1,6 +1,8 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
+#include <iostream>
+#include <cctype>
+#include <cstring>
+
+using namespace std;
 
 char *lower(char *s) {
     char *p = s;
@@ -21,9 +23,9 @@ char *upper(char *s) {
 }
 
 void usage(const char *program) {
-    printf("Usage: %s [option] [string]\n", program);
-    printf("--lower: convert string to lower case\n");
-    printf("--upper: convert string to upper case\n");
+    cout << "Usage: " << program << " [option] [string]" << endl;
+    cout << "--lower: convert string to lower case" << endl;
+    cout << "--upper: convert string to upper case" << endl;
 }
 
 int main(int argc, char **argv) {
@@ -36,9 +38,9 @@ int main(int argc, char **argv) {
     char *string = argv[2];
 
     if (strcmp(option, "--lower") == 0) {
-        printf("Lower: %s\n", lower(string));
+        cout << "Lower: " << lower(string) << endl;
     } else if (strcmp(option, "--upper") == 0) {
-        printf("Upper: %s\n", upper(string));
+        cout << "Upper: " << upper(string) << endl;
     } else {
         usage(argv[0]);
         return 1;

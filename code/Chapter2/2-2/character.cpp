@@ -10,19 +10,19 @@ int main()
 
     if(c >= 'a' && c <= 'z')
     {
-        printf("Lowercase\n");
+        cout << "Lowercase" << endl;
     }
     else if(c >= 'A' && c <= 'Z')
     {
-        printf("Uppercase\n");
+        cout << "Uppercase" << endl;
     }
     else if(c >= '0' && c <= '9')
     {
-        printf("Digit\n");
+        cout << "Digit" << endl;
     }
     else
     {
-        printf("Special character\n");
+        cout << "Special character" << endl;
     }
     
     return 0;

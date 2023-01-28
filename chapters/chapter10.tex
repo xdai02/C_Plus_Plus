@@ -1,0 +1,868 @@
+\chapter{面向对象}
+
+\section{封装}
+
+\subsection{类与对象}
+
+在面向对象编程中，把构成问题的事物分解成各个对象，每个对象都有自己的数据和行为，程序通过对象之间的交互来实现功能。\\
+
+类（class）是一个模板，定义了对象的属性和方法，用来描述同一类对象的共同特征和行为。对象（object）是类的实例，它具有类定义的属性和方法。\\
+
+关键字new实例化并返回一个指向类对象的指针，之后就可以通过访问对象的属性和方法来操作对象。使用new分配的对象，需要使用delete释放。\\
+
+\mybox{银行账户}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class BankAccount {
+public:
+    string owner;
+    string account;
+    double balance;
+
+    void deposit(double amount) {
+        balance += amount;
+    }
+
+    void withdraw(double amount) {
+        balance -= amount;
+    }
+};
+
+int main() {
+    BankAccount account;
+    account.owner = "Terry";
+    account.account = "6250941006528599";
+    account.balance = 50;
+
+    cout << "Owner: " << account.owner << endl;
+    cout << "Account: " << account.account << endl;
+    cout << "Balance: " << account.balance << endl;
+
+    account.deposit(100);
+    cout << "Balance: " << account.balance << endl;
+
+    account.withdraw(70);
+    cout << "Balance: " << account.balance << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Owner: Terry
+Account: 6250941006528599
+Balance: 50
+Balance: 150
+Balance: 80
+\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{封装（Encapsulation）}
+
+封装是面向对象的重要原则，尽可能隐藏对象的内部实现细节。封装可以认为是一个保护屏障，防止该类的数据被外部随意访问。当要访问该类的数据时，必须通过指定的接口。合适的封装可以让代码更容易理解和维护，也加强了程序的安全性。\\
+
+为了实现封装，需要对类的属性和方法进行访问权限的控制：
+
+\begin{enumerate}
+    \item public：允许任何地方访问。
+    \item private：只允许在类的内部访问。
+    \item protected：只允许在类的内部和子类中访问。
+\end{enumerate}
+
+通常会将类的属性设置为private，然后对外提供一对setter/getter方法来访问该属性。\\
+
+为了避免方法的参数与类的属性重名造成歧义，可以使用this关键字用来指代当前对象。\\
+
+\mybox{银行账户}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class BankAccount {
+    private:
+    const size_t ACCOUNT_DIGITS = 16;
+    string owner;
+    string account;
+    double balance;
+
+    public:
+    void setOwner(string owner) {
+        if (!owner.empty()) {
+            this->owner = owner;
+        }
+    }
+
+    string getOwner() {
+        return owner;
+    }
+
+    void setAccount(string account) {
+        if (account.length() == ACCOUNT_DIGITS) {
+            this->account = account;
+        }
+    }
+
+    string getAccount() {
+        return account;
+    }
+
+    void setBalance(double balance) {
+        if (balance >= 0) {
+            this->balance = balance;
+        }
+    }
+
+    double getBalance() {
+        return balance;
+    }
+
+    bool deposit(double amount) {
+        if (amount <= 0) {
+            return false;
+        }
+        balance += amount;
+        return true;
+    }
+
+    bool withdraw(double amount) {
+        if (amount <= 0 || amount > balance) {
+            return false;
+        }
+        balance -= amount;
+        return true;
+    }
+};
+
+int main() {
+    BankAccount account;
+    account.setOwner("Terry");
+    account.setAccount("6250941006528599");
+    account.setBalance(50);
+
+    cout << "Owner: " << account.getOwner() << endl;
+    cout << "Account: " << account.getAccount() << endl;
+    cout << "Balance: " << account.getBalance() << endl;
+
+    account.deposit(100);
+    cout << "Balance: " << account.getBalance() << endl;
+
+    account.withdraw(70);
+    cout << "Balance: " << account.getBalance() << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Owner: Terry
+Account: 6250941006528599
+Balance: 50
+Balance: 150
+Balance: 80
+\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{构造函数}
+
+\subsection{构造方法（Constructor）}
+
+构造方法是一种特殊的方法，会在创建对象时自动调用，用于创建并初始化对象。每个类可以有一个或多个构造方法，构造方法的名字必须和类名一致。构造方法没有返回值，返回值类型部分不写。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C++]
+BankAccount() {
+    owner = "admin";
+    account = "0000000000000000";
+    balance = 0;
+}
+\end{lstlisting}
+
+如果一个类中没有写构造方法，系统会自动提供一个public的无参构造方法，以便实例化对象。如果一个类中已经写了构造方法，系统将不会再提供默认的无参构造方法。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C++]
+BankAccount(string owner, string account, double balance) {
+    if (!owner.empty()) {
+        this->owner = owner;
+    }
+
+    if (account.length() == ACCOUNT_DIGITS) {
+        this->account = account;
+    }
+
+    if (balance >= 0) {
+        this->balance = balance;
+    }
+}
+\end{lstlisting}
+
+析构函数（Destructor）是一种特殊的方法，会在对象被销毁时自动调用，用于释放对象占用的资源。析构函数的名字必须和类名一致，前面加上~，没有返回值，返回值类型部分不写。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=C++]
+~BankAccount() {
+    // code
+}
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\subsection{重载（Overload）}
+
+重载用于在同一个类定义多个同名方法，但是这些方法的参数列表不同。重载的主要用途是提供方法的多种版本，以便满足不同的需求。\\
+
+重载还可以使代码更具可读性，因为它使得方法名更具描述性，而不必考虑特定的参数列表。\\
+
+\mybox{银行账户}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class BankAccount {
+    private:
+    const size_t ACCOUNT_DIGITS = 16;
+    string owner;
+    string account;
+    double balance;
+
+    public:
+    BankAccount() {
+        owner = "admin";
+        account = "0000000000000000";
+        balance = 0;
+    }
+
+    BankAccount(string owner, string account, double balance) {
+        if (!owner.empty()) {
+            this->owner = owner;
+        }
+
+        if (account.length() == ACCOUNT_DIGITS) {
+            this->account = account;
+        }
+
+        if (balance >= 0) {
+            this->balance = balance;
+        }
+    }
+
+    void setOwner(string owner) {
+        if (!owner.empty()) {
+            this->owner = owner;
+        }
+    }
+
+    string getOwner() {
+        return owner;
+    }
+
+    void setAccount(string account) {
+        if (account.length() == ACCOUNT_DIGITS) {
+            this->account = account;
+        }
+    }
+
+    string getAccount() {
+        return account;
+    }
+
+    void setBalance(double balance) {
+        if (balance >= 0) {
+            this->balance = balance;
+        }
+    }
+
+    double getBalance() {
+        return balance;
+    }
+
+    bool deposit(double amount) {
+        if (amount <= 0) {
+            return false;
+        }
+        balance += amount;
+        return true;
+    }
+
+    bool withdraw(double amount) {
+        if (amount <= 0 || amount > balance) {
+            return false;
+        }
+        balance -= amount;
+        return true;
+    }
+
+    bool withdraw(double amount, double fee) {
+        if (amount <= 0 || amount + fee > balance) {
+            return false;
+        }
+
+        balance -= amount + fee;
+        return true;
+    }
+};
+
+int main() {
+    BankAccount account1;
+    cout << "Account 1 Owner: " << account1.getOwner() << endl;
+    cout << "Account 1 Account: " << account1.getAccount() << endl;
+    cout << "Account 1 Balance: " << account1.getBalance() << endl;
+
+    BankAccount account2("Terry", "6250941006528599", 50);
+    cout << "Account 2 Balance: " << account2.getBalance() << endl;
+
+    account2.withdraw(20);
+    cout << "Account 2 Balance: " << account2.getBalance() << endl;
+
+    account2.withdraw(10, 1);
+    cout << "Account 2 Balance: " << account2.getBalance() << endl;
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Account 1 Owner: admin
+Account 1 Account: 0000000000000000
+Account 1 Balance: 0
+Account 2 Balance: 50
+Account 2 Balance: 30
+Account 2 Balance: 19
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{继承}
+
+\subsection{继承（Inheritance）}
+
+继承指一个类可以继承另一个类的特征和行为，并可以对其进行扩展。这样就可以避免在多个类中重复定义相同的特征和行为。\\
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{class}[text width = 5cm]{Product}{0,0}
+            \attribute{- name : String}
+            \attribute{- price : double}
+            \operation{+ Product(String, double)}
+            \operation{+ getName() : String}
+            \operation{+ getPrice() : double}
+            \operation{+ setName(String) : void}
+            \operation{+ setPrice(double) : void}
+        \end{class}
+
+        \begin{class}[text width = 6cm]{Food}{-4,-7}
+            \inherit{Product}
+            \attribute{- calories : int}
+            \operation{+ Food(String, double, int)}
+            \operation{+ getCalories() : int}
+            \operation{+ setCalories(int) : void}
+        \end{class}
+
+        \begin{class}[text width = 6cm]{Drink}{4,-7}
+            \inherit{Product}
+            \attribute{- size : String}
+            \operation{+ Drink(String, double, String)}
+            \operation{+ getSize() : String}
+            \operation{+ setSize(String) : void}
+        \end{class}
+    \end{tikzpicture}
+    \caption{继承}
+\end{figure}
+
+extends关键字用于指定一个类继承于另一个类，产生继承关系后，子类可以通过super关键字调用父类中的属性和方法，也可以定义子类独有的属性和方法。\\
+
+在创建子类对象时，会先调用父类的构造方法，然后再调用子类的构造方法。因此父类中必须存在一个构造方法，否则将无法创建子类对象。\\
+
+\mybox{麦当劳}
+
+\begin{lstlisting}[language=Java]
+public class Product {
+    private String name;
+    private double price;
+
+    public Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Food extends Product {
+    int calories;
+
+    public Food(String name, double price, int calories) {
+        super(name, price);
+        this.calories = calories;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Drink extends Product {
+    private String size;
+
+    public Drink(String name, double price, String size) {
+        super(name, price);
+        this.size = size;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class McDonalds {
+    public static void main(String[] args) {
+        Food food = new Food("Cheeseburger", 5.45, 302);
+        Drink drink = new Drink("Coke", 3.7, "Large");
+
+        System.out.printf(
+                "Food: %s ($%.2f) %d Kcal\n",
+                food.getName(), food.getPrice(), food.getCalories()
+        );
+        System.out.printf(
+                "Drink: %s ($%.2f) %s\n",
+                drink.getName(), drink.getPrice(), drink.getSize()
+        );
+    }
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Food: Cheeseburger ($5.45) 302 Kcal
+Drink: Coke ($3.70) Large
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\subsection{重写（Override）}
+
+Object类是所有类的根类，所有的类都直接或者间接地继承自Object类。Object类中包含的方法在其它所有类中都可以使用，例如getClass()、hashCode()、toString()、clone()、equals()等。\\
+
+当直接输出一个对象时，会自动调用该对象的toString()方法，将其以字符串的形式输出。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=Java]
+System.out.println(food);   // Food@41629346
+\end{lstlisting}
+
+在没有重写toString()方法的情况下，输出的内容是对象的类名及其哈希码（hash code），但这并不是预期想要的结果。因此，可以重写从父类继承的toString()，以满足程序的需求。\\
+
+在重写方法时，需要使用@Override注解，以便编译器检查该方法是否真的是从父类继承的。\\
+
+Object类的equals()方法默认比较的是两个对象的地址，如果地址相同则为true，否则为false。而String类的equals()方法就重写了Object类的equals()方法，以便比较两个字符串的内容是否相同。\\
+
+\mybox{麦当劳}
+
+\begin{lstlisting}[language=Java]
+public class Product {
+    private String name;
+    private double price;
+
+    public Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s ($%.2f)", name, price);
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Food extends Product {
+    int calories;
+
+    public Food(String name, double price, int calories) {
+        super(name, price);
+        this.calories = calories;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    @Override
+    public String toString() {
+        return "Food: " + super.toString() + " " + calories + " Kcal";
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Drink extends Product {
+    private String size;
+
+    public Drink(String name, double price, String size) {
+        super(name, price);
+        this.size = size;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return "Drink: " + super.toString() + " " + size;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class McDonalds {
+    public static void main(String[] args) {
+        Food food = new Food("Cheeseburger", 5.45, 302);
+        Drink drink = new Drink("Coke", 3.7, "Large");
+
+        System.out.println(food);
+        System.out.println(drink);
+    }
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Food: Cheeseburger ($5.45) 302 Kcal
+Drink: Coke ($3.70) Large
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{抽象类}
+
+\subsection{抽象类（Abstract Class）}
+
+有些类只能用来做继承，不能用于创建对象。例如在动物园中并不存在“动物”这个对象，只有动物的子类对象，因此动物类不应该被实例化。\\
+
+抽象类是一种不能被实例化的类，它用于定义接口或公共实现，供其它类继承并实现。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=Java]
+public abstract class Animal {}
+\end{lstlisting}
+
+\vspace{0.5cm}
+
+\subsection{抽象方法}
+
+有时候父类提供的方法无法满足子类不同的需求，但是如果不定义该方法，就表示该类具有该行为。\\
+
+这种情况就可以将这个父类的方法定义为抽象方法，这样所有的子类都必须要重写该方法，否则子类仍然为抽象类。\\
+
+抽象方法只需声明，而不用实现。包含抽象方法的类必须声明为抽象类。\\
+
+\mybox{动物}
+
+\begin{lstlisting}[language=Java]
+public abstract class Animal {
+    public abstract String sound();
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Dog extends Animal {
+    @Override
+    public String sound() {
+        return "Woof";
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Cat extends Animal {
+    @Override
+    public String sound() {
+        return "Meow";
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class AnimalSound {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        Cat cat = new Cat();
+
+        System.out.println("Dog's sound: " + dog.sound());
+        System.out.println("Cat's sound: " + cat.sound());
+    }
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Dog's sound: Woof
+Cat's sound: Meow
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{多态}
+
+\subsection{多态（Polymorphism）}
+
+多态是指对象可以具有多种形态，即同一个对象在不同时刻表现出不同的行为。例如Dog和Cat都是Animal的子类，因此可以将子类对象赋值给父类引用，从而产生多种形态。
+
+\vspace{-0.5cm}
+
+\begin{lstlisting}[language=Java]
+Animal animal = new Dog();
+\end{lstlisting}
+
+由子类类型转型为父类类型，称为向上转型。向上转型是一种隐式转换，向上转型后的对象，只能访问父类中定义的成员。\\
+
+由父类类型转型为子类类型，称为向下转型。向下转型存在失败的可能，因为父类对象并不一定是子类对象。\\
+
+向下转型需要显式地强制转换，在转换时需要使用instanceof关键字进行类型检查。\\
+
+\mybox{员工工资}
+
+\begin{lstlisting}[language=Java]
+public abstract class Employee {
+    private String name;
+
+    public Employee(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public abstract double getSalary();
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class FullTimeEmployee extends Employee {
+    private double basicSalary;
+    private double bonus;
+
+    public FullTimeEmployee(
+            String name, double basicSalary, double bonus
+    ) {
+        super(name);
+        this.basicSalary = basicSalary;
+        this.bonus = bonus;
+    }
+
+    @Override
+    public double getSalary() {
+        return basicSalary + bonus;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class PartTimeEmployee extends Employee {
+    private double dailyWage;
+    private int workingDays;
+
+    public PartTimeEmployee(
+            String name, double dailyWage, int workingDays
+    ) {
+        super(name);
+        this.dailyWage = dailyWage;
+        this.workingDays = workingDays;
+    }
+
+    @Override
+    public double getSalary() {
+        return dailyWage * workingDays;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Salary {
+    public static void main(String[] args) {
+        Employee[] employees = new Employee[]{
+                new FullTimeEmployee("Alice", 5783, 173),
+                new PartTimeEmployee("Bob", 150, 15)
+        };
+
+        for (Employee employee : employees) {
+            System.out.println(
+                    employee.getName() + ": $" + employee.getSalary()
+            );
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Alice: $5956.0
+Bob: $2250.0
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{接口}
+
+\subsection{接口（Interface）}
+
+接口是一种特殊的抽象类，接口中的所有方法都是抽象方法，接口中的成员变量必须是常量。\\
+
+接口用于定义一组标准，代表了某种能力和约定。例如USB接口代表了电脑和外设设备之间的连接标准。USB接口不用关心连接的外设设备是什么，只要这个外设设备满足USB的标准，就可以连接到电脑上。\\
+
+\mybox{USB}
+
+\begin{lstlisting}[language=Java]
+public interface USB {
+    String getDeviceInfo();
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Mouse implements USB {
+    @Override
+    public String getDeviceInfo() {
+        return "Mouse";
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Keyboard implements USB {
+    @Override
+    public String getDeviceInfo() {
+        return "Keyboard";
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Computer {
+    private USB usb1;
+    private USB usb2;
+
+    public void setUSB1(USB usb) {
+        usb1 = usb;
+    }
+
+    public void setUSB2(USB usb) {
+        usb2 = usb;
+    }
+
+    @Override
+    public String toString() {
+        return "USB 1: " + usb1.getDeviceInfo() + "\n"
+                + "USB 2: " + usb2.getDeviceInfo();
+    }
+
+    public static void main(String[] args) {
+        Computer computer = new Computer();
+
+        computer.setUSB1(new Mouse());
+        computer.setUSB2(new Keyboard());
+
+        System.out.println(computer);
+    }
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+USB 1: Mouse
+USB 2: Keyboard
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage

@@ -304,6 +304,52 @@ After: a = 2, b = 1
 
 \newpage
 
+\section{默认参数}
+
+\subsection{默认参数}
+
+函数参数可以有默认值，如果在调用函数时不指定某个参数的值，则使用默认值。默认参数必须放在参数列表的最后。\\
+
+\mybox{日期}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <sstream>
+
+using namespace std;
+
+string format_date(int year=1970, int month=1, int day=1) {
+	ostringstream oss;
+	oss << setfill('0') << setw(4) << year << "/"
+		<< setw(2) << month << "/"
+		<< setw(2) << day;
+	return oss.str();
+}
+
+int main() {
+	cout << format_date(2022, 12, 16) << endl;
+	cout << format_date(2022, 12) << endl;
+	cout << format_date(2022) << endl;
+	cout << format_date() << endl;
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+	\mybox{运行结果}
+	\begin{verbatim}
+2022/12/16
+2022/12/01
+2022/01/01
+1970/01/01
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
 \section{递归} \label{recursion}
 
 \subsection{递归（Recursion）}

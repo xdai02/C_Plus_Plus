@@ -1,12 +1,11 @@
 #ifndef _WORD_LIST_H_
 #define _WORD_LIST_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <string>
 
 typedef struct {
-    char *word;
+    std::string word;
     int count;
 } Word;
 
@@ -15,10 +14,12 @@ typedef struct {
     int word_count;
 } WordList;
 
-Word *create_word(const char *word);
+Word *create_word(const std::string word);
 
 WordList *create_word_list();
 
-void add_word(WordList *word_list, const char *word);
+void add_word(WordList *word_list, const std::string word);
+
+void destroy_word_list(WordList *word_list);
 
 #endif

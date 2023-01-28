@@ -1,4 +1,6 @@
-#include <stdio.h>
+#include <iostream>
+
+using namespace std;
 
 union Value {
     int int_data;
@@ -9,10 +11,10 @@ int main() {
     union Value val;
 
     val.char_data = 'A';
-    printf("val.int_data = %d\n", val.int_data);
+    cout << "val.int_data = " << val.int_data << endl;
 
     val.int_data = 97;
-    printf("val.char_data = %c\n", val.char_data);
+    cout << "val.char_data = " << val.char_data << endl;
 
     return 0;
 }

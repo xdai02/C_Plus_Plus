@@ -1,12 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data3.txt", "r");
     if (!fp) {
-        fprintf(stderr, "File open failed.\n");
+        cerr << "File open failed." << endl;
     }
 
     char line[128];
@@ -20,7 +22,7 @@ int main() {
             }
             token[i + 1] = '\0';
 
-            printf("%s\n", token);
+            cout << token << endl;
             token = strtok(NULL, " \t\n");
         }
     }

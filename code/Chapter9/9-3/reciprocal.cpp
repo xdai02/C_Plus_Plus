@@ -1,5 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+
+using namespace std;
 
 typedef struct {
     int numerator;
@@ -8,7 +9,7 @@ typedef struct {
 
 void reciprocal(Fraction *f) {
     if (f->numerator == 0) {
-        fprintf(stderr, "Error: Denominator cannot be zero.\n");
+        cerr << "Error: Denominator cannot be zero." << endl;
         exit(1);
     } else {
         int temp = f->numerator;
@@ -20,10 +21,10 @@ void reciprocal(Fraction *f) {
 int main() {
     Fraction fraction = {2, 5};  // 2/5
 
-    printf("Reciprocal of ");
-    printf("%d/%d is ", fraction.numerator, fraction.denominator);
+    cout << "Reciprocal of ";
+    cout << fraction.numerator << "/" << fraction.denominator << " is ";
     reciprocal(&fraction);
-    printf("%d/%d\n", fraction.numerator, fraction.denominator);
+    cout << fraction.numerator << "/" << fraction.denominator << endl;
 
     return 0;
 }

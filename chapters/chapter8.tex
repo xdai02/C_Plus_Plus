@@ -388,15 +388,17 @@ fgets()接受三个参数，第一个参数用于保存读取到的字符串，�
 \mybox{解析单词}
 
 \begin{lstlisting}[language=C++]
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data3.txt", "r");
     if (!fp) {
-        fprintf(stderr, "File open failed.\n");
+        cerr << "File open failed." << endl;
     }
 
     char line[128];
@@ -410,7 +412,7 @@ int main() {
             }
             token[i + 1] = '\0';
 
-            printf("%s\n", token);
+            cout << token << endl;
             token = strtok(NULL, " \t\n");
         }
     }
@@ -440,6 +442,82 @@ Stay
 Hungry
 Stay
 Foolish
+	\end{verbatim}
+\end{tcolorbox}
+
+\newpage
+
+\section{fstream}
+
+\subsection{fstream}
+
+fstream库包含了三个文件I/O类：
+
+\begin{enumerate}
+    \item fstream：可读写文件
+    \item ifstream：只能读文件
+    \item ofstream：只能写文件
+\end{enumerate}
+
+在打开文件时可以指定文件的打开模式：\\
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5mm}{
+        \begin{tabular}{|c|l|}
+            \hline
+            \textbf{打开模式} & \textbf{功能}                 \\
+            \hline
+            ios::in           & 只读                          \\
+            \hline
+            ios::out          & 只写                          \\
+            \hline
+            ios::app          & 追加                          \\
+            \hline
+            ios::ate          & 定位到文件尾                  \\
+            \hline
+            ios::trunc        & 如果文件存在，把文件长度设为0 \\
+            \hline
+        \end{tabular}
+    }
+    \caption{打开模式}
+\end{table}
+
+\vspace{0.5cm}
+
+\mybox{统计代码行数}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    ifstream in("code_lines.cpp");
+    int line_count = 0;
+    string line;
+    while (getline(in, line)) {
+        line_count++;
+    }
+    in.close();
+
+    ofstream out("code_lines.txt");
+    out << "File name: " << __FILE__ << endl;
+    out << "Line count: " << line_count << endl;
+    out.close();
+
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \textbf{code\_lines.txt}
+    \begin{verbatim}
+File name: code_lines.cpp
+Line count: 22
 	\end{verbatim}
 \end{tcolorbox}
 

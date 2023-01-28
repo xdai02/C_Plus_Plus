@@ -1,7 +1,7 @@
 #include "tic_tac_toe.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 char board[N][N];
 
@@ -20,17 +20,17 @@ void init_board() {
 void print_board() {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            printf(" %c ", board[i][j]);
+            std::cout << " " << board[i][j] << " ";
             if (j < N - 1) {
-                printf("|");
+                std::cout << "|";
             }
         }
-        printf("\n");
+        std::cout << std::endl;
         if (i < N - 1) {
-            printf("---+---+---\n");
+            std::cout << "---+---+---" << std::endl;
         }
     }
-    printf("\n");
+    std::cout << std::endl;
 }
 
 bool is_board_full() {
@@ -131,7 +131,7 @@ int winner() {
         }
     }
 
-    if (is_board_full(board)) {
+    if (is_board_full()) {
         return DRAW;
     } else {
         return IN_PROGRESS;

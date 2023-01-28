@@ -1,8 +1,6 @@
 #ifndef _TIC_TAC_TOE_H_
 #define _TIC_TAC_TOE_H_
 
-#include <stdbool.h>
-
 #define N 3
 
 #define CROSS 'X'

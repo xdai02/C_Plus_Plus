@@ -1,4 +1,7 @@
-#include <stdio.h>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data2.txt", "w");

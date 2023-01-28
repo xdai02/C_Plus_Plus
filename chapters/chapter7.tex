@@ -628,6 +628,74 @@ Upper: HELLO WORLD!
 
 \newpage
 
+\section{引用}
+
+\subsection{引用（Reference）}
+
+引用可以看作是变量的别名，对引用的操作与对变量的操作完全一样。因此引用可以用于传递参数和返回值，避免了复制较大变量的开销。\\
+
+声明引用时必须对其初始化，并且之后不能再将该引用作为其它变量的别名。\\
+
+\mybox{交换}
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+
+using namespace std;
+
+void swap(int &data1, int &data2) {
+    int temp = data1;
+    data1 = data2;
+    data2 = temp;
+}
+
+int main() {
+    int a = 3;
+    int b = 5;
+
+    cout << "Before: a = " << a << ", b = " << b << endl;
+    swap(a, b);
+    cout << "After: a = " << a << ", b = " << b << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\begin{tcolorbox}
+    \mybox{运行结果}
+    \begin{verbatim}
+Before: a = 3, b = 5
+After: a = 5, b = 3
+	\end{verbatim}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+
+\begin{table}[H]
+    \centering
+    \setlength{\tabcolsep}{5mm}{
+        \begin{tabular}{|c|c|c|}
+            \hline
+                                  & \textbf{指针}         & \textbf{引用}    \\
+            \hline
+            \textbf{内存}         & 占用空间              & 不占用空间       \\
+            \hline
+            \textbf{大小}         & 4字节/8字节           & 被引用对象的大小 \\
+            \hline
+            \textbf{能否为空}     & 可以为NULL            & 引用对象必须存在 \\
+            \hline
+            \textbf{能否改变指向} & 可以                  & 不可以           \\
+            \hline
+            \textbf{使用}         & 通过*对指向的变量操作 & 直接对变量操作   \\
+            \hline
+            \textbf{层级}         & 可以有多级指针        & 只有一级         \\
+            \hline
+        \end{tabular}
+    }
+    \caption{指针与引用的区别}
+\end{table}
+
+\newpage
+
 \section{动态内存申请}
 
 \subsection{内存管理}

@@ -10,7 +10,7 @@
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 FILE *fopen(const char *filename, const char *mode);
 \end{lstlisting}
 
@@ -48,7 +48,7 @@ fopen()接受两个参数，第一个参数是要打开的文件名，第二个�
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int fclose(FILE *stream);
 \end{lstlisting}
 
@@ -60,9 +60,11 @@ int fclose(FILE *stream);
 This is a test.
 \end{lstlisting}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdlib.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data.txt", "r");
@@ -84,7 +86,7 @@ fprintf()函数用于将数据输出到文件中，使用方法与printf()类似
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int fprintf(FILE *stream, const char *format, ...);
 \end{lstlisting}
 
@@ -92,22 +94,25 @@ int fprintf(FILE *stream, const char *format, ...);
 
 \mybox{成绩}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data1.txt", "w");
     int n;
-    printf("Enter number of students: ");
-    scanf("%d", &n);
+    cout << "Enter number of students: ";
+    cin >> n;
 
     char id[8];
     double score;
     for (int i = 0; i < n; i++) {
-        printf("Enter student %d's ID: ", i + 1);
-        scanf("%s", id);
-        printf("Enter student %d's score: ", i + 1);
-        scanf("%lf", &score);
+        cout << "Enter student " << i + 1 << "'s ID: ";
+        cin >> id;
+        cout << "Enter student " << i + 1 << "'s score: ";
+        cin >> score;
         fprintf(fp, "ID=%s\tScore=%.2f\n", id, score);
     }
 
@@ -157,7 +162,7 @@ fscanf()函数用于从文件中读取数据，使用方法与scanf()类似。fs
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int fscanf(FILE *stream, const char *format, ...);
 \end{lstlisting}
 
@@ -165,14 +170,17 @@ fscanf()函数读取成功时返回实际读取的数据个数，失败时返回
 
 \mybox{平均分}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdlib.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+#include <iomanip>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data1.txt", "r");
     if (!fp) {
-        fprintf(stderr, "File open failed.\n");
+        cerr << "File open failed." << endl;
         exit(1);
     }
 
@@ -185,7 +193,8 @@ int main() {
         sum += score;
         n++;
     }
-    printf("Average = %.2f\n", sum / n);
+    cout << "Average = "
+         << fixed << setprecision(2) << sum / n << endl;
 
     fclose(fp);
     return 0;
@@ -207,7 +216,7 @@ fputc()函数用于将一个字符写入文件中，其函数原型为：
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int fputc(int ch, FILE *stream);
 \end{lstlisting}
 
@@ -217,8 +226,11 @@ fputc()接受两个参数，第一个参数为要写入的字符（ASCII码）�
 
 \mybox{大写字母}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data2.txt", "w");
@@ -248,7 +260,7 @@ fgetc()函数用于从文件中读取一个字符，读取成功返回字符的A
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int fgetc(FILE *stream);
 \end{lstlisting}
 
@@ -258,7 +270,7 @@ int fgetc(FILE *stream);
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int feof(FILE *stream);
 \end{lstlisting}
 
@@ -266,14 +278,16 @@ int feof(FILE *stream);
 
 \mybox{源代码统计}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
-#include <stdlib.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
-    FILE *fp = fopen("fgetc.c", "r");
+    FILE *fp = fopen("statistics.cpp", "r");
     if (!fp) {
-        fprintf(stderr, "File open failed.\n");
+        cerr << "File open failed." << endl;
         exit(1);
     }
 
@@ -289,8 +303,8 @@ int main() {
         }
     }
 
-    printf("Characters: %d\n", chars);
-    printf("Lines: %d\n", lines);
+    cout << "Characters: " << chars << endl;
+    cout << "Lines: " << lines << endl;
 
     fclose(fp);
     return 0;
@@ -300,8 +314,8 @@ int main() {
 \begin{tcolorbox}
     \mybox{运行结果}
     \begin{verbatim}
-Characters: 467
-Lines: 28
+Characters: 485
+Lines: 29
 	\end{verbatim}
 \end{tcolorbox}
 
@@ -313,7 +327,7 @@ fputs()函数用于将一个字符串写入文件，其函数原型为：
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 int fputs(const char *str, FILE *stream);
 \end{lstlisting}
 
@@ -321,14 +335,17 @@ int fputs(const char *str, FILE *stream);
 
 \mybox{Computer Science Quotes}
 
-\begin{lstlisting}[language=C]
-#include <stdio.h>
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
     const char *quotes[] = {
         "Talk is cheap. Show me the code.",
         "Code never lies, comments sometimes do.",
-        "Stay Hungry Stay Foolish",
+        "Stay Hungry Stay Foolish.",
     };
     int n = sizeof(quotes) / sizeof(quotes[0]);
 
@@ -350,7 +367,7 @@ int main() {
     \begin{verbatim}
 Talk is cheap. Show me the code.
 Code never lies, comments sometimes do.
-Stay Hungry Stay Foolish
+Stay Hungry Stay Foolish.
 	\end{verbatim}
 \end{tcolorbox}
 
@@ -362,7 +379,7 @@ fgets()函数用于从文件读取一行数据，读取成功返回指向字符�
 
 \vspace{-0.5cm}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 char *fgets(char *str, int n, FILE *stream);
 \end{lstlisting}
 
@@ -370,7 +387,7 @@ fgets()接受三个参数，第一个参数用于保存读取到的字符串，�
 
 \mybox{解析单词}
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C++]
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

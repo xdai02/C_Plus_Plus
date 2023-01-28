@@ -1,10 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 int main() {
-    FILE *fp = fopen("fgetc.c", "r");
+    FILE *fp = fopen("statistics.cpp", "r");
     if (!fp) {
-        fprintf(stderr, "File open failed.\n");
+        cerr << "File open failed." << endl;
         exit(1);
     }
 
@@ -20,8 +22,8 @@ int main() {
         }
     }
 
-    printf("Characters: %d\n", chars);
-    printf("Lines: %d\n", lines);
+    cout << "Characters: " << chars << endl;
+    cout << "Lines: " << lines << endl;
 
     fclose(fp);
     return 0;

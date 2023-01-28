@@ -1,10 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
+#include <iomanip>
+
+using namespace std;
 
 int main() {
     FILE *fp = fopen("data1.txt", "r");
     if (!fp) {
-        fprintf(stderr, "File open failed.\n");
+        cerr << "File open failed." << endl;
         exit(1);
     }
 
@@ -17,7 +20,8 @@ int main() {
         sum += score;
         n++;
     }
-    printf("Average = %.2f\n", sum / n);
+    cout << "Average = "
+         << fixed << setprecision(2) << sum / n << endl;
 
     fclose(fp);
     return 0;

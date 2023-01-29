@@ -731,63 +731,93 @@ Drink: Coke ($3.7) Large
 
 \section{抽象类}
 
-\subsection{抽象类（Abstract Class）}
+\subsection{虚函数}
 
 有些类只能用来做继承，不能用于创建对象。例如在动物园中并不存在“动物”这个对象，只有动物的子类对象，因此动物类不应该被实例化。\\
 
-抽象类是一种不能被实例化的类，它用于定义接口或公共实现，供其它类继承并实现。
-
-\vspace{-0.5cm}
-
-\begin{lstlisting}[language=Java]
-public abstract class Animal {}
-\end{lstlisting}
-
-\vspace{0.5cm}
-
-\subsection{抽象方法}
+抽象类是一种不能被实例化的类，它用于定义接口或公共实现，供其它类继承并实现。\\
 
 有时候父类提供的方法无法满足子类不同的需求，但是如果不定义该方法，就表示该类具有该行为。\\
 
-这种情况就可以将这个父类的方法定义为抽象方法，这样所有的子类都必须要重写该方法，否则子类仍然为抽象类。\\
-
-抽象方法只需声明，而不用实现。包含抽象方法的类必须声明为抽象类。\\
+这种情况就可以将这个父类的方法定义为虚函数，这样所有的子类都必须要重写该方法，否则子类仍然为抽象类。\\
 
 \mybox{动物}
 
-\begin{lstlisting}[language=Java]
-public abstract class Animal {
-    public abstract String sound();
+\begin{lstlisting}[language=C++]
+#ifndef _ANIMAL_H_
+#define _ANIMAL_H_
+
+#include <string>
+
+class Animal {
+    public:
+    virtual std::string sound() = 0;
+};
+
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#ifndef _DOG_H_
+#define _DOG_H_
+
+#include "animal.h"
+
+class Dog : public Animal {
+    public:
+    virtual std::string sound() override;
+};
+
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include "dog.h"
+#include <iostream>
+
+std::string Dog::sound() {
+    return "Woof";
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=Java]
-public class Dog extends Animal {
-    @Override
-    public String sound() {
-        return "Woof";
-    }
+\begin{lstlisting}[language=C++]
+#ifndef _CAT_H_
+#define _CAT_H_
+
+#include "animal.h"
+
+class Cat : public Animal {
+    public:
+    virtual std::string sound() override;
+};
+
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[language=C++]
+#include "cat.h"
+#include <iostream>
+
+std::string Cat::sound() {
+    return "Meow";
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=Java]
-public class Cat extends Animal {
-    @Override
-    public String sound() {
-        return "Meow";
-    }
-}
-\end{lstlisting}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include "dog.h"
+#include "cat.h"
 
-\begin{lstlisting}[language=Java]
-public class AnimalSound {
-    public static void main(String[] args) {
-        Dog dog = new Dog();
-        Cat cat = new Cat();
+using namespace std;
 
-        System.out.println("Dog's sound: " + dog.sound());
-        System.out.println("Cat's sound: " + cat.sound());
-    }
+int main() {
+    Dog dog;
+    Cat cat;
+
+    cout << "Dog's sound: " << dog.sound() << endl;
+    cout << "Cat's sound: " << cat.sound() << endl;
+
+    return 0;
 }
 \end{lstlisting}
 
